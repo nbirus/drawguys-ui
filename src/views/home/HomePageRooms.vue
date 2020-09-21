@@ -1,18 +1,19 @@
 <template>
 	<ul class="room-list">
 		<li class="room-list__item" v-for="room in rooms" :key="room.roomid">
-			<home-page-card v-bind="room"></home-page-card>
+			<home-page-room v-bind="room"></home-page-room>
 		</li>
 	</ul>
 </template>
 
 <script>
-import HomePageCard from './HomePageCard'
+import HomePageRoom from './HomePageRoom'
 import { rooms } from '@/services/Room'
+
 export default {
-	name: 'room-page-list',
+	name: 'room-page-rooms',
 	components: {
-		HomePageCard,
+		HomePageRoom,
 	},
 	setup() {
 		return {

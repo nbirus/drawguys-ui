@@ -13,7 +13,8 @@ input[type='text'] {
 		border-color: $text !important;
 	}
 	&::placeholder {
-		opacity: 0.5;
+		color: $text-placeholder;
+		font-weight: $regular;
 	}
 
 	&.b-none {

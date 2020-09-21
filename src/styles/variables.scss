@@ -3,7 +3,7 @@ $regular: 400;
 $block-height: 45px;
 $block-height-lg: 55px;
 $border-radius: 0.5rem;
-$max-width: 600px;
+$max-width: 500px;
 $margin-top: 7.5rem;
 
 // colors
@@ -30,6 +30,9 @@ $colors: $navy 'navy', $blue 'blue', $olive 'olive', $green 'green',
 	$silver 'silver', $light 'light';
 
 $text: $black;
+$text-light: darken($light, 65);
+$text-placeholder: fade-out($text, 0.75);
+$text-extra-light: darken($light, 5);
 $border-color: darken($light, 5);
 $border-color-light: lighten($light, 3);
 

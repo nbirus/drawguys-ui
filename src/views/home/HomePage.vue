@@ -18,21 +18,21 @@
 		</transition>
 
 		<!-- room list -->
-		<home-page-list class="home__room-list" />
+		<home-page-rooms class="home__room-list" />
 
 		<router-link class="home__username-link" to="/username">Choose another name</router-link>
 	</div>
 </template>
 
 <script>
-import HomePageList from './HomePageList'
+import HomePageRooms from './HomePageRooms'
 import FormCard from '@/components/FormCard'
 import { createRoom } from '@/services/Room'
 
 export default {
 	name: 'home-page',
 	components: {
-		HomePageList,
+		HomePageRooms,
 		FormCard,
 	},
 	setup() {
