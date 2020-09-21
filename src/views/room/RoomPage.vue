@@ -6,11 +6,15 @@
 		</transition>
 
 		<!-- card -->
-		<div class="room__card card">
-			<room-users class="room__users" />
-			<room-ready-btn class="room__ready" />
-			<room-chat class="room__chat" />
-		</div>
+		<transition name="pop-up" mode="out-in" appear>
+			<div class="room__card card delay-1">
+				<room-users class="room__users" />
+				<div class="room__ready">
+					<room-ready-btn />
+				</div>
+				<room-chat class="room__chat" />
+			</div>
+		</transition>
 	</div>
 </template>
 
@@ -43,7 +47,7 @@ export default {
 	&__card {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		grid-template-rows: 5rem 1fr;
+		grid-template-rows: auto auto;
 		width: 100%;
 		border: none;
 		overflow: hidden;
@@ -51,7 +55,7 @@ export default {
 	&__users {
 		grid-row: 1;
 		grid-column: 1;
-		padding: 1rem;
+		padding: 1.75rem 1.5rem;
 	}
 	&__ready {
 		grid-row: 2;
@@ -63,7 +67,7 @@ export default {
 		grid-row: span 2;
 		grid-column: 2;
 		border-left: solid thin $border-color;
-		background-color: lighten($light, 2);
+		background-color: lighten($light, 1);
 	}
 }
 </style>

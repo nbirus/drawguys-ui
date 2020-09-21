@@ -11,6 +11,8 @@ export const roomState = reactive({
 	active: false,
 	users: [],
 	messages: [],
+	user: {},
+	userTurn: {},
 })
 
 // actions
@@ -43,6 +45,12 @@ export function leaveRoom() {
 		userState.roomid = ''
 	}
 }
+export function toggleReady() {
+	log('toggle-ready')
+	if (socket && userState.roomid) {
+		socket.emit('toggle_ready', userState.userid)
+	}
+}
 
 // event handlers
 function onUpdateRooms(newRooms) {
@@ -50,10 +58,15 @@ function onUpdateRooms(newRooms) {
 	rooms.value = newRooms
 }
 function onUpdateRoom(newRoom) {
-	// log('room-update')
 	Object.keys(roomState).forEach(key => {
 		roomState[key] = newRoom[key]
 	})
+	roomState.user = newRoom.users[userState.userid]
+
+	// if game has started, set player's turn
+	if (roomState.active) {
+		roomState.userTurn = newRoom.users[newRoom.turnUserid]
+	}
 }
 function onJoinRoom(roomid) {
 	log('room-join')

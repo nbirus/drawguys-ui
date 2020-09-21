@@ -2,9 +2,9 @@ $bold: 900;
 $regular: 400;
 $block-height: 45px;
 $block-height-lg: 55px;
-$border-radius: .5rem;
+$border-radius: 0.5rem;
 $max-width: 600px;
-$margin-top: 10rem;
+$margin-top: 7.5rem;
 
 // colors
 
@@ -24,25 +24,15 @@ $grey: #aaaaaa;
 $silver: #dddddd;
 $light: lighten(#eceff4, 3);
 
-$colors: $navy 'navy',
-	$blue 'blue',
-	$olive 'olive',
-	$green 'green',
-	$yellow 'yellow',
-	$orange 'orange',
-	$red 'red',
-	$maroon 'maroon',
-	$fuchsia 'fuchsia',
-	$purple 'purple',
-	$black 'black',
-	$grey 'grey',
-	$silver 'silver',
-	$light 'light';
+$colors: $navy 'navy', $blue 'blue', $olive 'olive', $green 'green',
+	$yellow 'yellow', $orange 'orange', $red 'red', $maroon 'maroon',
+	$fuchsia 'fuchsia', $purple 'purple', $black 'black', $grey 'grey',
+	$silver 'silver', $light 'light';
 
 $text: $black;
-$border-color: $light;
+$border-color: darken($light, 5);
 $border-color-light: lighten($light, 3);
 
-
 // shadows
-$box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+	0 2px 4px -1px rgba(0, 0, 0, 0.06);

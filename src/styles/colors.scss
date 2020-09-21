@@ -1,11 +1,15 @@
-	@each $color, $name in $colors {
-		.bg-#{$name} {
-			background-color: $color;
+@each $color, $name in $colors {
+	.bg-#{$name} {
+		background-color: $color;
 
-			&.bg-darken {
-				background-color: darken($color, 3);
-			}
+		&.bg-darken {
+			background-color: darken($color, 3);
 		}
-		.border-#{$name} {}
-		.text-#{$name} {}
 	}
+	.border-#{$name} {
+		border: solid thin $color;
+	}
+	.text-#{$name} {
+		color: $color;
+	}
+}
