@@ -61,6 +61,8 @@ function onUpdateRoom(newRoom) {
 	Object.keys(roomState).forEach(key => {
 		roomState[key] = newRoom[key]
 	})
+
+	// update current user
 	roomState.user = newRoom.users[userState.userid]
 
 	// if game has started, set player's turn
