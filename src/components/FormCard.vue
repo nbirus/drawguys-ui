@@ -17,9 +17,9 @@ import { ref } from 'vue'
 export default {
 	name: 'form-card',
 	inheritAttrs: false,
-	props: ['submitText', 'size', 'color'],
+	props: ['submitText', 'size', 'color', 'initValue'],
 	setup(props, { emit }) {
-		let value = ref('')
+		let value = ref(props.initValue)
 		function onSubmit() {
 			emit('submit', value.value)
 		}

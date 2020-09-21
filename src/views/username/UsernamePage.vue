@@ -1,27 +1,37 @@
 <template>
 	<div class="page page--center username">
 		<h1 class="mb-5">Choose a username</h1>
-		<form-card color="black" submit-text="Next" placeholder="Username..." @submit="setUsername" />
+		<form-card
+			:init-value="userState.username"
+			color="black"
+			submit-text="Next"
+			placeholder="Username..."
+			@submit="onSubmit"
+		/>
 	</div>
 </template>
 
 <script>
 import FormCard from '@/components/FormCard'
-import router from '@/router'
+import { setUsername, userState } from '@/services/User'
+import router from '@/router.js'
+
 export default {
 	name: 'username-page',
 	components: {
 		FormCard,
 	},
 	setup() {
-		function setUsername(username) {
+		function onSubmit(username) {
 			if (username) {
+				setUsername(username)
 				router.push('/')
 			}
 		}
 
 		return {
-			setUsername,
+			onSubmit,
+			userState,
 		}
 	},
 }

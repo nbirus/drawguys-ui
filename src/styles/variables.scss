@@ -3,13 +3,46 @@ $regular: 400;
 $block-height: 45px;
 $block-height-lg: 55px;
 $border-radius: .5rem;
+$max-width: 600px;
+$margin-top: 10rem;
 
 // colors
-$text: black;
-$black: black;
+
+// main colors
+$navy: #001f3f;
+$blue: #0074d9;
+$olive: #3d9970;
+$green: darken(#2ecc40, 5);
+$yellow: #ffdc00;
+$orange: #ff851b;
+$red: #ff4136;
+$maroon: #85144b;
+$fuchsia: #f012be;
+$purple: #b10dc9;
+$black: #111111;
+$grey: #aaaaaa;
+$silver: #dddddd;
 $light: lighten(#eceff4, 3);
-$border-color: darken(#eceff4, 10);
-$border-color-light: darken(#eceff4, 3);
+
+$colors: $navy 'navy',
+	$blue 'blue',
+	$olive 'olive',
+	$green 'green',
+	$yellow 'yellow',
+	$orange 'orange',
+	$red 'red',
+	$maroon 'maroon',
+	$fuchsia 'fuchsia',
+	$purple 'purple',
+	$black 'black',
+	$grey 'grey',
+	$silver 'silver',
+	$light 'light';
+
+$text: $black;
+$border-color: $light;
+$border-color-light: lighten($light, 3);
+
 
 // shadows
 $box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);

@@ -1,4 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { userState } from '@/services/User'
+
+let routeAfterUsername = ''
 
 const routes = [
   {
@@ -49,7 +52,21 @@ router.beforeEach((to, from, next) => {
   // set doc title
   document.title = to.meta.title
 
-  next()
+  if (to.name === 'username') {
+		next()
+	} 
+  else if (!userState.username) {
+    routeAfterUsername = to.fullPath
+    next('/username')
+  }
+  else if (routeAfterUsername) {
+    next(routeAfterUsername)
+    routeAfterUsername = ''
+  }
+  else {
+    next()
+  }
+
 })
 
 export default router;

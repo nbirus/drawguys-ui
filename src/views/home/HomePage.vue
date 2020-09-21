@@ -1,8 +1,14 @@
 <template>
-	<div class="page home">
+	<div class="page page--limit page--center home">
 		<h1 class="home__title">Create or join a room</h1>
-		<input type="text" />
-		<form-card class="home__form-card" @submit="createRoom" />
+
+		<form-card
+			class="home__form-card"
+			color="black"
+			submit-text="Next"
+			placeholder="Room name..."
+			@submit="onSubmit"
+		/>
 		<home-page-list class="home__room-list" />
 		<router-link class="home__username-link" to="/username">Choose another name</router-link>
 	</div>
@@ -11,6 +17,8 @@
 <script>
 import HomePageList from './HomePageList'
 import FormCard from '@/components/FormCard'
+import { createRoom } from '@/services/Room'
+
 export default {
 	name: 'home-page',
 	components: {
@@ -18,10 +26,13 @@ export default {
 		FormCard,
 	},
 	setup() {
-		function createRoom(username) {}
-
+		function onSubmit(roomname) {
+			if (roomname) {
+				createRoom(roomname)
+			}
+		}
 		return {
-			createRoom,
+			onSubmit,
 		}
 	},
 }
@@ -31,13 +42,17 @@ export default {
 @import '@/styles/component.scss';
 
 .home {
+	justify-content: flex-start;
+
 	&__title {
+		margin-top: $margin-top;
 		margin-bottom: 2.5rem;
 	}
 	&__form-card {
-		margin-bottom: 2.5rem;
+		margin-bottom: 3rem;
 	}
 	&__room-list {
+		padding-top: 3rem;
 	}
 	&__username-link {
 		position: fixed;
