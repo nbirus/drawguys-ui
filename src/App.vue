@@ -1,8 +1,8 @@
 <template>
 	<div id="app">
 		<router-view v-if="socketState.connected" />
-		<socket-loading />
-		<socket-error />
+		<socket-loading v-else-if="socketState.loading" />
+		<socket-error v-else-if="socketState.error" />
 	</div>
 </template>
 

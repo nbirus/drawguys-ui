@@ -1,14 +1,16 @@
 <template>
-	<div class="page page--center username">
-		<h1 class="mb-5">Choose a username</h1>
-		<form-card
-			:init-value="userState.username"
-			color="black"
-			submit-text="Next"
-			placeholder="Username..."
-			@submit="onSubmit"
-		/>
-	</div>
+	<transition name="pop-up" mode="out-in" appear>
+		<div class="page page--center username">
+			<h1 class="mb-5">Choose a username</h1>
+			<form-card
+				:init-value="userState.username"
+				color="black"
+				submit-text="Next"
+				placeholder="Username..."
+				@submit="onSubmit"
+			/>
+		</div>
+	</transition>
 </template>
 
 <script>
@@ -39,4 +41,11 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
+.page {
+	justify-content: flex-start;
+
+	h1 {
+		margin-top: $margin-top;
+	}
+}
 </style>

@@ -1,15 +1,24 @@
 <template>
 	<div class="page page--limit page--center home">
-		<h1 class="home__title">Create or join a room</h1>
+		<!-- title -->
+		<transition name="pop-up" mode="out-in" appear>
+			<h1 class="home__title">Create or join a room</h1>
+		</transition>
 
-		<form-card
-			class="home__form-card"
-			color="black"
-			submit-text="Next"
-			placeholder="Room name..."
-			@submit="onSubmit"
-		/>
+		<!-- form card -->
+		<transition name="pop-up" mode="out-in" appear>
+			<form-card
+				class="home__form-card"
+				color="black"
+				submit-text="Create"
+				placeholder="Room name..."
+				@submit="createRoom"
+			/>
+		</transition>
+
+		<!-- room list -->
 		<home-page-list class="home__room-list" />
+
 		<router-link class="home__username-link" to="/username">Choose another name</router-link>
 	</div>
 </template>
@@ -26,13 +35,8 @@ export default {
 		FormCard,
 	},
 	setup() {
-		function onSubmit(roomname) {
-			if (roomname) {
-				createRoom(roomname)
-			}
-		}
 		return {
-			onSubmit,
+			createRoom,
 		}
 	},
 }
