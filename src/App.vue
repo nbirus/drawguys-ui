@@ -9,7 +9,7 @@
 <script>
 import SocketLoading from '@/components/SocketLoading'
 import SocketError from '@/components/SocketError'
-import { connect, disconecct, socketState } from '@/services/Socket'
+import { connect, disconnect, socketState } from '@/services/Socket'
 import { onBeforeUnmount, onMounted } from 'vue'
 
 export default {
@@ -24,7 +24,7 @@ export default {
 			connect()
 		})
 		onBeforeUnmount(() => {
-			disconecct()
+			disconnect()
 		})
 
 		return {

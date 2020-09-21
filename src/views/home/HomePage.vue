@@ -8,6 +8,7 @@
 		<!-- form card -->
 		<transition name="pop-up" mode="out-in" appear>
 			<form-card
+				init-value="test"
 				class="home__form-card"
 				color="black"
 				submit-text="Create"

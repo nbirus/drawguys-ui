@@ -14,7 +14,7 @@ export const socketState = reactive({
 })
 
 // actions
-export function connect(cb) {
+export function connect() {
 	socketState.loading = true
 	socket.connect()
 }
@@ -24,7 +24,6 @@ export function disconnect() {
 		socket.disconnect()
 	}
 }
-
 
 // event handlers
 function onConnect() {

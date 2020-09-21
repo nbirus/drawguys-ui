@@ -6,17 +6,16 @@ const LOG = true
 export const userState = reactive({
 	userid: sessionStorage.getItem('userid') || uid(),
 	username: sessionStorage.getItem('username') || '',
-	roomid: sessionStorage.getItem('roomid') || '',
+	roomid: '',
 	roomState: {},
 })
 
 // actions
 export function initUser() {
-	log('init-user', userState)
-	sessionStorage.setItem('userid', userState.userid)
-	sessionStorage.setItem('username', userState.username)
-
+	log('init-user', userState.userid)
 	if (socket) {
+		sessionStorage.setItem('userid', userState.userid)
+		sessionStorage.setItem('username', userState.username)
 		socket.emit('set_user', {
 			userid: userState.userid,
 			username: userState.username,
@@ -25,12 +24,9 @@ export function initUser() {
 }
 export function setUsername(username) {
 	log('set-username', username)
-
-	// set info
-	userState.username = username
-	sessionStorage.setItem('username', username)
-
 	if (socket) {
+		userState.username = username
+		sessionStorage.setItem('username', username)
 		socket.emit('set_user', {
 			userid: userState.userid,
 			username,
@@ -47,5 +43,5 @@ function log(event, param) {
 function uid() {
 	return Math.random()
 		.toString(16)
-		.slice(10)
+		.slice(11)
 }

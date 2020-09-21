@@ -1,8 +1,8 @@
-input[type="text"] {
+input[type='text'] {
 	height: $block-height;
 	border: solid 1px $border-color;
 	border-radius: $border-radius;
-	padding: 0 .75rem;
+	padding: 0 0.75rem;
 	font-size: 1em;
 
 	&:focus,
@@ -10,10 +10,10 @@ input[type="text"] {
 		border-radius: $border-radius;
 		outline: none;
 		box-shadow: 0 0 0 1px $text;
-		border-color: $text!important;
+		border-color: $text !important;
 	}
 	&::placeholder {
-		opacity: .5;
+		opacity: 0.5;
 	}
 
 	&.b-none {
@@ -23,6 +23,6 @@ input[type="text"] {
 	&.lg {
 		height: $block-height-lg;
 		font-size: 1.3em;
-		padding: .25rem 1rem 0;
+		padding: 0 1rem;
 	}
 }
