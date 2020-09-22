@@ -1,5 +1,12 @@
 .page {
 	width: 100%;
+	z-index: 2;
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+	
 
 	&--center {
 		height: 100vh;

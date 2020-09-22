@@ -13,10 +13,14 @@
 					class="home__form-card"
 					color="blue"
 					submit-text="Create"
+					icon="check"
 					placeholder="Enter a room name..."
 					maxlength="20"
 					@submit="createRoom"
-				/>
+				>
+					<span>Create</span>
+					<i class="ri-arrow-right-line ml-1"></i>
+				</form-card>
 			</div>
 		</transition>
 

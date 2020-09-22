@@ -5,11 +5,14 @@
 			<form-card
 				:init-value="userState.username"
 				color="black"
-				submit-text="Next"
+				icon="arrow-right"
 				placeholder="Enter a username..."
 				maxlength="16"
 				@submit="onSubmit"
-			/>
+			>
+				<span>Next</span>
+				<i class="ri-arrow-right-line ml-1"></i>
+			</form-card>
 		</div>
 	</transition>
 </template>

@@ -12,8 +12,7 @@
 		/>
 		<transition name="form-button" mode="out-in">
 			<button v-if="value" type="submit" class="lg">
-				<i class="ri-check-fill"></i>
-				<span v-text="submitText"></span>
+				<slot></slot>
 			</button>
 		</transition>
 	</form>
@@ -24,7 +23,7 @@ import { ref } from 'vue'
 export default {
 	name: 'form-card',
 	inheritAttrs: false,
-	props: ['submitText', 'size', 'color', 'initValue'],
+	props: ['submitText', 'size', 'color', 'initValue', 'icon'],
 	setup(props, { emit }) {
 		let value = ref(props.initValue)
 		let focus = ref(false)
@@ -40,7 +39,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @import '@/styles/component.scss';
 .form-card {
 	display: flex;
@@ -58,11 +57,11 @@ export default {
 		flex: 0 0 auto;
 		display: flex;
 		align-items: center;
-		padding-left: 1.15rem;
+		padding-left: 1.25rem;
+		padding-right: 1rem;
 
 		i {
 			font-size: 1.25rem;
-			margin-right: 0.5rem;
 			transform: translateY(2px);
 		}
 
