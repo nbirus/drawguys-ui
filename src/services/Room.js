@@ -55,12 +55,14 @@ export function toggleReady() {
 	}
 }
 export function sendMessage(message) {
-	console.log(message);
+	log('message')
+	if (socket && userState.roomid) {
+		socket.emit('message', message)
+	}
 }
 
 // event handlers
 function onUpdateRooms(newRooms) {
-	// log('rooms-update')
 	rooms.value = newRooms
 }
 function onUpdateRoom(newRoom) {

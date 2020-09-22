@@ -25,8 +25,8 @@ export default {
 .user {
 	$dark-light: darken($light, 90);
 	padding: 1.25rem 0;
-	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
-		0 10px 10px -5px rgba(0, 0, 0, 0.04);
+	box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.1),
+		0 5px 5px -5px rgba(0, 0, 0, 0.04);
 
 	&__username {
 		text-align: center;
@@ -38,7 +38,7 @@ export default {
 	@each $color, $name in $colors {
 		&.#{$name} {
 			background-color: $color;
-			border-color: darken($color, 10);
+			border-color: darken($color, 15);
 		}
 	}
 }

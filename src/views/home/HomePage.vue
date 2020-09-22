@@ -7,12 +7,12 @@
 
 		<!-- form card -->
 		<transition name="pop-up" mode="out-in" appear>
-			<div class="delay-1">
+			<div class="delay-1 ps">
 				<form-card
 					init-value
 					class="home__form-card"
 					color="blue"
-					submit-text="Create"
+					enter-text="create room"
 					icon="check"
 					placeholder="Enter a room name..."
 					maxlength="20"
@@ -72,5 +72,8 @@ export default {
 		left: 1rem;
 		font-size: 1.2rem;
 	}
+}
+.ps {
+	position: relative;
 }
 </style>
