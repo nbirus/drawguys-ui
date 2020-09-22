@@ -1,7 +1,7 @@
 <template>
 	<button class="lg custom" :class="[color, { ready }]" @click="toggleReady">
-		<i v-if="!ready" class="ri-indeterminate-circle-line"></i>
-		<i v-else class="ri-checkbox-circle-line"></i>
+		<!-- <i v-if="!ready" class="ri-indeterminate-circle-line"></i>
+		<i v-else class="ri-checkbox-circle-line"></i>-->
 		<span v-if="ready">Ready</span>
 		<span v-else>Not ready</span>
 	</button>
@@ -40,9 +40,8 @@ button {
 	}
 
 	&.ready {
-		i {
-			color: $text-light;
-		}
+		background-color: $green;
+		color: white;
 	}
 }
 </style>

@@ -1,5 +1,8 @@
 <template>
-	<div class="user card" :class="color">
+	<div class="user card ready-outline-green nudge" :class="[color, { ready }]">
+		<div class="ready-banner" v-if="ready">
+			<i class="ri-check-line"></i>
+		</div>
 		<div class="user__username">{{ username }}</div>
 	</div>
 </template>
@@ -23,6 +26,8 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
 .user {
+	position: relative;
+	overflow: hidden;
 	$dark-light: darken($light, 90);
 	padding: 1.25rem 0;
 	box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.1),

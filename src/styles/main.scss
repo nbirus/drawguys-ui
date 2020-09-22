@@ -182,3 +182,21 @@ a:focus {
 	animation: spinner-donut-anim 1.2s linear infinite;
 	margin: 0;
 }
+
+.ready-banner {
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: $green;
+	color: white;
+	height: 50px;
+	width: 40px;
+	clip-path: polygon(0 0, 0 68%, 100% 0);
+
+	i {
+		position: absolute;
+		top: 2px;
+		left: 4px;
+		font-size: 1.2rem;
+	}
+}

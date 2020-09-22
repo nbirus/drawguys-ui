@@ -7,7 +7,7 @@
 
 		<!-- card -->
 		<transition name="pop-up" mode="out-in" appear>
-			<div class="room__card card delay-1">
+			<div class="room__card card delay-1 ready-outline-green" :class="{ ready }">
 				<room-users class="room__users" />
 				<div class="room__ready">
 					<room-ready-btn />
@@ -23,6 +23,7 @@ import RoomChat from './RoomChat'
 import RoomUsers from './RoomUsers'
 import RoomReadyBtn from './RoomReadyBtn'
 import { roomState } from '@/services/Room'
+import { computed } from 'vue'
 
 export default {
 	name: 'room-page',
@@ -30,6 +31,7 @@ export default {
 	setup() {
 		return {
 			roomState,
+			ready: computed(() => roomState.user.ready),
 		}
 	},
 }
@@ -51,6 +53,7 @@ export default {
 		width: 100%;
 		border: none;
 		overflow: hidden;
+		position: relative;
 	}
 	&__users {
 		grid-row: 1;

@@ -12,4 +12,30 @@
 	.text-#{$name} {
 		color: $color;
 	}
+
+	.ready-outline-#{$name} {
+		&:after {
+			transition: box-shadow 0.2s ease;
+			content: '';
+			position: absolute;
+			top: 0px;
+			right: 0px;
+			bottom: 0px;
+			left: 0px;
+			border-radius: $border-radius;
+			pointer-events: none;
+		}
+		&.ready:after {
+			box-shadow: inset 0 0 0 4px $color;
+		}
+		&.ready {
+			border-color: $color !important;
+		}
+		&.nudge:after {
+			top: -1px;
+			right: -1px;
+			bottom: -1px;
+			left: -1px;
+		}
+	}
 }
