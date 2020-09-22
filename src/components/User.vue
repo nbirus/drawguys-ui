@@ -1,5 +1,5 @@
 <template>
-	<div class="user card ready-outline-green nudge" :class="[color, { ready }]">
+	<div class="user card ready-outline-green nudge" :class="[color, { ready, small, outlined }]">
 		<div class="ready-banner" v-if="ready">
 			<i class="ri-check-line"></i>
 		</div>
@@ -17,6 +17,8 @@ export default {
 		ready: Boolean,
 		match: Boolean,
 		typing: Boolean,
+		outlined: Boolean,
+		small: Boolean,
 		color: String,
 		score: Number,
 	},
@@ -41,9 +43,27 @@ export default {
 	}
 
 	@each $color, $name in $colors {
-		&.#{$name} {
+		&.#{$name}:not(.outlined) {
 			background-color: $color;
 			border-color: darken($color, 15);
+		}
+		&.#{$name}.outlined {
+			background-color: fade-out($color, 0.9);
+			border-color: lighten($color, 15);
+
+			.user__username {
+				color: $color;
+			}
+		}
+	}
+
+	&.small {
+		padding: 1.1rem 0;
+		box-shadow: 0 5px 10px -5px rgba(0, 0, 0, 0.05),
+			0 3px 3px -3px rgba(0, 0, 0, 0.03);
+
+		.user__username {
+			font-size: 1rem;
 		}
 	}
 }

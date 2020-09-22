@@ -1,0 +1,67 @@
+.popover-form-card {
+	position: absolute;
+	top: 5.85rem;
+	width: 100%;
+
+	display: flex;
+	justify-content: center;
+	z-index: 999;
+
+	div {
+		background-color: $blue;
+		width: auto;
+		color: white;
+		padding: 0.6rem 0.8rem;
+		font-size: 0.8rem;
+		animation: popover 0.4s ease;
+		box-shadow: $box-shadow;
+		border-radius: 25px;
+	}
+
+	code {
+		background-color: darken($blue, 10);
+		border-radius: 4px;
+		font-size: 0.7rem;
+		padding: 0.2rem 0.3rem;
+		margin: 0 2px;
+	}
+}
+.popover-room-card {
+	position: absolute;
+	bottom: -3rem;
+	width: 100%;
+
+	display: flex;
+	justify-content: center;
+	z-index: 999;
+
+	div {
+		background-color: $black;
+		width: auto;
+		color: white;
+		padding: 0.6rem 0.8rem;
+		font-size: 0.8rem;
+		animation: popover 0.4s ease;
+		box-shadow: $box-shadow;
+		border-radius: 25px;
+	}
+
+	code {
+		background-color: lighten($black, 10);
+		border-radius: 4px;
+		font-size: 0.7rem;
+		padding: 0.2rem 0.3rem;
+		margin: 0 2px;
+	}
+}
+
+@keyframes popover {
+	0% {
+		transform: translateY(2rem);
+		opacity: 0;
+	}
+	100% {
+		transform: translateY(0);
+		opacity: 1;
+	}
+}

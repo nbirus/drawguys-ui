@@ -1,5 +1,10 @@
 <template>
-	<form class="form-card card" ref="form" :class="{ focus }" @submit.prevent="onSubmit">
+	<form
+		class="form-card card ready-outline-blue nudge"
+		ref="form"
+		:class="{ focus, ready: focus }"
+		@submit.prevent="onSubmit"
+	>
 		<div class="wave"></div>
 		<input
 			type="text"
@@ -20,7 +25,7 @@
 </template>
 
 <script>
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 export default {
 	name: 'form-card',
 	inheritAttrs: false,
@@ -50,9 +55,9 @@ export default {
 			let popover = document.createElement('div')
 			let parent = form.value.parentElement
 			if (!oldPopover) {
-				popover.classList.add('popover')
+				popover.classList.add('popover-form-card')
 				popover.id = 'popover'
-				popover.innerHTML = `Press <code>Enter</code> to ${props.enterText}`
+				popover.innerHTML = `<div>Press <code>Enter</code> to ${props.enterText}</div>`
 				parent.appendChild(popover)
 			}
 		}
@@ -78,7 +83,7 @@ export default {
 .form-card {
 	display: flex;
 	align-items: center;
-	padding: 0.75rem;
+	padding: 0.75rem 1rem 0.75rem 0.75rem;
 	width: 450px;
 	transition: transform 0.2s ease;
 	overflow: hidden;
@@ -94,6 +99,8 @@ export default {
 		align-items: center;
 		padding-left: 1.25rem;
 		padding-right: 1rem;
+		height: 50px;
+		font-size: 1.1rem;
 
 		i {
 			font-size: 1.25rem;
@@ -107,7 +114,7 @@ export default {
 
 	&.focus {
 		transform: scale(1.025);
-		border: solid thin $blue;
+		// border: solid thin $blue;
 
 		button {
 			border-color: $blue;
@@ -116,26 +123,6 @@ export default {
 				color: $blue !important;
 			}
 		}
-	}
-}
-.popover {
-	position: absolute;
-	right: -1.5rem;
-	top: 6rem;
-	background-color: fade-out($black, 0.1);
-	color: white;
-	border-radius: 25px;
-	padding: 0.6rem 0.8rem;
-	font-size: 0.8rem;
-	animation: popover 0.4s ease;
-	box-shadow: $box-shadow;
-
-	code {
-		background-color: $black;
-		border-radius: 4px;
-		font-size: 0.7rem;
-		padding: 0.2rem 0.3rem;
-		margin: 0 2px;
 	}
 }
 .wave {

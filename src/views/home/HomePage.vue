@@ -27,7 +27,11 @@
 		<!-- room list -->
 		<home-page-rooms class="home__room-list" />
 
-		<router-link class="home__username-link" to="/username">Choose another name</router-link>
+		<div class="home__username-link">
+			<!-- Welcome,
+			<b>{{ userState.username }}</b> --->
+			<router-link to="/username">Choose another username</router-link>
+		</div>
 	</div>
 </template>
 
@@ -35,6 +39,7 @@
 import HomePageRooms from './HomePageRooms'
 import FormCard from '@/components/FormCard'
 import { createRoom, getRooms } from '@/services/Room'
+import { userState } from '@/services/User'
 
 export default {
 	name: 'home-page',
@@ -46,6 +51,7 @@ export default {
 		getRooms()
 		return {
 			createRoom,
+			userState,
 		}
 	},
 }
@@ -65,12 +71,13 @@ export default {
 	}
 	&__room-list {
 		padding-top: 3rem;
+		padding-bottom: 3rem;
 	}
 	&__username-link {
 		position: fixed;
 		bottom: 1rem;
 		left: 1rem;
-		font-size: 1.2rem;
+		font-size: 1.1rem;
 	}
 }
 .ps {
