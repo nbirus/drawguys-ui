@@ -16,6 +16,9 @@ export const roomState = reactive({
 })
 
 // actions
+export function getRooms() {
+	socket.emit('get_rooms')
+}
 export function createRoom(roomname) {
 	log('create-room')
 	if (socket) {
@@ -50,6 +53,9 @@ export function toggleReady() {
 	if (socket && userState.roomid) {
 		socket.emit('toggle_ready', userState.userid)
 	}
+}
+export function sendMessage(message) {
+	console.log(message);
 }
 
 // event handlers

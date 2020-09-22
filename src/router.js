@@ -51,30 +51,45 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
+
 	// set doc title
 	document.title = to.meta.title
 
-	if (['room', 'game'].includes(from.name) && userState.roomid) {
-		leaveRoom()
-	} else if (
-		['room', 'game'].includes(to.name) &&
-		!userState.roomid &&
-		to.params.id
-	) {
-		joinRoom(to.params.id)
-	}
 
+	// if routing to username, do nothing
 	if (to.name === 'username') {
 		next()
-	} else if (!userState.username) {
+	} 
+	// if the user doesn't have a username
+	else if (!userState.username) {
 		routeAfterUsername = to.fullPath
 		next('/username')
-	} else if (routeAfterUsername) {
+	}
+	// if the user just entered a username, go to next route
+	else if (routeAfterUsername) {
 		next(routeAfterUsername)
 		routeAfterUsername = ''
-	} else {
+	} 
+
+	// default
+	else {
+
+		// if coming from room, leave room
+		if (['room', 'game'].includes(from.name) && userState.roomid) {
+			leaveRoom()
+		} 
+		// if going to room, join it
+		else if (
+			['room', 'game'].includes(to.name) &&
+			!userState.roomid &&
+			to.params.id
+		) {
+			joinRoom(to.params.id)
+		}
+
 		next()
 	}
+
 })
 
 export default router

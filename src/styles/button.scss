@@ -5,13 +5,19 @@ button {
 	padding: 0 0.75rem;
 	font-size: 1em;
 	cursor: pointer;
+	transition: all .2s ease;
 
 	&:focus,
 	&:active {
 		border-radius: $border-radius;
 		border-color: $text;
-		outline: none;
+		outline: none!important;
+		transform: translateY(0px);
 		box-shadow: 0 0 0 1px $text;
+	}
+	&:hover {
+		transform: translateY(-1px);
+		box-shadow: $box-shadow;
 	}
 
 	&.lg {
@@ -19,9 +25,36 @@ button {
 		font-size: 1.25em;
 		padding: 0 1.5rem;
 	}
-	&.black {
-		background-color: $black;
-		color: white;
-		border-color: $black;
+
+	@each $color, $name in $colors {
+		&.#{$name} {
+			background-color: $color;
+			color: white;
+			border-color: darken($color, 5);
+
+			&:hover {
+				background-color: lighten($color, 5);
+			}
+			&:active {
+				background-color: darken($color, 15);
+			}
+			&:focus {
+				border-color: darken($color, 10);
+			}
+		}
+	}
+
+	&.light {
+		color: $text-light;
+
+			&:hover {
+				background-color: darken($light, 3);
+			}
+			&:active {
+				background-color: darken($light, 15);
+			}
+			&:focus {
+				border-color: darken($light, 10);
+			}
 	}
 }

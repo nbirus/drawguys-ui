@@ -12,4 +12,8 @@
 		max-width: $max-width;
 		margin: 0 auto;
 	}
+	&--limit-sm {
+		max-width: $max-width-sm;
+		margin: 0 auto;
+	}
 }

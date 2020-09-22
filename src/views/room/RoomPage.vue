@@ -46,7 +46,7 @@ export default {
 	}
 	&__card {
 		display: grid;
-		grid-template-columns: 1fr 1fr;
+		grid-template-columns: 0.9fr 1fr;
 		grid-template-rows: auto auto;
 		width: 100%;
 		border: none;

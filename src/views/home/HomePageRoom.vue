@@ -8,7 +8,7 @@
 			<li class="room__users-user" v-for="user of userList" :key="user.userid">
 				<user v-bind="user" />
 			</li>
-			<li class="room__users-user invite" v-for="n of (4 - userList.length)" :key="n">
+			<li class="room__users-user invite" v-for="n of userEmpty" :key="n">
 				<i class="ri-user-line"></i>
 			</li>
 		</ul>
@@ -24,9 +24,12 @@ export default {
 	props: ['roomid', 'roomname', 'users'],
 	components: { User },
 	setup(props) {
-		const userList = computed(() => Object.values(props.users))
+		let userList = computed(() => Object.values(props.users))
 		return {
 			userList,
+			userEmpty: computed(() =>
+				userList.value.length > 4 ? 0 : 4 - userList.value.length
+			),
 		}
 	},
 }
@@ -42,7 +45,7 @@ export default {
 
 	&__header {
 		margin-bottom: 1rem;
-		padding: 1.5rem 1.5rem 0;
+		padding: 2rem 2rem 0;
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
@@ -50,7 +53,7 @@ export default {
 	&__users {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
-		padding: 0 1.5rem 1.5rem;
+		padding: 0 2rem 2rem;
 		grid-gap: 1rem;
 
 		&-user {

@@ -1,5 +1,5 @@
 <template>
-	<div class="page page--limit page--center home">
+	<div class="page page--limit-sm page--center home">
 		<!-- title -->
 		<transition name="pop-up" mode="out-in" appear>
 			<h1 class="home__title">Create or join a room</h1>
@@ -10,9 +10,9 @@
 			<form-card
 				init-value="test"
 				class="home__form-card"
-				color="black"
+				color="blue"
 				submit-text="Create"
-				placeholder="Room name..."
+				placeholder="Enter room name..."
 				@submit="createRoom"
 			/>
 		</transition>
@@ -27,7 +27,7 @@
 <script>
 import HomePageRooms from './HomePageRooms'
 import FormCard from '@/components/FormCard'
-import { createRoom } from '@/services/Room'
+import { createRoom, getRooms } from '@/services/Room'
 
 export default {
 	name: 'home-page',
@@ -36,6 +36,7 @@ export default {
 		FormCard,
 	},
 	setup() {
+		getRooms()
 		return {
 			createRoom,
 		}

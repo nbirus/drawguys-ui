@@ -3,8 +3,8 @@
 		<li class="room-users__user" v-for="user of users" :key="user.userid">
 			<user v-bind="user" />
 		</li>
-		<li class="room-users__user invite" v-for="n of (4 - users.length)" :key="n"></li>
-		<li class="room-users__user invite" v-if="users.length === 4 && users.length < 8"></li>
+		<li class="room-users__user invite" v-for="n of userEmpty" :key="n"></li>
+		<li class="room-users__user invite" v-if="users.length > 3 && users.length < 8"></li>
 	</ul>
 </template>
 
@@ -20,6 +20,9 @@ export default {
 		const users = computed(() => Object.values(roomState.users))
 		return {
 			users,
+			userEmpty: computed(() =>
+				users.value.length > 4 ? 0 : 4 - users.value.length
+			),
 		}
 	},
 }
