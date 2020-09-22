@@ -2,19 +2,22 @@
 	<div class="page page--limit-sm page--center home">
 		<!-- title -->
 		<transition name="pop-up" mode="out-in" appear>
-			<h1 class="home__title">Create or join a room</h1>
+			<h1 class="home__title mb-6">Create or join a room</h1>
 		</transition>
 
 		<!-- form card -->
 		<transition name="pop-up" mode="out-in" appear>
-			<form-card
-				init-value="test"
-				class="home__form-card"
-				color="blue"
-				submit-text="Create"
-				placeholder="Enter room name..."
-				@submit="createRoom"
-			/>
+			<div class="delay-1">
+				<form-card
+					init-value
+					class="home__form-card"
+					color="blue"
+					submit-text="Create"
+					placeholder="Enter a room name..."
+					maxlength="20"
+					@submit="createRoom"
+				/>
+			</div>
 		</transition>
 
 		<!-- room list -->
@@ -52,7 +55,6 @@ export default {
 
 	&__title {
 		margin-top: $margin-top;
-		margin-bottom: 2.5rem;
 	}
 	&__form-card {
 		margin-bottom: 3rem;
@@ -64,7 +66,7 @@ export default {
 		position: fixed;
 		bottom: 1rem;
 		left: 1rem;
-		font-size: 1.1rem;
+		font-size: 1.2rem;
 	}
 }
 </style>

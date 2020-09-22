@@ -23,12 +23,16 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
 .user {
+	$dark-light: darken($light, 90);
 	padding: 1.25rem 0;
+	box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+		0 10px 10px -5px rgba(0, 0, 0, 0.04);
 
 	&__username {
 		text-align: center;
 		font-size: 1.1rem;
 		color: white;
+		font-weight: $bold;
 	}
 
 	@each $color, $name in $colors {

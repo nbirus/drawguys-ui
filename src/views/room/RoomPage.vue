@@ -55,13 +55,13 @@ export default {
 	&__users {
 		grid-row: 1;
 		grid-column: 1;
-		padding: 1.75rem 1.5rem;
+		padding: 2rem 2.25rem 0;
+		margin-bottom: 1.5rem;
 	}
 	&__ready {
 		grid-row: 2;
 		grid-column: 1;
-		padding: 1rem;
-		border-top: solid thin $border-color;
+		padding: 0 1.5rem 1.5rem;
 	}
 	&__chat {
 		grid-row: span 2;

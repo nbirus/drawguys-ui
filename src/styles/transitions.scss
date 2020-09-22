@@ -12,6 +12,32 @@
 	transform: translateY(50px) scale(.9) rotateZ(30deg);
 }
 
+// list
+.list-enter-active,
+.list-leave-active {
+	transition: .5s ease;
+	transition-property: opacity, transform;
+}
+.list-enter-from,
+.list-leave-to {
+	opacity: 0;
+	transform: translateY(50px) scale(.9) rotateY(20deg) rotateX(10deg);
+}
+
+// button
+.form-button-enter-active, .loading-leave-active {
+	transition: .5s ease;
+	transition-property: opacity, transform;
+}
+.form-button-enter-from {
+	opacity: 0;
+	transform: translateY(40px) scale(.9) rotateZ(-3deg);
+}
+.form-button-leave-to {
+	opacity: 0;
+	transform: translateY(30px) scale(.9) rotateZ(3deg);
+}
+
 ///////////////////////////
 
 .hover-animation {

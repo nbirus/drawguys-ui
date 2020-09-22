@@ -1,24 +1,27 @@
 button {
 	height: $block-height;
-	border: solid 1px $border-color;
+	border: solid 1px transparent;
 	border-radius: $border-radius;
+	background-color: $light;
 	padding: 0 0.75rem;
 	font-size: 1em;
 	cursor: pointer;
 	transition: all .2s ease;
+	outline: none!important;
 
-	&:focus,
-	&:active {
-		border-radius: $border-radius;
-		border-color: $text;
-		outline: none!important;
-		transform: translateY(0px);
-		box-shadow: 0 0 0 1px $text;
-	}
 	&:hover {
 		transform: translateY(-1px);
 		box-shadow: $box-shadow;
 	}
+	&:focus,
+	&:active {
+		border-radius: $border-radius;
+		transform: translateY(0px);
+		box-shadow: none;
+		background-color: darken($light, 3);
+		border-color: $blue;
+	}
+
 
 	&.lg {
 		height: $block-height-lg;
@@ -27,7 +30,7 @@ button {
 	}
 
 	@each $color, $name in $colors {
-		&.#{$name} {
+		&.#{$name}:not(.custom) {
 			background-color: $color;
 			color: white;
 			border-color: darken($color, 5);
@@ -42,19 +45,5 @@ button {
 				border-color: darken($color, 10);
 			}
 		}
-	}
-
-	&.light {
-		color: $text-light;
-
-			&:hover {
-				background-color: darken($light, 3);
-			}
-			&:active {
-				background-color: darken($light, 15);
-			}
-			&:focus {
-				border-color: darken($light, 10);
-			}
 	}
 }

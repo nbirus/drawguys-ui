@@ -1,9 +1,9 @@
 <template>
-	<ul class="room-list">
-		<li class="room-list__item" v-for="room in rooms" :key="room.roomid">
+	<transition-group name="list" tag="ul" mode="out-in" class="room-list" appear>
+		<li class="room-list__item" :class="`delay-${i + 1}`" v-for="(room, i) in rooms" :key="i">
 			<home-page-room v-bind="room"></home-page-room>
 		</li>
-	</ul>
+	</transition-group>
 </template>
 
 <script>

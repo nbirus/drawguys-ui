@@ -80,9 +80,10 @@ export default {
 		input {
 			width: 100%;
 			font-size: 1.05rem;
-			height: 52px;
+			height: 55px;
 			border: none !important;
 			padding-left: 1.25rem;
+			background-color: lighten($light, 1);
 
 			&:focus,
 			&:active {

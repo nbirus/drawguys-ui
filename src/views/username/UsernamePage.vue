@@ -1,12 +1,13 @@
 <template>
 	<transition name="pop-up" mode="out-in" appear>
 		<div class="page page--center username">
-			<h1 class="mb-5">Choose a username</h1>
+			<h1 class="mb-6">Choose a username</h1>
 			<form-card
 				:init-value="userState.username"
 				color="black"
 				submit-text="Next"
-				placeholder="Username..."
+				placeholder="Enter a username..."
+				maxlength="16"
 				@submit="onSubmit"
 			/>
 		</div>

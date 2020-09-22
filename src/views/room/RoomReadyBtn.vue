@@ -1,5 +1,7 @@
 <template>
-	<button class="lg" :class="[color, { ready }]" @click="toggleReady">
+	<button class="lg custom" :class="[color, { ready }]" @click="toggleReady">
+		<i v-if="!ready" class="ri-indeterminate-circle-line"></i>
+		<i v-else class="ri-checkbox-circle-line"></i>
 		<span v-if="ready">Ready</span>
 		<span v-else>Not ready</span>
 	</button>
@@ -27,5 +29,20 @@ export default {
 button {
 	width: 100%;
 	font-size: 1.1rem;
+	position: relative;
+
+	i {
+		position: absolute;
+		top: 0.8rem;
+		left: 1rem;
+		font-size: 1.5rem;
+		color: $text-extra-light;
+	}
+
+	&.ready {
+		i {
+			color: $text-light;
+		}
+	}
 }
 </style>

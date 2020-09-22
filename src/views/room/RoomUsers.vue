@@ -3,8 +3,12 @@
 		<li class="room-users__user" v-for="user of users" :key="user.userid">
 			<user v-bind="user" />
 		</li>
-		<li class="room-users__user invite" v-for="n of userEmpty" :key="n"></li>
-		<li class="room-users__user invite" v-if="users.length > 3 && users.length < 8"></li>
+		<li class="room-users__user invite" v-for="n of userEmpty" :key="n">
+			<i class="ri-user-add-line"></i>
+		</li>
+		<li class="room-users__user invite" v-if="users.length > 3 && users.length < 8">
+			<i class="ri-user-add-line"></i>
+		</li>
 	</ul>
 </template>
 
@@ -38,6 +42,11 @@ export default {
 			height: $block-height-lg;
 			background-color: $light;
 			border-radius: $border-radius;
+			color: $text-extra-light;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-size: 2.15rem;
 
 			&:last-child {
 				margin-bottom: 0;
