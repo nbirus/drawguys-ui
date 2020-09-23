@@ -11,6 +11,19 @@
 	opacity: 0;
 	transform: translateY(50px) scale(.9) rotateZ(30deg);
 }
+// ready-btn
+.ready-btn-enter-active, .loading-leave-active {
+	transition: .5s ease;
+	transition-property: opacity, transform;
+}
+.ready-btn-enter-from {
+	opacity: 0;
+	transform: translateY(-20px) scale(.9);
+}
+.ready-btn-leave-to {
+	opacity: 0;
+	transform: translateY(50px) scale(.9) rotateZ(30deg);
+}
 
 // list
 .list-enter-active,
@@ -24,6 +37,18 @@
 	transform: translateY(50px) scale(.9) rotateY(20deg) rotateX(10deg);
 }
 
+// chat
+// .chat-enter-active,
+// .chat-leave-active {
+// 	transition: .5s ease;
+// 	transition-property: opacity, transform;
+// }
+// .chat-enter-from,
+// .chat-leave-to {
+// 	opacity: 0;
+// 	transform: translateY(50px) scale(.9) rotateY(20deg) rotateX(10deg);
+// }
+
 // button
 .form-button-enter-active, .loading-leave-active {
 	transition: .5s ease;
@@ -31,11 +56,11 @@
 }
 .form-button-enter-from {
 	opacity: 0;
-	transform: translateY(40px) scale(.9) rotateZ(-3deg);
+	transform: translateY(20px) scale(.9) rotateZ(10deg);
 }
 .form-button-leave-to {
 	opacity: 0;
-	transform: translateY(30px) scale(.9) rotateZ(3deg);
+	transform: translateY(20px) scale(.9) rotateZ(10deg);
 }
 
 ///////////////////////////

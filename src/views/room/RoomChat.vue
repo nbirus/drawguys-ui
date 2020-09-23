@@ -1,20 +1,29 @@
 <template>
 	<div class="chat" :class="{ focus }">
 		<div class="chat__box">
-			<ul class="chat__messages">
+			<transition-group tag="ul" name="chat" class="chat__messages">
 				<chat-message v-for="(message, i) in messages" :key="i" v-bind="message" class="chat__message" />
-			</ul>
+			</transition-group>
 		</div>
-		<form class="chat__input" @submit.prevent="onSubmit">
+		<form
+			class="chat__input sm nudge-2"
+			:class="[`ready-outline-${roomState.user.color}`, { ready: focus }]"
+			@submit.prevent="onSubmit"
+		>
 			<input
 				class="b-none"
 				placeholder="Send message..."
 				type="text"
+				required
+				maxlength="40"
+				:disabled="roomState.user.ready"
 				v-model="message"
 				@focus="focus=true"
 				@blur="focus=false"
 			/>
-			<i class="ri-send-plane-2-fill"></i>
+			<button class="icon mr-1" type="submit">
+				<i :class="`text-${roomState.user.color}`" class="ri-send-plane-fill"></i>
+			</button>
 		</form>
 	</div>
 </template>
@@ -43,7 +52,8 @@ export default {
 			focus,
 			onSubmit,
 			message,
-			messages,
+			messages: computed(() => messages.value.reverse()),
+			roomState,
 		}
 	},
 }
@@ -63,24 +73,30 @@ export default {
 	&__messages {
 		display: flex;
 		flex-direction: column-reverse;
+		justify-content: flex-start;
+		overflow-y: auto;
+		overflow-x: hidden;
+		height: 350px;
+		width: 327px;
 	}
 	&__input {
 		flex: 0 0 auto;
 		border-top: solid thin $border-color;
 		position: relative;
+		display: flex;
+		align-items: center;
 
-		i {
-			position: absolute;
-			right: 1rem;
-			top: 1rem;
-			font-size: 1.25rem;
-			color: $text;
+		button i {
+			color: $text-extra-light;
+		}
+		&:after {
+			border-radius: 0 0 $border-radius 0;
 		}
 
 		input {
 			width: 100%;
-			font-size: 1.05rem;
-			height: 55px;
+			font-size: 0.9rem;
+			height: 50px;
 			border: none !important;
 			padding-left: 1.25rem;
 			background-color: lighten($light, 1);
@@ -93,17 +109,8 @@ export default {
 	}
 
 	&.focus {
-		.chat {
-			&__input:after {
-				content: '';
-				position: absolute;
-				top: 0px;
-				right: 0px;
-				bottom: 0px;
-				left: 0px;
-				border: solid thin $blue;
-				border-bottom-right-radius: $border-radius;
-			}
+		.chat__input button i {
+			color: $text;
 		}
 	}
 }

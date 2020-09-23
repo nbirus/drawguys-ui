@@ -66,6 +66,7 @@ function onUpdateRooms(newRooms) {
 	rooms.value = newRooms
 }
 function onUpdateRoom(newRoom) {
+	console.log(newRoom);
 	Object.keys(roomState).forEach(key => {
 		roomState[key] = newRoom[key]
 	})

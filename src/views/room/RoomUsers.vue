@@ -4,10 +4,14 @@
 			<user v-bind="user" />
 		</li>
 		<li class="room-users__user invite" v-for="n of userEmpty" :key="n">
-			<i class="ri-user-add-line"></i>
+			<button @click="$emit('share')">
+				<i class="ri-user-add-fill"></i>
+			</button>
 		</li>
 		<li class="room-users__user invite" v-if="users.length > 3 && users.length < 8">
-			<i class="ri-user-add-line"></i>
+			<button @click="$emit('share')">
+				<i class="ri-user-add-fill"></i>
+			</button>
 		</li>
 	</ul>
 </template>
@@ -38,7 +42,8 @@ export default {
 	&__user {
 		margin-bottom: 1rem;
 
-		&.invite {
+		&.invite button {
+			width: 100%;
 			height: $block-height-lg;
 			background-color: $light;
 			border-radius: $border-radius;
@@ -47,6 +52,10 @@ export default {
 			align-items: center;
 			justify-content: center;
 			font-size: 2rem;
+
+			&:focus {
+				background-color: darken($light, 2);
+			}
 
 			&:last-child {
 				margin-bottom: 0;

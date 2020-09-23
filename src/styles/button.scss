@@ -12,14 +12,17 @@ button {
 	&:hover {
 		transform: translateY(-1px);
 		box-shadow: $box-shadow;
+		border-color: darken($light, 15);
 	}
 	&:focus,
 	&:active {
 		border-radius: $border-radius;
 		transform: translateY(0px);
-		box-shadow: none;
-		background-color: darken($light, 3);
-		border-color: $blue;
+		border-color: darken($light, 15);
+		
+	}
+	&:active {
+		box-shadow: inset $box-shadow;
 	}
 
 
@@ -27,6 +30,16 @@ button {
 		height: $block-height-lg;
 		font-size: 1.25em;
 		padding: 0 1.5rem;
+	}
+	&.icon {
+		height: 30px;
+		width: 30px;
+		min-width: 30px;
+		border-radius: 50%;
+		padding: 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
 	}
 
 	@each $color, $name in $colors {

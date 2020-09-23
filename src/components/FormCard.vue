@@ -17,7 +17,14 @@
 			autocomplete="off"
 		/>
 		<transition name="form-button" mode="out-in">
-			<button v-if="value" type="submit" class="lg">
+			<button
+				tabindex="0"
+				v-if="value"
+				type="submit"
+				class="lg"
+				@focus="focus = true"
+				@blur="focus = false"
+			>
 				<slot></slot>
 			</button>
 		</transition>
@@ -101,9 +108,10 @@ export default {
 		padding-right: 1rem;
 		height: 50px;
 		font-size: 1.1rem;
+		font-weight: $regular;
 
 		i {
-			font-size: 1.25rem;
+			font-size: 1.2rem;
 			transform: translateY(2px);
 		}
 
@@ -114,13 +122,15 @@ export default {
 
 	&.focus {
 		transform: scale(1.025);
-		// border: solid thin $blue;
 
 		button {
 			border-color: $blue;
+			box-shadow: 0 0 0 1px $blue;
+			background-color: lighten($blue, 55);
 
+			// color: $blue !important;
 			&:hover {
-				color: $blue !important;
+				border-color: $blue;
 			}
 		}
 	}

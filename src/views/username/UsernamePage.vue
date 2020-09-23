@@ -13,7 +13,7 @@
 					@submit="onSubmit"
 				>
 					<span>Next</span>
-					<i class="ri-arrow-right-line ml-1"></i>
+					<i class="ri-arrow-right-fill ml-1"></i>
 				</form-card>
 			</div>
 		</div>

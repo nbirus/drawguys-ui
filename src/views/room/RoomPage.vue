@@ -8,13 +8,16 @@
 		<!-- card -->
 		<transition name="pop-up" mode="out-in" appear>
 			<div class="room__card card delay-1 ready-outline-green" :class="{ ready }">
-				<room-users class="room__users" />
+				<room-users class="room__users" @share="showModalOpen = true" />
 				<div class="room__ready">
 					<room-ready-btn />
 				</div>
 				<room-chat class="room__chat" />
 			</div>
 		</transition>
+
+		<!-- modal -->
+		<room-share-modal v-model:open="showModalOpen" />
 	</div>
 </template>
 
@@ -22,15 +25,18 @@
 import RoomChat from './RoomChat'
 import RoomUsers from './RoomUsers'
 import RoomReadyBtn from './RoomReadyBtn'
+import RoomShareModal from './RoomShareModal'
 import { roomState } from '@/services/Room'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 export default {
 	name: 'room-page',
-	components: { RoomChat, RoomUsers, RoomReadyBtn },
+	components: { RoomChat, RoomUsers, RoomReadyBtn, RoomShareModal },
 	setup() {
+		let showModalOpen = ref(false)
 		return {
 			roomState,
+			showModalOpen,
 			ready: computed(() => roomState.user.ready),
 		}
 	},
@@ -58,13 +64,13 @@ export default {
 	&__users {
 		grid-row: 1;
 		grid-column: 1;
-		padding: 2rem 2.25rem 0;
-		margin-bottom: 1.5rem;
+		padding: 1.5rem 2rem 0;
+		margin-bottom: 1rem;
 	}
 	&__ready {
 		grid-row: 2;
 		grid-column: 1;
-		padding: 0 1.5rem 1.5rem;
+		padding: 0 1rem 1rem;
 	}
 	&__chat {
 		grid-row: span 2;
