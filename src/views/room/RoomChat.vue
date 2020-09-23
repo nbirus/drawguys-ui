@@ -86,13 +86,19 @@ export default {
 		display: flex;
 		align-items: center;
 
+		button {
+			background-color: transparent;
+		}
 		button i {
-			color: $text-extra-light;
+			color: darken($light, 20);
+			transform: translateY(1px) translateX(-1px);
+		}
+		button:hover i {
+			color: $text;
 		}
 		&:after {
 			border-radius: 0 0 $border-radius 0;
 		}
-
 		input {
 			width: 100%;
 			font-size: 0.9rem;

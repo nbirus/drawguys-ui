@@ -1,6 +1,6 @@
 <template>
 	<form
-		class="form-card card ready-outline-blue nudge"
+		class="form-card card ready-outline-black nudge"
 		ref="form"
 		:class="{ focus, ready: focus }"
 		@submit.prevent="onSubmit"
@@ -116,7 +116,7 @@ export default {
 		}
 
 		&:focus {
-			color: $blue !important;
+			color: $black !important;
 		}
 	}
 
@@ -124,13 +124,13 @@ export default {
 		transform: scale(1.025);
 
 		button {
-			border-color: $blue;
-			box-shadow: 0 0 0 1px $blue;
-			background-color: lighten($blue, 55);
+			border-color: $black;
+			box-shadow: 0 0 0 1px $black;
+			// background-color: lighten($black, 55);
 
 			// color: $blue !important;
 			&:hover {
-				border-color: $blue;
+				border-color: $black;
 			}
 		}
 	}

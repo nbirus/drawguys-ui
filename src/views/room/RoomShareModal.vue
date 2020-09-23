@@ -15,6 +15,8 @@
 <script>
 import Modal from '@/components/Modal'
 import { ref } from 'vue'
+import router from '@/router'
+
 export default {
 	name: 'room-share-modal',
 	components: {
@@ -22,7 +24,7 @@ export default {
 	},
 	props: ['open'],
 	setup() {
-		let link = ref('drawguys.com/asdf')
+		let link = ref(`drawguys.com`)
 		return {
 			link,
 		}
