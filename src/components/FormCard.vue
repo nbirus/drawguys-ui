@@ -7,6 +7,7 @@
 	>
 		<div class="wave"></div>
 		<input
+			ref="input"
 			type="text"
 			class="lg b-none mr-2"
 			v-bind="$attrs"
@@ -39,6 +40,7 @@ export default {
 	props: ['submitText', 'size', 'color', 'initValue', 'icon', 'enterText'],
 	setup(props, { emit }) {
 		let form = ref(null)
+		let input = ref(null)
 		let value = ref(props.initValue)
 		let focus = ref(false)
 
@@ -56,7 +58,6 @@ export default {
 				hidePopover()
 			}
 		}
-
 		function showPopover() {
 			let oldPopover = document.getElementById('popover')
 			let popover = document.createElement('div')
@@ -74,12 +75,17 @@ export default {
 				popover.remove()
 			}
 		}
+		function toggleFocus() {
+			input.value.focus()
+		}
 
 		return {
+			input,
 			form,
 			value,
 			focus,
 			onSubmit,
+			toggleFocus,
 		}
 	},
 }

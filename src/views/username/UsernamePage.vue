@@ -4,6 +4,7 @@
 			<h1 class="mb-6">Choose a username</h1>
 			<div class="ps">
 				<form-card
+					ref="form"
 					:init-value="userState.username"
 					color="black"
 					icon="arrow-right"
@@ -24,6 +25,7 @@
 import FormCard from '@/components/FormCard'
 import { setUsername, userState } from '@/services/User'
 import router from '@/router.js'
+import { onMounted, ref } from 'vue'
 
 export default {
 	name: 'username-page',
@@ -31,13 +33,21 @@ export default {
 		FormCard,
 	},
 	setup() {
+		let form = ref(null)
+
 		function onSubmit(username) {
 			if (username) {
 				setUsername(username)
 				router.push('/')
 			}
 		}
+
+		onMounted(() => {
+			form.value.toggleFocus()
+		})
+
 		return {
+			form,
 			onSubmit,
 			userState,
 		}
