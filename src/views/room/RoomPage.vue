@@ -64,7 +64,7 @@ export default {
 	&__users {
 		grid-row: 1;
 		grid-column: 1;
-		padding: 1.5rem 2rem 0;
+		padding: 2rem 2rem 0;
 		margin-bottom: 1rem;
 	}
 	&__ready {

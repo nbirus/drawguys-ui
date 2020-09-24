@@ -76,7 +76,7 @@ export default {
 		justify-content: flex-start;
 		overflow-y: auto;
 		overflow-x: hidden;
-		height: 350px;
+		height: 358px;
 		width: 327px;
 	}
 	&__input {
