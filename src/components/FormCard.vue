@@ -77,6 +77,7 @@ export default {
 		}
 		function toggleFocus() {
 			input.value.focus()
+			input.value.select()
 		}
 
 		return {
@@ -104,6 +105,11 @@ export default {
 
 	input {
 		flex: 0 1 100%;
+
+		&::selection {
+			background: $black;
+			color: white;
+		}
 	}
 	button {
 		position: relative;
@@ -120,9 +126,11 @@ export default {
 			font-size: 1.2rem;
 			transform: translateY(2px);
 		}
-
 		&:focus {
 			color: $black !important;
+		}
+		&:hover {
+			background-color: darken($light, 5);
 		}
 	}
 
@@ -132,9 +140,7 @@ export default {
 		button {
 			border-color: $black;
 			box-shadow: 0 0 0 1px $black;
-			// background-color: lighten($black, 55);
 
-			// color: $blue !important;
 			&:hover {
 				border-color: $black;
 			}

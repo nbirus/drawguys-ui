@@ -3,7 +3,7 @@ input[type='text'] {
 	border: solid 1px $border-color;
 	border-radius: $border-radius;
 	padding: 0 0.75rem;
-	font-size: 1em;
+	font-size: 1rem;
 	transition: border-color .2s;
 
 	&:focus,
@@ -24,7 +24,7 @@ input[type='text'] {
 
 	&.lg {
 		height: $block-height-lg;
-		font-size: 1.3em;
+		font-size: 1.3rem;
 		padding: 0 1rem;
 	}
 }

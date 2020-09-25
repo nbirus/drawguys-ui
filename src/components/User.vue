@@ -1,9 +1,18 @@
 <template>
-	<div class="user card ready-outline-green nudge" :class="[color, { ready, small, outlined }]">
+	<div
+		class="user card ready-outline-green nudge"
+		:class="[color, { ready, small, outlined }]"
+	>
 		<div class="ready-banner" v-if="ready">
 			<i class="ri-check-line"></i>
 		</div>
 		<div class="user__username">{{ username }}</div>
+		<button class="btn btn-color left" v-if="changeColor">
+			<i class="ri-arrow-left-s-line"></i>
+		</button>
+		<button class="btn btn-color right" v-if="changeColor">
+			<i class="ri-arrow-right-s-line"></i>
+		</button>
 	</div>
 </template>
 
@@ -19,6 +28,7 @@ export default {
 		typing: Boolean,
 		outlined: Boolean,
 		small: Boolean,
+		changeColor: Boolean,
 		color: String,
 		score: Number,
 	},
@@ -37,7 +47,7 @@ export default {
 
 	&__username {
 		text-align: center;
-		font-size: 1.1rem;
+		font-size: 1rem;
 		color: white;
 		font-weight: $bold;
 	}
@@ -45,7 +55,6 @@ export default {
 	@each $color, $name in $colors {
 		&.#{$name}:not(.outlined) {
 			background-color: $color;
-			border-color: darken($color, 15);
 		}
 		&.#{$name}.outlined {
 			background-color: fade-out($color, 0.9);
@@ -65,6 +74,40 @@ export default {
 		.user__username {
 			font-size: 1rem;
 		}
+	}
+}
+.btn-color {
+	position: absolute;
+	top: 0.75rem;
+	border-radius: 50%;
+	background-color: transparent;
+	color: white;
+	height: unset;
+	width: unset;
+	padding: 0;
+	height: 35px;
+	width: 35px;
+	font-size: 1.5rem;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: unset;
+
+	&:hover,
+	&:active,
+	&:focus {
+		transform: unset;
+	}
+
+	&:active {
+		background-color: fade-out($black, 0.9);
+	}
+	&.left {
+		left: 0.25rem;
+	}
+	&.right {
+		right: 0.25rem;
 	}
 }
 </style>

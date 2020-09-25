@@ -4,7 +4,7 @@ button {
 	border-radius: $border-radius;
 	background-color: $light;
 	padding: 0 0.75rem;
-	font-size: 1em;
+	font-size: 1rem;
 	cursor: pointer;
 	transition: all .2s ease;
 	outline: none!important;
@@ -28,7 +28,7 @@ button {
 
 	&.lg {
 		height: $block-height-lg;
-		font-size: 1.25em;
+		font-size: 1.25rem;
 		padding: 0 1.5rem;
 	}
 	&.icon {

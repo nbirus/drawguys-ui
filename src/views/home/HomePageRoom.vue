@@ -1,7 +1,7 @@
 <template>
 	<router-link
 		ref="card"
-		class="room card ready-outline-blue"
+		class="room card ready-outline-black"
 		:class="{ ready: hover }"
 		:to="`/${roomid}`"
 		@mouseover="hover = true"
@@ -86,7 +86,7 @@ export default {
 	position: relative;
 
 	&__header {
-		margin-bottom: 1.25rem;
+		margin: 0 1.5rem 1.25rem;
 		padding: 1.25rem 0;
 		border-bottom: solid thin $border-color;
 		display: flex;

@@ -1,9 +1,7 @@
 <template>
 	<button class="lg custom" :class="[color, { ready }]" @click="toggleReady">
 		<transition name="ready-btn" mode="out-in">
-			<span v-if="ready">
-				<i class="ri-checkbox-circle-line"></i>READY
-			</span>
+			<span v-if="ready"> <i class="ri-checkbox-circle-line"></i>READY </span>
 			<span v-else>
 				<i class="ri-indeterminate-circle-line"></i>NOT READY
 			</span>
@@ -68,6 +66,9 @@ button {
 	}
 	&:active {
 		box-shadow: inset 0 0 0 2px darken($light, 25);
+	}
+	&:hover {
+		box-shadow: inset 0 0 0 2px $text-light;
 	}
 
 	&.ready {

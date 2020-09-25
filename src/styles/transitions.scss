@@ -18,11 +18,11 @@
 }
 .ready-btn-enter-from {
 	opacity: 0;
-	transform: translateY(-20px) scale(.9);
+	transform: translateY(-10px) rotateX(50deg);
 }
 .ready-btn-leave-to {
 	opacity: 0;
-	transform: translateY(50px) scale(.9) rotateZ(30deg);
+	transform: rotateX(30deg);
 }
 
 // list
