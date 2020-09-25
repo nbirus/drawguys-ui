@@ -51,15 +51,13 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-
 	// set doc title
 	document.title = to.meta.title
-
 
 	// if routing to username, do nothing
 	if (to.name === 'username') {
 		next()
-	} 
+	}
 	// if the user doesn't have a username
 	else if (!userState.username) {
 		routeAfterUsername = to.fullPath
@@ -69,15 +67,14 @@ router.beforeEach((to, from, next) => {
 	else if (routeAfterUsername) {
 		next(routeAfterUsername)
 		routeAfterUsername = ''
-	} 
+	}
 
 	// default
 	else {
-
 		// if coming from room, leave room
 		if (['room', 'game'].includes(from.name) && userState.roomid) {
 			leaveRoom()
-		} 
+		}
 		// if going to room, join it
 		else if (
 			['room', 'game'].includes(to.name) &&
@@ -89,7 +86,6 @@ router.beforeEach((to, from, next) => {
 
 		next()
 	}
-
 })
 
 export default router

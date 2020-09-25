@@ -60,13 +60,23 @@ export function sendMessage(message) {
 		socket.emit('message', message)
 	}
 }
+export function setColor(color) {
+	log('setColor')
+	if (socket && userState.roomid) {
+		socket.emit('color', color)
+	}
+}
+export function setTyping(typing) {
+	if (socket && userState.roomid) {
+		socket.emit('typing', typing)
+	}
+}
 
 // event handlers
 function onUpdateRooms(newRooms) {
 	rooms.value = newRooms
 }
 function onUpdateRoom(newRoom) {
-
 	Object.keys(roomState).forEach(key => {
 		roomState[key] = newRoom[key]
 	})

@@ -7,16 +7,28 @@
 			<i class="ri-check-line"></i>
 		</div>
 		<div class="user__username">{{ username }}</div>
-		<button class="btn btn-color left" v-if="changeColor">
+		<button
+			class="btn btn-color left"
+			@click="nextColor('left')"
+			v-if="changeColor"
+		>
 			<i class="ri-arrow-left-s-line"></i>
 		</button>
-		<button class="btn btn-color right" v-if="changeColor">
+		<button
+			class="btn btn-color right"
+			@click="nextColor('right')"
+			v-if="changeColor"
+		>
 			<i class="ri-arrow-right-s-line"></i>
 		</button>
 	</div>
 </template>
 
 <script>
+import colors from '@/assets/colors'
+import { setColor, roomState } from '@/services/Room'
+import { userState } from '@/services/User'
+
 export default {
 	name: 'user',
 	props: {
@@ -31,6 +43,49 @@ export default {
 		changeColor: Boolean,
 		color: String,
 		score: Number,
+	},
+	setup() {
+		function nextColor(direction) {
+			let user = roomState.users[userState.userid]
+			let activeColorIndex = colors.findIndex(c => c === user.color)
+			let newColor = true
+			let newColorIndex = activeColorIndex
+
+			if (direction === 'right') {
+				while (newColor) {
+					newColorIndex++
+					if (newColorIndex === colors.length) {
+						newColorIndex = 0
+					}
+					if (!colorTaken(newColorIndex)) {
+						newColor = false
+					}
+				}
+			} else {
+				while (newColor) {
+					newColorIndex--
+					if (newColorIndex === -1) {
+						newColorIndex = colors.length - 1
+					}
+					if (!colorTaken(newColorIndex)) {
+						newColor = false
+					}
+				}
+			}
+
+			setColor(colors[newColorIndex])
+		}
+		function colorTaken(colorIndex) {
+			let users = roomState.users
+			let takenIndexes = Object.values(users).map(user =>
+				colors.findIndex(c => c === user.color)
+			)
+			return takenIndexes.includes(colorIndex)
+		}
+
+		return {
+			nextColor,
+		}
 	},
 }
 </script>

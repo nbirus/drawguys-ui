@@ -1,17 +1,31 @@
 <template>
 	<div class="message" :class="[color, event, event && 'event']">
-		<div class="message__avatar avatar" v-if="event">
-			<i class="ri-check-line" v-if="event === 'ready'"></i>
-			<i class="ri-close-line" v-else-if="event === 'not-ready'"></i>
-			<i class="ri-arrow-right-fill" v-else-if="event === 'join-room'"></i>
+		<!-- avatar -->
+		<div
+			class="message__avatar avatar"
+			v-if="['join-room', 'leave-room'].includes(event)"
+		>
+			<i class="ri-arrow-right-fill" v-if="event === 'join-room'"></i>
 			<i class="ri-arrow-left-fill" v-else-if="event === 'leave-room'"></i>
 		</div>
-		<div class="message__username" v-text="username"></div>
+
+		<!-- username -->
+		<div
+			class="message__username"
+			v-if="event !== 'countdown'"
+			v-text="username"
+		></div>
+
+		<!-- message -->
 		<div class="message__message">
-			<span v-if="event === 'ready'">is ready</span>
-			<span v-if="event === 'not-ready'">isn't ready</span>
 			<span v-if="event === 'join-room'">joined the room</span>
 			<span v-else-if="event === 'leave-room'">left the room</span>
+			<span v-else-if="event === 'countdown'"
+				>Game starts in {{ message }}...</span
+			>
+			<span v-else-if="event === 'countdown-cancel'"
+				>stopped the countdown</span
+			>
 			<span v-else v-text="message"></span>
 		</div>
 	</div>
@@ -51,8 +65,8 @@ export default {
 		width: 1rem;
 		height: 1rem;
 		font-size: 0.9rem;
-		// color: $text-extra-light;
 		margin-right: 0.5rem;
+		transform: translateY(-2px);
 	}
 	&__username {
 		font-weight: $bold;

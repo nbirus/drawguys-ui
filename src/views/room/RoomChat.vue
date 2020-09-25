@@ -2,7 +2,12 @@
 	<div class="chat" :class="{ focus }">
 		<div class="chat__box">
 			<transition-group tag="ul" name="chat" class="chat__messages">
-				<chat-message v-for="(message, i) in messages" :key="i" v-bind="message" class="chat__message" />
+				<chat-message
+					v-for="(message, i) in messages"
+					:key="i"
+					v-bind="message"
+					class="chat__message"
+				/>
 			</transition-group>
 		</div>
 		<form
@@ -18,11 +23,22 @@
 				maxlength="40"
 				:disabled="roomState.user.ready"
 				v-model="message"
-				@focus="focus=true"
-				@blur="focus=false"
+				@focus="focus = true"
+				@blur="
+					() => {
+						setTyping(false)
+						focus = false
+					}
+				"
+				@keydown="setTyping(true)"
+				@keypress.enter="setTyping(false)"
+				@keypress.delete="setTyping(false)"
 			/>
 			<button class="icon mr-1" type="submit">
-				<i :class="`text-${roomState.user.color}`" class="ri-send-plane-fill"></i>
+				<i
+					:class="`text-${roomState.user.color}`"
+					class="ri-send-plane-fill"
+				></i>
 			</button>
 		</form>
 	</div>
@@ -30,7 +46,7 @@
 
 <script>
 import ChatMessage from './RoomChatMessage'
-import { roomState, sendMessage } from '@/services/Room'
+import { setTyping, roomState, sendMessage } from '@/services/Room'
 import { computed, ref } from 'vue'
 
 export default {
@@ -51,6 +67,7 @@ export default {
 		return {
 			focus,
 			onSubmit,
+			setTyping,
 			message,
 			messages: computed(() => messages.value.reverse()),
 			roomState,

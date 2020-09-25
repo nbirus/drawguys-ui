@@ -1,7 +1,15 @@
 <template>
-	<button class="lg custom" :class="[color, { ready }]" @click="toggleReady">
+	<button
+		class="lg custom"
+		:class="[color, { ready }]"
+		:disabled="disabled"
+		@click="toggleReady"
+	>
 		<transition name="ready-btn" mode="out-in">
-			<span v-if="ready"> <i class="ri-checkbox-circle-line"></i>READY </span>
+			<span v-if="disabled"> Waiting for more players...</span>
+			<span v-else-if="ready">
+				<i class="ri-checkbox-circle-line"></i>READY</span
+			>
 			<span v-else>
 				<i class="ri-indeterminate-circle-line"></i>NOT READY
 			</span>
@@ -19,6 +27,7 @@ export default {
 		return {
 			color: computed(() => roomState.user.color),
 			ready: computed(() => roomState.user.ready),
+			disabled: computed(() => Object.keys(roomState.users).length === 1),
 			toggleReady,
 		}
 	},
@@ -69,6 +78,9 @@ button {
 	}
 	&:hover {
 		box-shadow: inset 0 0 0 2px $text-light;
+	}
+	&:disabled {
+		pointer-events: none;
 	}
 
 	&.ready {

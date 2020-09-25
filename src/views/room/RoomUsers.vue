@@ -7,7 +7,7 @@
 			/>
 		</li>
 		<li class="room-users__user invite" v-for="n of userEmpty" :key="n">
-			<button @click="$emit('share')">
+			<button @click="$emit('share')" :disabled="ready">
 				<i class="ri-user-add-fill"></i>
 			</button>
 		</li>
@@ -15,7 +15,7 @@
 			class="room-users__user invite"
 			v-if="users.length > 3 && users.length < 8"
 		>
-			<button @click="$emit('share')">
+			<button @click="$emit('share')" :disabled="ready">
 				<i class="ri-user-add-fill"></i>
 			</button>
 		</li>
@@ -30,7 +30,7 @@ import { computed } from 'vue'
 
 export default {
 	name: 'room-users',
-	components: { User, userState },
+	components: { User },
 	setup() {
 		const users = computed(() => Object.values(roomState.users))
 		const ready = computed(() => roomState.user.ready)
@@ -72,11 +72,15 @@ export default {
 			}
 			&:active {
 				border-color: $text-light;
+				color: $text-light;
 				box-shadow: inset 0 0 0 2px $text-light;
 			}
 
 			&:last-child {
 				margin-bottom: 0;
+			}
+			&:disabled {
+				pointer-events: none;
 			}
 		}
 	}
