@@ -12,7 +12,7 @@
 		</div>
 		<form
 			class="chat__input sm nudge-2"
-			:class="[`ready-outline-${roomState.user.color}`, { ready: focus }]"
+			:class="[{ ready: focus }]"
 			@submit.prevent="onSubmit"
 		>
 			<input
@@ -21,7 +21,6 @@
 				type="text"
 				required
 				maxlength="40"
-				:disabled="roomState.user.ready"
 				v-model="message"
 				@focus="focus = true"
 				@blur="

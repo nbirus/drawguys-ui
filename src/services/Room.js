@@ -9,6 +9,8 @@ export const roomState = reactive({
 	roomid: '',
 	roomname: '',
 	active: false,
+	countdownActive: false,
+	countdown: 3,
 	users: [],
 	messages: [],
 	user: {},

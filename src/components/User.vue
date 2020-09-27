@@ -1,12 +1,14 @@
 <template>
 	<div
-		class="user card ready-outline-green nudge"
+		class="user card ready-outline-green "
 		:class="[color, { ready, small, outlined }]"
 	>
 		<div class="ready-banner" v-if="ready">
 			<i class="ri-check-line"></i>
 		</div>
-		<div class="user__username">{{ username }}</div>
+		<div class="user__username">
+			{{ username }} <span v-if="userid === userState.userid">(You)</span>
+		</div>
 		<button
 			class="btn btn-color left"
 			@click="nextColor('left')"
@@ -85,6 +87,7 @@ export default {
 
 		return {
 			nextColor,
+			userState,
 		}
 	},
 }
@@ -97,14 +100,20 @@ export default {
 	overflow: hidden;
 	$dark-light: darken($light, 90);
 	padding: 1.25rem 0;
-	box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.1),
-		0 5px 5px -5px rgba(0, 0, 0, 0.04);
+	border: none;
+	box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.15),
+		0 5px 5px -5px rgba(0, 0, 0, 0.075);
 
 	&__username {
 		text-align: center;
 		font-size: 1rem;
 		color: white;
 		font-weight: $bold;
+
+		span {
+			font-weight: $regular;
+			font-size: 0.85rem;
+		}
 	}
 
 	@each $color, $name in $colors {

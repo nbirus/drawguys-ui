@@ -18,14 +18,7 @@
 			autocomplete="off"
 		/>
 		<transition name="form-button" mode="out-in">
-			<button
-				tabindex="0"
-				v-if="value"
-				type="submit"
-				class="lg"
-				@focus="focus = true"
-				@blur="focus = false"
-			>
+			<button tabindex="0" v-if="value" type="submit" class="lg">
 				<slot></slot>
 			</button>
 		</transition>

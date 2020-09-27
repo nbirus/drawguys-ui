@@ -93,12 +93,14 @@ export default {
 		flex-direction: column;
 		justify-content: center;
 		align-items: center;
+		pointer-events: none;
 	}
 	&__users {
 		display: grid;
 		grid-template-columns: 1fr;
 		padding: 0 1.5rem 1.25rem;
 		grid-gap: 1rem;
+		pointer-events: none;
 
 		&-user {
 			&.invite {

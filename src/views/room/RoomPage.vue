@@ -7,16 +7,19 @@
 
 		<!-- card -->
 		<transition name="pop-up" mode="out-in" appear>
-			<div class="room__card card delay-1 ready-outline-green" :class="{ ready }">
+			<div class="room__card card delay-1 " :class="{ ready }">
 				<room-users class="room__users" @share="showModalOpen = true" />
 				<div class="room__ready">
 					<room-ready-btn />
 				</div>
 				<room-chat class="room__chat" />
+				<transition name="pop-up" mode="out-in" appear>
+					<room-countdown v-if="roomState.countdownActive" />
+				</transition>
 			</div>
 		</transition>
 
-		<!-- modal -->
+		<!-- overlays -->
 		<room-share-modal v-model:open="showModalOpen" />
 	</div>
 </template>
@@ -26,14 +29,22 @@ import RoomChat from './RoomChat'
 import RoomUsers from './RoomUsers'
 import RoomReadyBtn from './RoomReadyBtn'
 import RoomShareModal from './RoomShareModal'
+import RoomCountdown from './RoomCountdown'
 import { roomState } from '@/services/Room'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 export default {
 	name: 'room-page',
-	components: { RoomChat, RoomUsers, RoomReadyBtn, RoomShareModal },
+	components: {
+		RoomChat,
+		RoomUsers,
+		RoomReadyBtn,
+		RoomShareModal,
+		RoomCountdown,
+	},
 	setup() {
 		let showModalOpen = ref(false)
+
 		return {
 			roomState,
 			showModalOpen,
@@ -47,6 +58,7 @@ export default {
 @import '@/styles/component.scss';
 .room {
 	justify-content: flex-start;
+	position: relative;
 
 	&__header {
 		margin-top: $margin-top;
@@ -64,8 +76,8 @@ export default {
 	&__users {
 		grid-row: 1;
 		grid-column: 1;
-		padding: 2rem 2rem 0;
-		margin-bottom: 1rem;
+		padding: 2.25rem 2rem 0;
+		margin-bottom: 0.75rem;
 	}
 	&__ready {
 		grid-row: 2;

@@ -64,9 +64,9 @@ export default {
 	&__avatar {
 		width: 1rem;
 		height: 1rem;
-		font-size: 0.9rem;
-		margin-right: 0.5rem;
-		transform: translateY(-2px);
+		font-size: 0.8rem;
+		margin-right: 0.25rem;
+		transform: translateY(-1px);
 	}
 	&__username {
 		font-weight: $bold;
@@ -96,7 +96,6 @@ export default {
 			background-color: fade-out($green, 0.9);
 		}
 	}
-
 	&:not(.event) {
 		.message__username:after {
 			content: ':';
@@ -112,7 +111,8 @@ export default {
 		}
 	}
 	&.black {
-		.message__username {
+		.message__username,
+		.message__avatar {
 			color: $text-light;
 		}
 	}
