@@ -119,3 +119,42 @@ function uid() {
 		.toString(16)
 		.slice(11)
 }
+
+////////////////////////////////////////////////
+
+const roomStateTest = {
+	roomid: 'roomid',
+	roomname: 'Room Name',
+	active: true,
+	countdownActive: false,
+	countdown: 3,
+	users: [
+		{
+			userid: 'user1',
+			username: 'Username one',
+			color: 'blue',
+		},
+		{
+			userid: 'user2',
+			username: 'Username two',
+			color: 'red',
+		},
+	],
+	messages: [],
+	user: {
+		userid: 'user1',
+		username: 'Username one',
+		color: 'blue',
+	},
+	userTurn: {
+		userid: 'user1',
+		username: 'Username one',
+		color: 'blue',
+	},
+}
+
+export function testRoomState() {
+	Object.keys(roomState).forEach(key => {
+		roomState[key] = roomStateTest[key]
+	})
+}
