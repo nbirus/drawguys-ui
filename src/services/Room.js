@@ -69,7 +69,7 @@ export function setColor(color) {
 	}
 }
 export function setTyping(typing) {
-	if (socket && userState.roomid) {
+	if (socket && userState.roomid && roomState.user.typing !== typing) {
 		socket.emit('typing', typing)
 	}
 }

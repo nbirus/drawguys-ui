@@ -23,6 +23,14 @@
 		>
 			<i class="ri-arrow-right-s-line"></i>
 		</button>
+
+		<transition name="typing" mode="out-in" appear>
+			<div class="typing" v-if="typing">
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</transition>
 	</div>
 </template>
 
@@ -97,7 +105,6 @@ export default {
 @import '@/styles/component.scss';
 .user {
 	position: relative;
-	overflow: hidden;
 	$dark-light: darken($light, 90);
 	padding: 1.25rem 0;
 	border: none;
@@ -172,6 +179,54 @@ export default {
 	}
 	&.right {
 		right: 0.25rem;
+	}
+}
+.typing {
+	position: absolute;
+	top: 0.9rem;
+	left: calc(100% + 0.5rem);
+	z-index: 9;
+	box-shadow: $box-shadow;
+	border-radius: 25px;
+	white-space: nowrap;
+	overflow: hidden;
+
+	display: flex;
+	align-items: center;
+	padding: 0.5rem 0.5rem;
+	background-color: #fff;
+
+	> div {
+		width: 8px;
+		height: 8px;
+		background-color: $grey;
+		border-radius: 50%;
+		animation: dot 1.5s ease-in-out infinite;
+
+		&:nth-child(2) {
+			animation-delay: 0.5s;
+		}
+		&:nth-child(3) {
+			animation-delay: 1s;
+		}
+		&:not(:last-child) {
+			margin-right: 0.25rem;
+		}
+	}
+}
+
+@keyframes dot {
+	0% {
+		opacity: 0.5;
+		transform: scale(0.75);
+	}
+	50% {
+		opacity: 1;
+		transform: scale(1);
+	}
+	100% {
+		opacity: 0.5;
+		transform: scale(0.75);
 	}
 }
 </style>

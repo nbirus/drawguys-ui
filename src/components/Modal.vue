@@ -29,7 +29,7 @@ export default {
 	top: 0;
 	bottom: 0;
 	width: 100%;
-	background-color: fade-out(white, 0.1);
+	background-color: fade-out(black, 0.5);
 	animation: fade 0.3s ease;
 
 	display: flex;

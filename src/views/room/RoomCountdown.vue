@@ -1,9 +1,11 @@
 <template>
 	<div class="room-countdown">
 		<h3 class="mb-4">Game starts in...</h3>
-		<h1 class="mb-5" v-text="roomState.countdown"></h1>
+		<div class="avatar mb-5">
+			<h1 v-text="roomState.countdown"></h1>
+		</div>
 		<button class="custom striped" @click="toggleReady">
-			<span><i class="ri-forbid-line"></i>STOP</span>
+			<span><i class="ri-close-line"></i>STOP</span>
 		</button>
 	</div>
 </template>
@@ -26,7 +28,7 @@ export default {
 @import '@/styles/component.scss';
 .room-countdown {
 	display: block;
-	position: absolute;
+	position: fixed;
 	top: 0px;
 	right: 0px;
 	bottom: 0px;
@@ -36,6 +38,17 @@ export default {
 	justify-content: center;
 	flex-direction: column;
 	background-color: fade-out(white, 0.05);
+
+	.avatar {
+		background-color: $light;
+		width: 7rem;
+		height: 7rem;
+	}
+	h1 {
+		font-size: 4rem;
+		font-weight: $bold;
+		text-shadow: 2px 2px darken($light, 5);
+	}
 
 	button {
 		width: 110px;

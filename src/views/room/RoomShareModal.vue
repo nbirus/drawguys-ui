@@ -1,12 +1,16 @@
 <template>
 	<modal :open="open" @close="$emit('update:open', false)">
 		<div class="card">
-			<h4 class="mb-5">Invite others to the game</h4>
+			<h4 class="mb-5">Invite others to the game...</h4>
 			<div class="actions">
-				<input type="text" :value="link" @input.prevent />
-				<button>
-					<i class="ri-clipboard-line"></i>Copy
-				</button>
+				<input
+					ref="input"
+					@click="selectInput"
+					type="text"
+					:value="link"
+					@input.prevent
+				/>
+				<button @click="onCopy"><i class="ri-clipboard-line"></i>Copy</button>
 			</div>
 		</div>
 	</modal>
@@ -16,6 +20,7 @@
 import Modal from '@/components/Modal'
 import { ref } from 'vue'
 import router from '@/router'
+import copy from 'copy-to-clipboard'
 
 export default {
 	name: 'room-share-modal',
@@ -24,9 +29,23 @@ export default {
 	},
 	props: ['open'],
 	setup() {
-		let link = ref(`drawguys.com`)
+		let currentRoute = router.currentRoute.value
+		let roomid = currentRoute.params.id
+		let link = ref(`drawguys.com/${roomid}`)
+		let input = ref(null)
+
+		function onCopy() {
+			copy(link.value)
+		}
+		function selectInput() {
+			input.value.select()
+		}
+
 		return {
 			link,
+			onCopy,
+			selectInput,
+			input,
 		}
 	},
 }
@@ -58,6 +77,8 @@ export default {
 		align-items: center;
 		justify-content: center;
 		transition-delay: unset;
+		font-weight: $bold;
+		font-size: 0.9rem;
 
 		i {
 			display: block;
