@@ -13,7 +13,7 @@
 		color: $color;
 	}
 
-	.ready-outline-#{$name} {
+	.outline-#{$name} {
 		&:after {
 			transition: box-shadow 0.2s ease;
 			content: '';

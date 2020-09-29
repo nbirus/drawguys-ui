@@ -1,6 +1,6 @@
 <template>
 	<form
-		class="form-card card ready-outline-black nudge"
+		class="form-card card outline-black nudge"
 		ref="form"
 		:class="{ focus, ready: focus }"
 		@submit.prevent="onSubmit"

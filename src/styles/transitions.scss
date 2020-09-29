@@ -51,28 +51,16 @@
 // 	transform: translateY(50px) scale(.9) rotateY(20deg) rotateX(10deg);
 // }
 
-// typing
-.typing-enter-active,
-.typing-leave-active {
-	transition: 0.25s ease;
+// user-event
+.user-popup-enter-active,
+.user-popup-leave-active {
+	transition: 0.2s ease;
 	transition-property: opacity, transform;
 }
-.typing-enter-from,
-.typing-leave-to {
+.user-popup-enter-from,
+.user-popup-leave-to {
 	opacity: 0;
-	transform: translateX(-18px) scale(0.7) rotateY(30deg) rotateX(10deg);
-}
-
-// drawing
-.drawing-enter-active,
-.drawing-leave-active {
-	transition: 0.25s ease;
-	transition-property: opacity, transform;
-}
-.drawing-enter-from,
-.drawing-leave-to {
-	opacity: 0;
-	transform: translateX(-18px) scale(0.7) rotateY(30deg) rotateX(10deg);
+	transform: translateX(-18px) scale(0.75);
 }
 
 // button

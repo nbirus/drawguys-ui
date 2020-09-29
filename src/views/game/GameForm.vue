@@ -2,7 +2,7 @@
 	<form
 		class="form-card card nudge"
 		ref="form"
-		:class="[`ready-outline-${color}`, { focus, ready: focus }]"
+		:class="[`outline-${color}`, { focus, ready: focus }]"
 		@submit.prevent="onSubmit"
 	>
 		<input

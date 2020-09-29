@@ -1,54 +1,8 @@
-<template>
-	<div
-		class="user card"
-		:class="[
-			color,
-			{ ready, small, outlined, ready: drawing },
-			`ready-outline-${drawing ? 'black' : 'green'}`,
-		]"
-	>
-		<div class="ready-banner" v-if="ready">
-			<i class="ri-check-line"></i>
-		</div>
-		<div class="user__username">
-			{{ username }} <span v-if="userid === userState.userid">(You)</span>
-		</div>
-		<button
-			class="btn btn-color left"
-			@click="nextColor('left')"
-			v-if="changeColor"
-		>
-			<i class="ri-arrow-left-s-line"></i>
-		</button>
-		<button
-			class="btn btn-color right"
-			@click="nextColor('right')"
-			v-if="changeColor"
-		>
-			<i class="ri-arrow-right-s-line"></i>
-		</button>
-
-		<transition name="typing" mode="out-in" appear>
-			<div class="typing" v-if="typing">
-				<div></div>
-				<div></div>
-				<div></div>
-			</div>
-		</transition>
-
-		<transition name="drawing" mode="out-in" appear>
-			<div class="typing drawing" v-if="drawing">
-				<i class="ri-pencil-line"></i>
-				<span>DRAWING</span>
-			</div>
-		</transition>
-	</div>
-</template>
-
 <script>
 import colors from '@/assets/colors'
 import { setColor, roomState } from '@/services/Room'
 import { userState } from '@/services/User'
+import { computed, ref, watch } from 'vue'
 
 export default {
 	name: 'user',
@@ -66,7 +20,8 @@ export default {
 		color: String,
 		score: Number,
 	},
-	setup() {
+	setup(props) {
+		// colors
 		function nextColor(direction) {
 			let user = roomState.users[userState.userid]
 			let activeColorIndex = colors.findIndex(c => c === user.color)
@@ -105,13 +60,126 @@ export default {
 			return takenIndexes.includes(colorIndex)
 		}
 
+		// status
+		let outlineIcons = ref({
+			drawing: 'pencil',
+			ready: 'check',
+		})
+		let outlineColors = ref({
+			drawing: 'black',
+			ready: 'green',
+		})
+		let status = computed(() => {
+			if (props.drawing) {
+				return 'drawing'
+			} else if (props.ready) {
+				return 'ready'
+			} else {
+				return ''
+			}
+		})
+
+		// popup
+		let guess = ref('')
+		let event = ref('')
+		let eventTimeout = null
+		function setEvent(m) {
+			if (eventTimeout !== null) {
+				clearTimeout(eventTimeout)
+				eventTimeout = null
+			}
+			event.value = m
+			eventTimeout = setTimeout(() => {
+				event.value = ''
+			}, 2000)
+		}
+		watch(
+			status,
+			() => {
+				if (status.value === 'drawing') {
+					setEvent('DRAWING')
+				} else if (status.value === 'ready') {
+					setEvent('READY')
+				} else {
+					setEvent('')
+				}
+			},
+			{
+				immediate: true,
+			}
+		)
+
 		return {
 			nextColor,
 			userState,
+			status,
+			outlineColors,
+			outlineIcons,
+			event,
+			guess,
 		}
 	},
 }
 </script>
+
+<template>
+	<div
+		class="user card"
+		:class="[
+			color,
+			{ small, outlined, ready: !!status },
+			`outline-${outlineColors[status]}`,
+		]"
+	>
+		<!-- icon banner -->
+		<div class="icon-banner" v-if="!!status" :class="outlineColors[status]">
+			<i :class="`ri-${outlineIcons[status]}-line`"></i>
+		</div>
+
+		<!-- username -->
+		<div class="user__username">
+			{{ username }} <span v-if="userid === userState.userid">(You)</span>
+		</div>
+
+		<!-- color buttons -->
+		<button
+			class="user__btn-color left"
+			@click="nextColor('left')"
+			v-if="changeColor"
+		>
+			<i class="ri-arrow-left-s-line"></i>
+		</button>
+		<button
+			class="user__btn-color right"
+			@click="nextColor('right')"
+			v-if="changeColor"
+		>
+			<i class="ri-arrow-right-s-line"></i>
+		</button>
+
+		<!-- popup -->
+		<transition name="user-popup" mode="out-in" appear>
+			<!-- event -->
+			<div class="user__popup event" v-if="event" :class="status">
+				<span v-text="event"></span>
+			</div>
+
+			<!-- guess -->
+			<div class="user__popup guess" v-else-if="guess">
+				<span v-text="guess"></span>
+			</div>
+		</transition>
+
+		<!-- typing -->
+		<transition name="user-popup" mode="out-in" appear>
+			<div class="user__popup typing" v-if="!event && !guess && typing">
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</transition>
+	</div>
+</template>
 
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
@@ -132,6 +200,92 @@ export default {
 		span {
 			font-weight: $regular;
 			font-size: 0.85rem;
+		}
+	}
+	&__btn-color {
+		position: absolute;
+		top: 0.75rem;
+		border-radius: 50%;
+		background-color: transparent;
+		color: white;
+		height: unset;
+		width: unset;
+		padding: 0;
+		height: 35px;
+		width: 35px;
+		font-size: 1.5rem;
+
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border: unset;
+
+		&:hover,
+		&:active,
+		&:focus {
+			transform: unset;
+		}
+
+		&:active {
+			background-color: fade-out($black, 0.9);
+		}
+		&.left {
+			left: 0.25rem;
+		}
+		&.right {
+			right: 0.25rem;
+		}
+	}
+	&__popup {
+		position: absolute;
+		top: 0.8rem;
+		font-size: 0.8rem;
+		left: calc(100% + 0.5rem);
+		z-index: 9;
+		box-shadow: $box-shadow;
+		border-radius: 25px;
+		white-space: nowrap;
+		overflow: hidden;
+
+		display: flex;
+		align-items: center;
+		padding: 0.5rem 0.65rem;
+		background-color: #fff;
+
+		&.event.drawing {
+			background-color: fade-out($black, 0.1);
+			color: white;
+			font-weight: $bold;
+			font-size: 0.7rem;
+		}
+		&.event.ready {
+			background-color: fade-out($green, 0.1);
+			color: white;
+			font-weight: $bold;
+			font-size: 0.7rem;
+		}
+
+		&.typing {
+			padding: 0.5rem 0.5rem;
+			top: 0.9rem;
+
+			> div {
+				width: 8px;
+				height: 8px;
+				background-color: $grey;
+				border-radius: 50%;
+				animation: dot 1.5s ease-in-out infinite;
+
+				&:nth-child(2) {
+					animation-delay: 0.5s;
+				}
+				&:nth-child(3) {
+					animation-delay: 1s;
+				}
+				&:not(:last-child) {
+					margin-right: 0.15rem;
+				}
+			}
 		}
 	}
 
@@ -159,84 +313,10 @@ export default {
 		}
 	}
 }
-.btn-color {
-	position: absolute;
-	top: 0.75rem;
-	border-radius: 50%;
-	background-color: transparent;
-	color: white;
-	height: unset;
-	width: unset;
-	padding: 0;
-	height: 35px;
-	width: 35px;
-	font-size: 1.5rem;
-
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	border: unset;
-
-	&:hover,
-	&:active,
-	&:focus {
-		transform: unset;
-	}
-
-	&:active {
-		background-color: fade-out($black, 0.9);
-	}
-	&.left {
-		left: 0.25rem;
-	}
-	&.right {
-		right: 0.25rem;
-	}
-}
-.typing {
-	position: absolute;
-	top: 0.9rem;
-	left: calc(100% + 0.5rem);
-	z-index: 9;
-	box-shadow: $box-shadow;
-	border-radius: 25px;
-	white-space: nowrap;
-	overflow: hidden;
-
-	display: flex;
-	align-items: center;
-	padding: 0.5rem 0.5rem;
-	background-color: #fff;
-
-	> div {
-		width: 8px;
-		height: 8px;
-		background-color: $grey;
-		border-radius: 50%;
-		animation: dot 1.5s ease-in-out infinite;
-
-		&:nth-child(2) {
-			animation-delay: 0.5s;
-		}
-		&:nth-child(3) {
-			animation-delay: 1s;
-		}
-		&:not(:last-child) {
-			margin-right: 0.25rem;
-		}
-	}
-
-	&.drawing {
-		background-color: fade-out($black, 0.1);
-		font-size: 0.8rem;
-		color: white;
-		font-weight: $bold;
-	}
-}
 
 @keyframes dot {
 	0% {
-		opacity: 0.5;
+		opacity: 0.75;
 		transform: scale(0.75);
 	}
 	50% {
@@ -244,8 +324,8 @@ export default {
 		transform: scale(1);
 	}
 	100% {
-		opacity: 0.5;
-		transform: scale(0.75);
+		opacity: 0.75;
+		transform: scale(0.85);
 	}
 }
 </style>
