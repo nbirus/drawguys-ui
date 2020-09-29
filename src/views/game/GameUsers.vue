@@ -1,7 +1,10 @@
 <template>
 	<ul class="game-users">
 		<li class="game-users__user" v-for="user of users" :key="user.userid">
-			<user v-bind="user" />
+			<user
+				v-bind="user"
+				:drawing="user.userid === roomState.userTurn.userid"
+			/>
 		</li>
 	</ul>
 </template>
@@ -18,11 +21,9 @@ export default {
 	},
 	setup() {
 		let users = computed(() => Object.values(roomState.users))
-
-		console.log(users)
-
 		return {
 			users,
+			roomState,
 		}
 	},
 }

@@ -90,7 +90,7 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: 0.75rem 1rem 0.75rem 0.75rem;
-	width: 375px;
+	width: 350px;
 	transition: transform 0.2s ease;
 	overflow: hidden;
 	position: relative;

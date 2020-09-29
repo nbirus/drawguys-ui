@@ -1,7 +1,11 @@
 <template>
 	<div
-		class="user card ready-outline-green "
-		:class="[color, { ready, small, outlined }]"
+		class="user card"
+		:class="[
+			color,
+			{ ready, small, outlined, ready: drawing },
+			`ready-outline-${drawing ? 'black' : 'green'}`,
+		]"
 	>
 		<div class="ready-banner" v-if="ready">
 			<i class="ri-check-line"></i>
@@ -31,6 +35,13 @@
 				<div></div>
 			</div>
 		</transition>
+
+		<transition name="drawing" mode="out-in" appear>
+			<div class="typing drawing" v-if="drawing">
+				<i class="ri-pencil-line"></i>
+				<span>DRAWING</span>
+			</div>
+		</transition>
 	</div>
 </template>
 
@@ -49,6 +60,7 @@ export default {
 		match: Boolean,
 		typing: Boolean,
 		outlined: Boolean,
+		drawing: Boolean,
 		small: Boolean,
 		changeColor: Boolean,
 		color: String,
@@ -212,6 +224,13 @@ export default {
 		&:not(:last-child) {
 			margin-right: 0.25rem;
 		}
+	}
+
+	&.drawing {
+		background-color: fade-out($black, 0.1);
+		font-size: 0.8rem;
+		color: white;
+		font-weight: $bold;
 	}
 }
 

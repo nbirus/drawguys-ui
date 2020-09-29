@@ -1,31 +1,37 @@
 <template>
 	<div class="board">
-		<div class="board__card card">
-			<!-- timer -->
-			<!-- <game-timer /> -->
+		<transition name="pop-up" appear>
+			<div class="board__card card">
+				<!-- timer -->
+				<game-timer />
 
-			<!-- overlay -->
-			<!-- <game-overlay /> -->
+				<!-- overlay -->
+				<!-- <game-overlay /> -->
 
-			<!-- drawing -->
-			<!-- <game-drawing /> -->
+				<!-- drawing -->
+				<!-- <game-drawing /> -->
 
-			<!-- form -->
-			<div class="board__footer">
-				<game-form :color="roomState.user.color" />
+				<!-- form -->
+				<div class="board__footer">
+					<transition name="pop-up" appear>
+						<game-form class="delay-2" :color="roomState.user.color" />
+					</transition>
+				</div>
 			</div>
-		</div>
+		</transition>
 	</div>
 </template>
 
 <script>
 import GameForm from '@/views/game/GameForm'
+import GameTimer from '@/views/game/GameTimer'
 import { roomState } from '@/services/Room'
 
 export default {
 	name: 'game-board',
 	components: {
 		GameForm,
+		GameTimer,
 	},
 	setup() {
 		return {
