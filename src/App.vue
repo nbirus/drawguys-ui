@@ -1,5 +1,5 @@
 <template>
-	<router-view v-if="socketState.connected" />
+	<router-view v-if="socketState.connected || $route.name === 'game-test'" />
 	<socket-loading v-else-if="socketState.loading" />
 	<socket-error v-else-if="socketState.error" />
 </template>

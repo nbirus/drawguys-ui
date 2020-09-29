@@ -13,14 +13,16 @@
 					<room-ready-btn />
 				</div>
 				<room-chat class="room__chat" />
-				<transition name="pop-up" mode="out-in" appear>
-					<room-countdown v-if="roomState.countdownActive" />
-				</transition>
 			</div>
 		</transition>
 
-		<!-- overlays -->
+		<!-- share modal -->
 		<room-share-modal v-model:open="showModalOpen" />
+
+		<!-- countdown -->
+		<transition name="pop-up" mode="out-in" appear>
+			<room-countdown v-if="roomState.countdownActive" />
+		</transition>
 	</div>
 </template>
 
@@ -32,6 +34,7 @@ import RoomShareModal from './RoomShareModal'
 import RoomCountdown from './RoomCountdown'
 import { roomState } from '@/services/Room'
 import { computed, ref, watch } from 'vue'
+import router from '@/router'
 
 export default {
 	name: 'room-page',
@@ -44,6 +47,20 @@ export default {
 	},
 	setup() {
 		let showModalOpen = ref(false)
+		let currentRoute = router.currentRoute.value
+		let roomid = currentRoute.params.id
+
+		watch(
+			roomState,
+			() => {
+				if (roomState.active) {
+					router.push(`/${roomid}/g`)
+				}
+			},
+			{
+				immediate: true,
+			}
+		)
 
 		return {
 			roomState,
