@@ -63,6 +63,18 @@
 	transform: translateX(-18px) scale(0.7) rotateY(30deg) rotateX(10deg);
 }
 
+// drawing
+.drawing-enter-active,
+.drawing-leave-active {
+	transition: 0.25s ease;
+	transition-property: opacity, transform;
+}
+.drawing-enter-from,
+.drawing-leave-to {
+	opacity: 0;
+	transform: translateX(-18px) scale(0.7) rotateY(30deg) rotateX(10deg);
+}
+
 // button
 .form-button-enter-active,
 .loading-leave-active {
