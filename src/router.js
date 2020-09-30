@@ -63,6 +63,12 @@ router.beforeEach((to, from, next) => {
 	// set doc title
 	document.title = to.meta.title
 
+	// skip for testing
+	if (to.name === 'game-test') {
+		next()
+		return
+	}
+
 	// if routing to username, do nothing
 	if (to.name === 'username') {
 		next()

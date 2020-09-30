@@ -8,7 +8,10 @@
 		<transition name="pop-up" mode="out-in" appear>
 			<h3 class="delay-1">
 				Couldn't connect, try
-				<a href="javascript:window.location.href=window.location.href">refreshing</a> the page
+				<a href="javascript:window.location.href=window.location.href"
+					>refreshing</a
+				>
+				the page
 			</h3>
 		</transition>
 	</div>

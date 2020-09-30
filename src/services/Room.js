@@ -133,6 +133,7 @@ const roomStateTest = {
 			userid: 'user1',
 			username: 'Username one',
 			color: 'blue',
+			drawing: true,
 		},
 		{
 			userid: 'user2',
@@ -145,6 +146,7 @@ const roomStateTest = {
 		userid: 'user1',
 		username: 'Username one',
 		color: 'blue',
+		drawing: true,
 	},
 	userTurn: {
 		userid: 'user1',

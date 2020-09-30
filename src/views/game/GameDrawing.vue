@@ -1,16 +1,23 @@
 <template>
-	<div class="game-drawing"></div>
+	<div id="canvasDiv" class="drawing"></div>
 </template>
 
 <script>
+import Drawing from '@/services/Drawing'
 export default {
-	name: 'game-drawing',
+	name: 'drawing',
+	mounted() {
+		Drawing()
+	},
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 @import '@/styles/component.scss';
 
-.game-drawing {
+.drawing {
+	border-radius: $border-radius;
+	height: 100%;
+	width: 100%;
 }
 </style>
