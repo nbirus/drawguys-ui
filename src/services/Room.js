@@ -134,11 +134,13 @@ const roomStateTest = {
 			username: 'Username one',
 			color: 'blue',
 			drawing: true,
+			score: 500,
 		},
 		{
 			userid: 'user2',
 			username: 'Username two',
 			color: 'red',
+			score: 650,
 		},
 	],
 	messages: [],

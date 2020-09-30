@@ -16,6 +16,7 @@ export default {
 		outlined: Boolean,
 		drawing: Boolean,
 		small: Boolean,
+		large: Boolean,
 		changeColor: Boolean,
 		color: String,
 		score: Number,
@@ -127,7 +128,7 @@ export default {
 		class="user card"
 		:class="[
 			color,
-			{ small, outlined, ready: !!status },
+			{ small, large, outlined, ready: !!status },
 			`outline-${outlineColors[status]}`,
 		]"
 	>
@@ -140,6 +141,8 @@ export default {
 		<div class="user__username">
 			{{ username }} <span v-if="userid === userState.userid">(You)</span>
 		</div>
+
+		<div class="user__score" v-if="score" v-text="score"></div>
 
 		<!-- color buttons -->
 		<button
@@ -184,23 +187,35 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
 .user {
+	display: flex;
 	position: relative;
 	$dark-light: darken($light, 90);
-	padding: 1.25rem 0;
 	border: none;
 	box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.15),
 		0 5px 5px -5px rgba(0, 0, 0, 0.075);
 
 	&__username {
+		flex: 0 1 100%;
 		text-align: center;
 		font-size: 1rem;
 		color: white;
 		font-weight: $bold;
+		padding: 1.25rem 0;
 
 		span {
 			font-weight: $regular;
 			font-size: 0.85rem;
 		}
+	}
+	&__score {
+		flex: 0 0 auto;
+		padding: 0 0.75rem;
+		color: white;
+		border-radius: 0 $border-radius $border-radius 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: $bold;
 	}
 	&__btn-color {
 		position: absolute;
@@ -292,6 +307,10 @@ export default {
 	@each $color, $name in $colors {
 		&.#{$name}:not(.outlined) {
 			background-color: $color;
+
+			.user__score {
+				background-color: darken($color, 20);
+			}
 		}
 		&.#{$name}.outlined {
 			background-color: fade-out($color, 0.9);
@@ -304,12 +323,18 @@ export default {
 	}
 
 	&.small {
-		padding: 1.1rem 0;
 		box-shadow: 0 5px 10px -5px rgba(0, 0, 0, 0.05),
 			0 3px 3px -3px rgba(0, 0, 0, 0.03);
 
 		.user__username {
+			padding: 1.1rem 0;
 			font-size: 1rem;
+		}
+	}
+	&.large {
+		.user__username {
+			padding: 1.35rem 0;
+			font-size: 1.05rem;
 		}
 	}
 }

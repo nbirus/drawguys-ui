@@ -3,6 +3,7 @@
 		<li class="game-users__user" v-for="user of users" :key="user.userid">
 			<user
 				v-bind="user"
+				large
 				:drawing="user.userid === roomState.userTurn.userid"
 			/>
 		</li>
@@ -20,7 +21,9 @@ export default {
 		User,
 	},
 	setup() {
-		let users = computed(() => Object.values(roomState.users))
+		let users = computed(() =>
+			Object.values(roomState.users).sort((a, b) => b.score - a.score)
+		)
 		return {
 			users,
 			roomState,

@@ -1,6 +1,9 @@
 <template>
 	<div class="draw-form card">
-		<ul class="draw-form__colors">
+		<ul
+			class="draw-form__colors"
+			:class="{ disabled: drawState.tool === 'eraser' }"
+		>
 			<li
 				class="draw-form__colors-color"
 				v-for="(hex, color, i) in colorMap"
@@ -84,6 +87,11 @@ export default {
 		padding-bottom: 0.75rem;
 		margin-bottom: 0.75rem;
 		border-bottom: solid thin $border-color;
+
+		&.disabled {
+			opacity: 0.25;
+			pointer-events: none;
+		}
 
 		&-color {
 			height: 1rem;

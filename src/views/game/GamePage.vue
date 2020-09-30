@@ -42,7 +42,7 @@ export default {
 		display: flex;
 	}
 	&__users {
-		flex: 0 0 200px;
+		flex: 0 0 235px;
 		padding-top: 2rem;
 	}
 	&__board {
