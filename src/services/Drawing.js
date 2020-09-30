@@ -3,7 +3,7 @@ import { reactive, computed, ref } from 'vue'
 let canvas
 let context
 let paint
-let canvasWidth = 678
+let canvasWidth = 768
 let canvasHeight = 500
 
 let clickX = new Array()
