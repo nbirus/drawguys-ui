@@ -1,14 +1,20 @@
 <template>
 	<div class="timer">
 		<div class="timer__circle">
-			<span>23</span>
+			<span v-text="gameState.timer"></span>
 		</div>
 	</div>
 </template>
 
 <script>
+import { gameState } from '@/services/Game'
 export default {
 	name: 'game-timer',
+	setup() {
+		return {
+			gameState,
+		}
+	},
 }
 </script>
 

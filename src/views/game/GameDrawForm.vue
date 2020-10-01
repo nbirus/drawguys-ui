@@ -1,7 +1,7 @@
 <template>
-	<div class="draw-form card">
+	<div class="draw-form" :class="activeColor">
 		<ul
-			class="draw-form__colors"
+			class="draw-form__colors mr-3"
 			:class="{ disabled: drawState.tool === 'eraser' }"
 		>
 			<li
@@ -13,17 +13,44 @@
 			></li>
 		</ul>
 
-		<div class="draw-form__tools">
+		<div class="draw-form__size">
+			<button
+				:class="{ active: drawState.size === 3 }"
+				@click="drawState.size = 3"
+			>
+				<div class="c"></div>
+			</button>
+			<button
+				:class="{ active: drawState.size === 10 }"
+				@click="drawState.size = 10"
+			>
+				<div class="c"></div>
+			</button>
+			<button
+				:class="{ active: drawState.size === 25 }"
+				@click="drawState.size = 25"
+			>
+				<div class="c"></div>
+			</button>
+			<button
+				:class="{ active: drawState.size === 50 }"
+				@click="drawState.size = 50"
+			>
+				<div class="c"></div>
+			</button>
+		</div>
+
+		<div class="draw-form__tools" v-if="false">
 			<button
 				class="mr-2"
-				:disabled="drawState.tool === 'marker'"
+				:class="{ active: drawState.tool === 'marker' }"
 				@click="drawState.tool = 'marker'"
 			>
 				<i class="ri-mark-pen-fill"></i>
 			</button>
 			<button
 				class="mr-2"
-				:disabled="drawState.tool === 'eraser'"
+				:class="{ active: drawState.tool === 'eraser' }"
 				@click="drawState.tool = 'eraser'"
 			>
 				<i class="ri-eraser-line"></i>
@@ -46,8 +73,9 @@
 </template>
 
 <script>
-import { colorMap } from '@/assets/colors.js'
+import { colorMap, colorLookupMap } from '@/assets/colors.js'
 import { drawState, reset, undo, undoDisabled } from '@/services/Drawing'
+import { computed } from 'vue'
 export default {
 	name: 'game-draw-form',
 	setup() {
@@ -57,6 +85,7 @@ export default {
 			reset,
 			undo,
 			undoDisabled,
+			activeColor: computed(() => colorLookupMap[drawState.color]),
 		}
 	},
 }
@@ -67,43 +96,38 @@ export default {
 
 .draw-form {
 	display: flex;
-	flex-direction: column;
-	padding: 0.75rem 1rem 0.75rem 0.75rem;
+	align-items: center;
+	width: 100%;
 	position: relative;
-	border: solid thin $border-color;
+	padding: 0 1.25rem;
+	bottom: -4rem;
 
-	button i {
-		font-size: 1.3rem;
-	}
-
-	&__tools {
-		display: flex;
-		align-items: center;
-	}
 	&__colors {
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		padding-bottom: 0.75rem;
-		margin-bottom: 0.75rem;
-		border-bottom: solid thin $border-color;
+		border-radius: $border-radius;
+		padding: 0 0.75rem;
+		height: 40px;
+		background-color: darken($light, 5);
 
 		&.disabled {
-			opacity: 0.25;
 			pointer-events: none;
 		}
 
 		&-color {
 			height: 1rem;
 			width: 1rem;
-			margin-right: 0.5rem;
 			border-radius: 50%;
-			opacity: 0.5;
 			transition: 0.2s ease;
 			transition-property: box-shadow, transform;
 			display: flex;
 			align-items: center;
 			justify-content: center;
+
+			&:not(:last-child) {
+				margin-right: 0.5rem;
+			}
 
 			&.active {
 				opacity: 1;
@@ -128,7 +152,67 @@ export default {
 					background-color: $color;
 
 					&.active {
-						box-shadow: 0 0 0 2px fade-out($color, 0.5);
+						box-shadow: 0 0 0 4px fade-out($color, 0.75);
+					}
+				}
+			}
+		}
+	}
+	&__size {
+		display: flex;
+
+		button {
+			height: 40px;
+			width: 40px;
+			padding: 0;
+			background-color: darken($light, 5);
+			display: flex;
+			align-items: center;
+			justify-content: center;
+
+			.c {
+				background-color: $black;
+				border-radius: 50%;
+			}
+
+			&:not(:last-child) {
+				margin-right: 0.25rem;
+			}
+			&:not(.active) {
+				opacity: 0.75;
+			}
+			&:hover {
+				opacity: 1;
+			}
+			&:nth-child(1) .c {
+				height: 4px;
+				width: 4px;
+			}
+			&:nth-child(2) .c {
+				height: 10px;
+				width: 10px;
+			}
+			&:nth-child(3) .c {
+				height: 16px;
+				width: 16px;
+			}
+			&:nth-child(4) .c {
+				height: 25px;
+				width: 25px;
+			}
+		}
+	}
+
+	@each $color, $name in $colors {
+		&.#{$name} {
+			.draw-form {
+				&__size {
+					.c {
+						background-color: $color;
+					}
+
+					button.active {
+						box-shadow: inset 0 0 0 2px $color;
 					}
 				}
 			}

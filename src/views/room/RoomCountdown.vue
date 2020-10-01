@@ -38,6 +38,7 @@ export default {
 	justify-content: center;
 	flex-direction: column;
 	background-color: fade-out(white, 0.05);
+	z-index: 999;
 
 	.avatar {
 		background-color: $light;

@@ -199,7 +199,7 @@ export default {
 		text-align: center;
 		font-size: 1rem;
 		color: white;
-		font-weight: $bold;
+		font-weight: $regular;
 		padding: 1.25rem 0;
 
 		span {
@@ -209,13 +209,14 @@ export default {
 	}
 	&__score {
 		flex: 0 0 auto;
-		padding: 0 0.75rem;
+		padding: 0 1.25rem;
 		color: white;
 		border-radius: 0 $border-radius $border-radius 0;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		font-weight: $bold;
+		font-size: 1.1rem;
 	}
 	&__btn-color {
 		position: absolute;
@@ -279,7 +280,6 @@ export default {
 			font-weight: $bold;
 			font-size: 0.7rem;
 		}
-
 		&.typing {
 			padding: 0.5rem 0.5rem;
 			top: 0.9rem;
@@ -334,7 +334,7 @@ export default {
 	&.large {
 		.user__username {
 			padding: 1.35rem 0;
-			font-size: 1.05rem;
+			font-size: 1rem;
 		}
 	}
 }

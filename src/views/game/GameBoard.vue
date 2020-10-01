@@ -3,7 +3,7 @@
 		<transition name="pop-up" appear>
 			<div class="board__card card">
 				<!-- timer -->
-				<game-timer />
+				<!-- <game-timer /> -->
 
 				<!-- overlay -->
 				<!-- <game-overlay /> -->
@@ -14,7 +14,7 @@
 				<!-- form -->
 				<div class="board__footer">
 					<transition name="pop-up" appear>
-						<game-draw-form v-if="roomState.user.drawing" class="delay-2" />
+						<game-draw-form v-if="gameState.drawing" class="delay-2" />
 						<game-form v-else class="delay-2" :color="roomState.user.color" />
 					</transition>
 				</div>
@@ -29,6 +29,7 @@ import GameTimer from '@/views/game/GameTimer'
 import GameDrawing from '@/views/game/GameDrawing'
 import GameDrawForm from '@/views/game/GameDrawForm'
 import { roomState } from '@/services/Room'
+import { gameState } from '@/services/Game'
 
 export default {
 	name: 'game-board',
@@ -41,6 +42,7 @@ export default {
 	setup() {
 		return {
 			roomState,
+			gameState,
 		}
 	},
 }
@@ -60,8 +62,8 @@ export default {
 	}
 	&__footer {
 		position: absolute;
-		bottom: -3rem;
 		width: 100%;
+		bottom: 0;
 		display: flex;
 		justify-content: center;
 	}

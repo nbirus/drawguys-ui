@@ -1,4 +1,5 @@
 import { socket } from '@/services/Socket'
+import { userState } from '@/services/User'
 import { reactive } from 'vue'
 
 export const gameState = reactive({
@@ -10,13 +11,15 @@ export const gameState = reactive({
 	numberOfRounds: 5,
 	numberOfTurns: 4,
 	roundTimer: 10,
+	drawing: true,
 })
 
 function onUpdateGame(newGameState) {
-	console.log('HERE')
 	Object.keys(gameState).forEach(key => {
 		gameState[key] = newGameState[key]
 	})
+
+	gameState.drawing = gameState.turnUser.userid = userState.userid
 }
 
 // events

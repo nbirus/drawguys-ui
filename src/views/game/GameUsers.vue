@@ -3,9 +3,11 @@
 		<li class="game-users__user" v-for="user of users" :key="user.userid">
 			<user
 				v-bind="user"
+				:ready="false"
 				large
-				:drawing="user.userid === roomState.userTurn.userid"
+				:drawing="user.userid === gameState.turnUser.userid"
 			/>
+			<!--  -->
 		</li>
 	</ul>
 </template>
@@ -13,6 +15,7 @@
 <script>
 import User from '@/components/User'
 import { roomState } from '@/services/Room'
+import { gameState } from '@/services/Game'
 import { computed } from 'vue'
 
 export default {
@@ -27,6 +30,7 @@ export default {
 		return {
 			users,
 			roomState,
+			gameState,
 		}
 	},
 }

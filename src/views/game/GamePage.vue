@@ -1,13 +1,11 @@
 <template>
 	<div class="page game">
 		<div class="game__container">
-			HERE
-			{{ gameState }}
 			<!-- users -->
-			<!-- <game-users class="game__users" /> -->
+			<game-users class="game__users" />
 
 			<!-- board -->
-			<!-- <game-board class="game__board" /> -->
+			<game-board class="game__board" />
 		</div>
 	</div>
 </template>
@@ -25,7 +23,6 @@ export default {
 		GameBoard,
 	},
 	setup() {
-		console.log(gameState)
 		if (router.currentRoute.value.name === 'game-test') {
 			testRoomState()
 		}
