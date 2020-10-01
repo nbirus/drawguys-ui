@@ -3,7 +3,7 @@
 		<transition name="pop-up" appear>
 			<div class="board__card card">
 				<!-- timer -->
-				<!-- <game-timer /> -->
+				<!-- <game-timer />git  -->
 
 				<!-- overlay -->
 				<!-- <game-overlay /> -->
