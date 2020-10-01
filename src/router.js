@@ -87,14 +87,19 @@ router.beforeEach((to, from, next) => {
 	// default
 	else {
 		// if coming from room, leave room
-		if (['room', 'game'].includes(from.name) && userState.roomid) {
+		if (
+			['room', 'game'].includes(from.name) &&
+			userState.roomid &&
+			to.name !== 'game'
+		) {
 			leaveRoom()
 		}
 		// if going to room, join it
 		else if (
 			['room', 'game'].includes(to.name) &&
 			!userState.roomid &&
-			to.params.id
+			to.params.id &&
+			from.name !== 'game'
 		) {
 			joinRoom(to.params.id)
 		}

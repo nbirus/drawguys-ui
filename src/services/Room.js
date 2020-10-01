@@ -113,7 +113,6 @@ function log(event) {
 		console.log(`room:${event}`)
 	}
 }
-
 function uid() {
 	return Math.random()
 		.toString(16)

@@ -9,7 +9,7 @@
 		<transition name="pop-up" mode="out-in" appear>
 			<div class="delay-1 ps">
 				<form-card
-					init-value
+					init-value="test"
 					class="home__form-card"
 					color="blue"
 					enter-text="create room"
