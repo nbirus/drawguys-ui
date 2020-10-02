@@ -7,13 +7,35 @@
 			</div>
 		</transition>
 
-		<transition-group name="list" tag="ul" mode="out-in" class="room-list" appear>
-			<li class="room-list__item" :class="`delay-${i + 1}`" v-for="(room, i) in roomsEven" :key="i">
+		<transition-group
+			name="list"
+			tag="ul"
+			mode="out-in"
+			class="room-list"
+			appear
+		>
+			<li
+				class="room-list__item"
+				:class="`delay-${i + 1}`"
+				v-for="(room, i) in roomsEven"
+				:key="i"
+			>
 				<home-page-room v-bind="room"></home-page-room>
 			</li>
 		</transition-group>
-		<transition-group name="list" tag="ul" mode="out-in" class="room-list" appear>
-			<li class="room-list__item" :class="`delay-${i + 2}`" v-for="(room, i) in roomsOdd" :key="i">
+		<transition-group
+			name="list"
+			tag="ul"
+			mode="out-in"
+			class="room-list"
+			appear
+		>
+			<li
+				class="room-list__item"
+				:class="`delay-${i + 2}`"
+				v-for="(room, i) in roomsOdd"
+				:key="i"
+			>
 				<home-page-room v-bind="room"></home-page-room>
 			</li>
 		</transition-group>

@@ -35,7 +35,7 @@
 			/>
 			<button class="icon mr-1" type="submit">
 				<i
-					:class="`text-${roomState.user.color}`"
+					:class="`text-${roomState.userState.color}`"
 					class="ri-send-plane-fill"
 				></i>
 			</button>

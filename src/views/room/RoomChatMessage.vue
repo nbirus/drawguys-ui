@@ -39,7 +39,7 @@ export default {
 	props: ['message', 'username', 'userid', 'event'],
 	setup(props) {
 		let color = computed(() => {
-			let user = roomState.users[props.userid]
+			let user = roomState.usersState[props.userid]
 			if (user) {
 				return user.color
 			}

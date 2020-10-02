@@ -28,12 +28,12 @@ import { computed, ref, watch } from 'vue'
 
 export default {
 	name: 'home-page-room',
-	props: ['roomid', 'roomname', 'users'],
+	props: ['roomid', 'roomname', 'usersState'],
 	components: { User },
 	setup(props) {
 		let card = ref(null)
 		let hover = ref(false)
-		let userList = computed(() => Object.values(props.users))
+		let userList = computed(() => Object.values(props.usersState))
 
 		watch(hover, togglePopover)
 

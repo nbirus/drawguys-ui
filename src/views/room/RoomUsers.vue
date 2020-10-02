@@ -32,8 +32,8 @@ export default {
 	name: 'room-users',
 	components: { User },
 	setup() {
-		const users = computed(() => Object.values(roomState.users))
-		const ready = computed(() => roomState.user.ready)
+		const users = computed(() => Object.values(roomState.usersState))
+		const ready = computed(() => roomState.userState.ready)
 		return {
 			ready,
 			userState,

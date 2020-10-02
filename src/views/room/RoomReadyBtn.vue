@@ -25,9 +25,9 @@ export default {
 	name: 'room-ready-btn',
 	setup() {
 		return {
-			color: computed(() => roomState.user.color),
-			ready: computed(() => roomState.user.ready),
-			disabled: computed(() => Object.keys(roomState.users).length === 1),
+			color: computed(() => roomState.userState.color),
+			ready: computed(() => roomState.userState.ready),
+			disabled: computed(() => Object.keys(roomState.usersState).length === 1),
 			toggleReady,
 		}
 	},

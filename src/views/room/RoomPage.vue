@@ -1,7 +1,7 @@
 <template>
 	<div class="page page--limit page--center room" v-if="roomState.roomid">
 		<!-- countdown -->
-		<room-countdown v-if="roomState.countdownActive" />
+		<room-countdown v-if="roomState.timerActive" />
 
 		<!-- inner -->
 		<div class="room__inner" v-else>
@@ -53,7 +53,7 @@ export default {
 		watch(
 			roomState,
 			() => {
-				if (roomState.active) {
+				if (roomState.gameState.active) {
 					router.push(`/${roomid}/g`)
 				}
 			},
@@ -65,7 +65,7 @@ export default {
 		return {
 			roomState,
 			showModalOpen,
-			ready: computed(() => roomState.user.ready),
+			ready: computed(() => roomState.userState.ready),
 		}
 	},
 }

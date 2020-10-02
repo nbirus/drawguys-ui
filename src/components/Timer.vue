@@ -18,7 +18,7 @@ export default {
 	mounted() {
 		var bar = new ProgressBar.Circle(this.$refs.container, {
 			strokeWidth: 6,
-			duration: this.value * 1000 + 1000,
+			duration: this.value * 1000,
 			color: '#111111',
 			trailColor: '#eceff4',
 			trailWidth: 6,

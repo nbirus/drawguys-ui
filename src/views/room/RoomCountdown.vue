@@ -4,7 +4,7 @@
 			<h3 class="mb-5">The game will start in...</h3>
 		</transition>
 		<transition name="pop-up" mode="out-in" appear>
-			<timer :value="roomState.countdown" class="mb-7 delay-2" />
+			<timer :value="roomState.timer" class="mb-7 delay-2" />
 		</transition>
 		<transition name="pop-up" mode="out-in" appear>
 			<button class="custom striped" @click="toggleReady">

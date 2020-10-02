@@ -24,7 +24,7 @@ export default {
 	setup(props) {
 		// colors
 		function nextColor(direction) {
-			let user = roomState.users[userState.userid]
+			let user = roomState.usersState[userState.userid]
 			let activeColorIndex = colors.findIndex(c => c === user.color)
 			let newColor = true
 			let newColorIndex = activeColorIndex
@@ -54,7 +54,7 @@ export default {
 			setColor(colors[newColorIndex])
 		}
 		function colorTaken(colorIndex) {
-			let users = roomState.users
+			let users = roomState.usersState
 			let takenIndexes = Object.values(users).map(user =>
 				colors.findIndex(c => c === user.color)
 			)

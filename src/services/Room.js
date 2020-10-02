@@ -8,13 +8,23 @@ export const rooms = ref([])
 export const roomState = reactive({
 	roomid: '',
 	roomname: '',
-	active: false,
-	countdownActive: false,
-	countdown: 3,
-	users: [],
+	timer: 3,
+	timerActive: false,
 	messages: [],
-	user: {},
-	userTurn: {},
+  gameState: {
+    active: false,
+    event: 'pre_round',
+    timer: 0,
+    turnIndex: 1,
+    turnUser: {},
+    round: 1,
+    roundWord: '',
+    numberOfRounds: 5,
+    numberOfTurns: 4,
+    roundTimer: 10,
+  },
+  usersState: {},
+	userState: {}
 })
 
 // actions
@@ -69,7 +79,7 @@ export function setColor(color) {
 	}
 }
 export function setTyping(typing) {
-	if (socket && userState.roomid && roomState.user.typing !== typing) {
+	if (socket && userState.roomid && roomState.userState.typing !== typing) {
 		socket.emit('typing', typing)
 	}
 }
@@ -84,12 +94,7 @@ function onUpdateRoom(newRoom) {
 	})
 
 	// update current user
-	roomState.user = newRoom.users[userState.userid]
-
-	// if game has started, set player's turn
-	if (roomState.active) {
-		roomState.userTurn = newRoom.users[newRoom.turnUserid]
-	}
+	roomState.userState = newRoom.usersState[userState.userid]
 }
 function onJoinRoom(roomid) {
 	log('room-join')
