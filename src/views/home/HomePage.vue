@@ -38,7 +38,7 @@
 <script>
 import HomePageRooms from './HomePageRooms'
 import FormCard from '@/components/FormCard'
-import { createRoom, getRooms } from '@/services/Room'
+import { createRoom, getRooms, setInactive } from '@/services/Room'
 import { userState } from '@/services/User'
 
 export default {
@@ -49,6 +49,7 @@ export default {
 	},
 	setup() {
 		getRooms()
+		setInactive()
 		return {
 			createRoom,
 			userState,

@@ -1,6 +1,17 @@
 <template>
 	<div class="page game">
-		<div class="game__container">
+		<game-over
+			class="game__container"
+			v-if="roomState.gameState.event === 'game_end'"
+		/>
+
+		<div class="game__container" v-else>
+			<div class="game__rounds">
+				<span>{{
+					`Round ${roomState.gameState.round}/${roomState.gameState.numberOfRounds}`
+				}}</span>
+			</div>
+
 			<!-- users -->
 			<game-users class="game__users" />
 
@@ -13,18 +24,31 @@
 <script>
 import GameUsers from '@/views/game/GameUsers'
 import GameBoard from '@/views/game/GameBoard'
-import { testRoomState } from '@/services/Room'
+import GameOver from '@/views/game/GameOver'
+import { testRoomState, roomState } from '@/services/Room'
 import router from '@/router'
+import { onMounted } from 'vue'
 
 export default {
 	name: 'game-page',
 	components: {
 		GameUsers,
 		GameBoard,
+		GameOver,
 	},
 	setup() {
 		if (router.currentRoute.value.name === 'game-test') {
 			testRoomState()
+		}
+
+		onMounted(() => {
+			if (!roomState.gameState.active) {
+				router.push('/')
+			}
+		})
+
+		return {
+			roomState,
 		}
 	},
 }
@@ -38,6 +62,11 @@ export default {
 	align-items: center;
 	justify-content: center;
 
+	&__rounds {
+		position: fixed;
+		top: 2rem;
+		right: 2rem;
+	}
 	&__container {
 		width: 1000px;
 		display: flex;

@@ -27,7 +27,7 @@ export default {
 		onMounted(() => {
 			interval = setInterval(() => {
 				connect()
-			}, 1000)
+			}, 5000)
 		})
 		onBeforeUnmount(() => {
 			if (interval) {

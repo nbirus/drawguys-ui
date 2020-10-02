@@ -6,13 +6,16 @@
 				<game-timer />
 
 				<!-- overlay -->
-				<!-- <game-overlay /> -->
+				<game-overlay />
 
 				<!-- drawing -->
 				<game-drawing />
 
 				<!-- form -->
-				<div class="board__footer">
+				<div
+					class="board__footer"
+					v-if="roomState.gameState.event === 'turn_start'"
+				>
 					<transition name="pop-up" appear>
 						<game-draw-form
 							v-if="roomState.userState.drawing"
@@ -35,6 +38,7 @@ import GameForm from '@/views/game/GameForm'
 import GameTimer from '@/views/game/GameTimer'
 import GameDrawing from '@/views/game/GameDrawing'
 import GameDrawForm from '@/views/game/GameDrawForm'
+import GameOverlay from '@/views/game/GameOverlay'
 import { roomState } from '@/services/Room'
 
 export default {
@@ -44,6 +48,7 @@ export default {
 		GameTimer,
 		GameDrawing,
 		GameDrawForm,
+		GameOverlay,
 	},
 	setup() {
 		return {

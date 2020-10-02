@@ -53,6 +53,7 @@ export default {
 		watch(
 			roomState,
 			() => {
+				console.log(roomState.gameState.active)
 				if (roomState.gameState.active) {
 					router.push(`/${roomid}/g`)
 				}

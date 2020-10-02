@@ -12,15 +12,12 @@ export const roomState = reactive({
 	timerActive: false,
 	messages: [],
 	gameState: {
+		active: false,
 		timer: 0,
-		turnIndex: 1,
 		turnUser: {},
-		round: 1,
 		roundWord: '',
+		round: 1,
 		numberOfRounds: 5,
-		numberOfTurns: 4,
-		roundTimer: 10,
-		drawing: true,
 	},
 	usersState: {},
 	userState: {},
@@ -91,7 +88,6 @@ function onUpdateRoom(newRoom) {
 	Object.keys(roomState).forEach(key => {
 		roomState[key] = newRoom[key]
 	})
-	console.log(newRoom.gameState)
 	// update current user
 	roomState.userState = newRoom.usersState[userState.userid]
 }
@@ -102,7 +98,9 @@ function onJoinRoom(roomid) {
 function onJoinRoomError() {
 	log('room-join-error')
 	userState.roomid = ''
-	router.push('/')
+	setTimeout(() => {
+		router.push('/')
+	}, 100)
 }
 
 // events
@@ -164,4 +162,8 @@ export function testRoomState() {
 	Object.keys(roomState).forEach(key => {
 		roomState[key] = roomStateTest[key]
 	})
+}
+
+export function setInactive() {
+	roomState.gameState.active = false
 }

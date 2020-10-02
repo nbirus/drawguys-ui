@@ -95,6 +95,7 @@ export default {
 	overflow: hidden;
 	position: relative;
 	border: solid thin $border-color;
+	top: 2.5rem;
 
 	input {
 		flex: 0 1 100%;
