@@ -105,7 +105,6 @@ export default {
 		}
 	}
 	button {
-		position: relative;
 		flex: 0 0 auto;
 		display: flex;
 		align-items: center;
@@ -119,24 +118,13 @@ export default {
 			font-size: 1.2rem;
 			transform: translateY(2px);
 		}
-		&:focus {
-			color: $black !important;
-		}
-		&:hover {
-			background-color: darken($light, 5);
-		}
 	}
 
 	&.focus {
 		transform: scale(1.025);
 
 		button {
-			border-color: $black;
-			box-shadow: 0 0 0 1px $black;
-
-			&:hover {
-				border-color: $black;
-			}
+			box-shadow: 0 0 0 2px $black;
 		}
 	}
 }

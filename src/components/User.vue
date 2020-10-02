@@ -128,9 +128,10 @@ export default {
 		class="user card"
 		:class="[
 			color,
-			{ small, large, outlined, ready: !!status },
+			{ small, large, outlined, ready: !!status, 'edit-color': changeColor },
 			`outline-${outlineColors[status]}`,
 		]"
+		@click="nextColor('right')"
 	>
 		<!-- icon banner -->
 		<div class="icon-banner" v-if="!!status" :class="outlineColors[status]">
@@ -142,23 +143,8 @@ export default {
 			{{ username }} <span v-if="userid === userState.userid">(You)</span>
 		</div>
 
+		<!-- score -->
 		<div class="user__score" v-if="score" v-text="score"></div>
-
-		<!-- color buttons -->
-		<button
-			class="user__btn-color left"
-			@click="nextColor('left')"
-			v-if="changeColor"
-		>
-			<i class="ri-arrow-left-s-line"></i>
-		</button>
-		<button
-			class="user__btn-color right"
-			@click="nextColor('right')"
-			v-if="changeColor"
-		>
-			<i class="ri-arrow-right-s-line"></i>
-		</button>
 
 		<!-- popup -->
 		<transition name="user-popup" mode="out-in" appear>
@@ -193,14 +179,28 @@ export default {
 	border: none;
 	box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.15),
 		0 5px 5px -5px rgba(0, 0, 0, 0.075);
+	pointer-events: none;
+
+	&.edit-color {
+		pointer-events: auto;
+		transition: 0.2s ease;
+		transition-property: transform;
+		cursor: pointer;
+		&:hover {
+			transform: scale(1.025);
+		}
+		&:active {
+			transform: scale(1.015) translateY(2px);
+		}
+	}
 
 	&__username {
 		flex: 0 1 100%;
 		text-align: center;
 		font-size: 1rem;
 		color: white;
-		font-weight: $regular;
-		padding: 1.25rem 0;
+		font-weight: $bold;
+		padding: 1.35rem 0;
 
 		span {
 			font-weight: $regular;
@@ -217,40 +217,6 @@ export default {
 		justify-content: center;
 		font-weight: $bold;
 		font-size: 1.1rem;
-	}
-	&__btn-color {
-		position: absolute;
-		top: 0.75rem;
-		border-radius: 50%;
-		background-color: transparent;
-		color: white;
-		height: unset;
-		width: unset;
-		padding: 0;
-		height: 35px;
-		width: 35px;
-		font-size: 1.5rem;
-
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		border: unset;
-
-		&:hover,
-		&:active,
-		&:focus {
-			transform: unset;
-		}
-
-		&:active {
-			background-color: fade-out($black, 0.9);
-		}
-		&.left {
-			left: 0.25rem;
-		}
-		&.right {
-			right: 0.25rem;
-		}
 	}
 	&__popup {
 		position: absolute;
@@ -341,16 +307,16 @@ export default {
 
 @keyframes dot {
 	0% {
-		opacity: 0.75;
-		transform: scale(0.75);
+		opacity: 0.25;
+		transform: scale(0.85);
 	}
 	50% {
-		opacity: 1;
+		opacity: 0.75;
 		transform: scale(1);
 	}
 	100% {
-		opacity: 0.75;
-		transform: scale(0.85);
+		opacity: 0.25;
+		transform: scale(0.75);
 	}
 }
 </style>

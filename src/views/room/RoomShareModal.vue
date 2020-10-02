@@ -1,24 +1,6 @@
-<template>
-	<modal :open="open" @close="$emit('update:open', false)">
-		<div class="card">
-			<h4 class="mb-5">Invite others to the game...</h4>
-			<div class="actions">
-				<input
-					ref="input"
-					@click="selectInput"
-					type="text"
-					:value="link"
-					@input.prevent
-				/>
-				<button @click="onCopy"><i class="ri-clipboard-line"></i>Copy</button>
-			</div>
-		</div>
-	</modal>
-</template>
-
 <script>
 import Modal from '@/components/Modal'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import router from '@/router'
 import copy from 'copy-to-clipboard'
 
@@ -35,11 +17,16 @@ export default {
 		let input = ref(null)
 
 		function onCopy() {
+			selectInput()
 			copy(link.value)
 		}
 		function selectInput() {
 			input.value.select()
 		}
+
+		// onMounted(() => {
+		// 	selectInput()
+		// })
 
 		return {
 			link,
@@ -51,40 +38,96 @@ export default {
 }
 </script>
 
+<template>
+	<modal :open="open" @close="$emit('update:open', false)">
+		<div class="card">
+			<transition name="pop-up" mode="out-in" appear>
+				<div class="avatar">
+					<i class="ri-share-line"></i>
+				</div>
+			</transition>
+			<transition name="pop-up" mode="out-in" appear>
+				<h3 class="mb-5 delay-1">Invite others to the game</h3>
+			</transition>
+			<transition name="pop-up" mode="out-in" appear>
+				<div class="actions delay-2">
+					<input
+						ref="input"
+						@click="selectInput"
+						type="text"
+						:value="link"
+						@input.prevent
+					/>
+					<button class="striped custom dark" @click="onCopy">
+						<i class="ri-clipboard-line"></i>Copy
+					</button>
+				</div>
+			</transition>
+		</div>
+	</modal>
+</template>
+
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
 .card {
-	padding: 2rem;
+	padding: 1.5rem 0 1.75rem;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
-
-	h4 {
-		font-weight: $bold;
-	}
+	border: none;
+	position: relative;
+	overflow: hidden;
+	// box-shadow: 0 0 0 3px $black;
 }
 .actions {
 	display: flex;
 	align-items: center;
+	border-top: solid thin $border-color;
+	padding-top: 1.5rem;
 
 	input {
 		text-align: center;
 		margin-right: 1rem;
+		padding: 0.35rem 0.75rem;
+		font-size: 1.1rem;
+		transition: box-shadow 0.2s ease;
+		color: $text-light;
+		border: none;
+		background-color: $light;
+
+		&::selection {
+			background: $text;
+			color: white;
+		}
+		&:hover,
+		&:focus,
+		&:active {
+			box-shadow: 0 0 0 3px $text;
+			background-color: $light;
+		}
 	}
 	button {
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		transition-delay: unset;
-		font-weight: $bold;
-		font-size: 0.9rem;
+		padding: 0rem 1.5rem;
+		height: 60px;
+		font-size: 1rem;
 
 		i {
 			display: block;
-			margin-right: 0.25rem;
-			font-size: 0.9rem;
+			margin-right: 0.35rem;
+			font-size: 1rem;
 		}
 	}
+}
+.avatar {
+	background-color: $light;
+	// box-shadow: 0 0 0 3px $black;
+	// position: absolute;
+	// top: -3rem;
+	margin-bottom: 1rem;
 }
 </style>

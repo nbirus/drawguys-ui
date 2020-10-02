@@ -1,12 +1,18 @@
 <template>
 	<div class="room-countdown">
-		<h3 class="mb-4">Game starts in...</h3>
-		<div class="avatar mb-5">
-			<h1 v-text="roomState.countdown"></h1>
-		</div>
-		<button class="custom striped" @click="toggleReady">
-			<span><i class="ri-close-line"></i>STOP</span>
-		</button>
+		<transition name="pop-up" mode="out-in" appear>
+			<h3 class="mb-4">The game will start in...</h3>
+		</transition>
+		<transition name="pop-up" mode="out-in" appear>
+			<div class="avatar mb-5 delay-2">
+				<h1 v-text="roomState.countdown"></h1>
+			</div>
+		</transition>
+		<transition name="pop-up" mode="out-in" appear>
+			<button class="custom striped" @click="toggleReady">
+				<span><i class="ri-forbid-line"></i>Cancel</span>
+			</button>
+		</transition>
 	</div>
 </template>
 

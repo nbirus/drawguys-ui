@@ -50,7 +50,7 @@ export default {
 @import '@/styles/component.scss';
 .room-users {
 	&__user {
-		margin-bottom: 1rem;
+		margin-bottom: 0.8rem;
 
 		&.invite button {
 			width: 100%;
@@ -63,17 +63,32 @@ export default {
 			justify-content: center;
 			font-size: 2rem;
 
-			&:focus {
-				background-color: darken($light, 2);
-			}
+			&:focus,
 			&:hover {
-				border-color: $text-extra-light;
-				box-shadow: inset 0 0 0 2px $text-extra-light;
+				box-shadow: 0 0 0 3px darken($light, 10);
+				color: $text-light;
+				background: repeating-linear-gradient(
+					45deg,
+					darken($light, 1),
+					darken($light, 1) 2rem,
+					darken($light, 3) 2rem,
+					darken($light, 3) 4rem
+				);
+				background-size: 200% 200%;
+				animation: barberpole 15s linear infinite;
 			}
 			&:active {
-				border-color: $text-light;
+				background: repeating-linear-gradient(
+					45deg,
+					darken($light, 2),
+					darken($light, 2) 2rem,
+					darken($light, 6) 2rem,
+					darken($light, 6) 4rem
+				);
+				background-size: 200% 200%;
+				animation: barberpole 15s linear infinite;
+				box-shadow: 0 0 0 3px $text-light;
 				color: $text-light;
-				box-shadow: inset 0 0 0 2px $text-light;
 			}
 
 			&:last-child {

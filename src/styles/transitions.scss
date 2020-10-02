@@ -1,6 +1,6 @@
 // page
 .pop-up-enter-active,
-.loading-leave-active {
+.pop-up-leave-active {
 	transition: 0.5s ease;
 	transition-property: opacity, transform;
 }
@@ -14,17 +14,18 @@
 }
 // ready-btn
 .ready-btn-enter-active,
-.loading-leave-active {
+.ready-btn-leave-active {
 	transition: 0.5s ease;
 	transition-property: opacity, transform;
 }
 .ready-btn-enter-from {
 	opacity: 0;
-	transform: translateY(-10px) rotateX(50deg);
+	transform: rotateX(90deg);
 }
 .ready-btn-leave-to {
 	opacity: 0;
-	transform: rotateX(30deg);
+	transform: rotateX(-90deg);
+
 }
 
 // list

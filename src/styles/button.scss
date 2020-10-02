@@ -13,18 +13,18 @@ button {
 
 	&:hover {
 		transform: translateY(-1px);
-		box-shadow: $box-shadow;
-		border-color: darken($light, 15);
+		background-color: darken($light, 3);
+		box-shadow: 0 0 0 2px $black;
 	}
 	&:focus,
 	&:active {
 		border-radius: $border-radius;
-		transform: translateY(0px);
-		border-color: darken($light, 15);
-		
+		transform: translateY(0px);		
+		box-shadow: 0 0 0 2px $black;
 	}
 	&:active {
-		box-shadow: inset $box-shadow;
+		background-color: darken($light, 5);
+		box-shadow: 0 0 0 2px $black;
 	}
 
 
@@ -69,40 +69,59 @@ button {
 			margin-right: 0.5rem;
 			transform: translateY(1px);
 		}
+
+		&:focus,
 		&:hover {
-			border-color: $text-light;
-			box-shadow: inset 0 0 0 2px $text-light;
-		}
-		&:active,
-		&:focus {
-			border-color: darken($text-light, 10);
-			box-shadow: inset 0 0 0 2px darken($text-light, 10);
+			box-shadow: 0 0 0 3px $text-light;
 		}
 		&:active {
-			span, i {
-				color: darken($text-light, 10);
-			}
+			box-shadow: 0 0 0 3px darken($text-light, 20);
+			background: repeating-linear-gradient(
+				45deg,
+				darken($light, 1),
+				darken($light, 1) 2rem,
+				darken($light, 6) 2rem,
+				darken($light, 6) 4rem
+			);
+			background-size: 200% 200%;
+			animation: barberpole 15s linear infinite;
 		}
+
 		&:disabled {
 			pointer-events: none;
 		}
+	}
+	&.striped.dark {
+		color: $text;
 
+		i {
+			color: $text;
+		}
+		&:focus,
+		&:hover {
+			box-shadow: 0 0 0 3px $text;
+		}
+		&:active {
+			box-shadow: 0 0 0 3px darken($text, 20);
+		}
 	}
 
 	@each $color, $name in $colors {
 		&.#{$name}:not(.custom) {
 			background-color: $color;
 			color: white;
-			border-color: darken($color, 5);
 
 			&:hover {
-				background-color: lighten($color, 5);
+				background-color: darken($color, 3);
+				box-shadow: 0 0 0 2px $color;
+			}
+			&:focus,
+			&:active {
+				box-shadow: 0 0 0 2px $color;
 			}
 			&:active {
-				background-color: darken($color, 15);
-			}
-			&:focus {
-				border-color: darken($color, 10);
+				background-color: darken($color, 5);
+				box-shadow: 0 0 0 2px $color;
 			}
 		}
 		&.#{$name}.striped {
@@ -120,14 +139,21 @@ button {
 			i, span {
 				color: white;
 			}
+			&:focus,
 			&:hover {
-				border-color: darken($color, 10);
-				box-shadow: inset 0 0 0 2px darken($color, 10);
+				box-shadow: 0 0 0 3px darken($color, 20);
 			}
-			&:active,
-			&:focus {
-				border-color: darken($color, 25);
-				box-shadow: inset 0 0 0 2px darken($color, 25);
+			&:active {
+				background: repeating-linear-gradient(
+					45deg,
+					darken($color, 2),
+					darken($color, 2) 2rem,
+					darken($color, 6) 2rem,
+					darken($color, 6) 4rem
+				);
+				background-size: 200% 200%;
+				animation: barberpole 15s linear infinite;
+				box-shadow: 0 0 0 3px darken($color, 30);
 			}
 		}
 	}

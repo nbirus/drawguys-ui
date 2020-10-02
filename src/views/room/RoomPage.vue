@@ -1,28 +1,28 @@
 <template>
 	<div class="page page--limit page--center room" v-if="roomState.roomid">
-		<!-- title -->
-		<transition name="pop-up" mode="out-in" appear>
-			<h1 class="room__header" v-text="roomState.roomname"></h1>
-		</transition>
+		<!-- countdown -->
+		<room-countdown v-if="roomState.countdownActive" />
 
-		<!-- card -->
-		<transition name="pop-up" mode="out-in" appear>
-			<div class="room__card card delay-1 " :class="{ ready }">
-				<room-users class="room__users" @share="showModalOpen = true" />
-				<div class="room__ready">
-					<room-ready-btn />
+		<!-- inner -->
+		<div class="room__inner" v-else>
+			<!-- title -->
+			<transition name="pop-up" mode="out-in" appear>
+				<h1 class="room__header" v-text="roomState.roomname"></h1>
+			</transition>
+			<!-- card -->
+			<transition name="pop-up" mode="out-in" appear>
+				<div class="room__card card delay-1 " :class="{ ready }">
+					<room-users class="room__users" @share="showModalOpen = true" />
+					<div class="room__ready">
+						<room-ready-btn />
+					</div>
+					<room-chat class="room__chat" />
 				</div>
-				<room-chat class="room__chat" />
-			</div>
-		</transition>
+			</transition>
+		</div>
 
 		<!-- share modal -->
 		<room-share-modal v-model:open="showModalOpen" />
-
-		<!-- countdown -->
-		<transition name="pop-up" mode="out-in" appear>
-			<room-countdown v-if="roomState.countdownActive" />
-		</transition>
 	</div>
 </template>
 
@@ -77,6 +77,11 @@ export default {
 	justify-content: flex-start;
 	position: relative;
 
+	&__inner {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
 	&__header {
 		margin-top: $margin-top;
 		margin-bottom: 2.5rem;

@@ -65,8 +65,9 @@ export default {
 		width: 1rem;
 		height: 1rem;
 		font-size: 0.8rem;
-		margin-right: 0.25rem;
+		margin-right: 0.45rem;
 		transform: translateY(-1px);
+		background-color: darken($light, 2);
 	}
 	&__username {
 		font-weight: $bold;
