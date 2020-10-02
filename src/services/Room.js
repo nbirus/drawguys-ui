@@ -11,20 +11,19 @@ export const roomState = reactive({
 	timer: 3,
 	timerActive: false,
 	messages: [],
-  gameState: {
-    active: false,
-    event: 'pre_round',
-    timer: 0,
-    turnIndex: 1,
-    turnUser: {},
-    round: 1,
-    roundWord: '',
-    numberOfRounds: 5,
-    numberOfTurns: 4,
-    roundTimer: 10,
-  },
-  usersState: {},
-	userState: {}
+	gameState: {
+		timer: 0,
+		turnIndex: 1,
+		turnUser: {},
+		round: 1,
+		roundWord: '',
+		numberOfRounds: 5,
+		numberOfTurns: 4,
+		roundTimer: 10,
+		drawing: true,
+	},
+	usersState: {},
+	userState: {},
 })
 
 // actions
@@ -92,7 +91,7 @@ function onUpdateRoom(newRoom) {
 	Object.keys(roomState).forEach(key => {
 		roomState[key] = newRoom[key]
 	})
-
+	console.log(newRoom.gameState)
 	// update current user
 	roomState.userState = newRoom.usersState[userState.userid]
 }

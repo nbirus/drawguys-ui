@@ -19,6 +19,7 @@ export function initUser() {
 		socket.emit('set_user', {
 			userid: userState.userid,
 			username: userState.username,
+			roomid: userState.roomid,
 		})
 	}
 }
@@ -29,6 +30,7 @@ export function setUsername(username) {
 		sessionStorage.setItem('username', username)
 		socket.emit('set_user', {
 			userid: userState.userid,
+			roomid: userState.roomid,
 			username,
 		})
 	}

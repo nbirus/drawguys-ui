@@ -18,7 +18,22 @@
 </template>
 
 <script>
+import { onBeforeUnmount, onMounted } from 'vue'
+import { connect } from '@/services/Socket'
+let interval
 export default {
 	name: 'socket-error',
+	setup() {
+		onMounted(() => {
+			interval = setInterval(() => {
+				connect()
+			}, 1000)
+		})
+		onBeforeUnmount(() => {
+			if (interval) {
+				clearInterval(interval)
+			}
+		})
+	},
 }
 </script>

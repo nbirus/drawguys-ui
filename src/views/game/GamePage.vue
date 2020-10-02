@@ -14,8 +14,8 @@
 import GameUsers from '@/views/game/GameUsers'
 import GameBoard from '@/views/game/GameBoard'
 import { testRoomState } from '@/services/Room'
-import { gameState } from '@/services/Game'
 import router from '@/router'
+
 export default {
 	name: 'game-page',
 	components: {

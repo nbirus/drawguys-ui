@@ -1,18 +1,18 @@
 <template>
 	<div class="timer">
-		<div class="timer__circle">
-			<span v-text="gameState.timer"></span>
-		</div>
+		<timer :value="roomState.gameState.timer" />
 	</div>
 </template>
 
 <script>
-import { gameState } from '@/services/Game'
+import { roomState } from '@/services/Room'
+import Timer from '@/components/Timer'
 export default {
 	name: 'game-timer',
+	components: { Timer },
 	setup() {
 		return {
-			gameState,
+			roomState,
 		}
 	},
 }
