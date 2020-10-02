@@ -64,9 +64,38 @@
 	transform: translateX(-18px) scale(0.75);
 }
 
+// user-event
+.timer-enter-active,
+.timer-leave-active {
+	transition: 0.15s ease;
+	transition-property: opacity, transform;
+}
+.timer-enter-from {
+	opacity: 0;
+	transform: translateY(-2px) scale(1.1) rotateY(-80deg) rotateZ(-10deg);
+}
+.timer-leave-to {
+	opacity: 0;
+	transform: translateY(2px) scale(0.85) rotateY(50deg) rotateZ(10deg);
+}
+// timer-circle
+.timer-circle-enter-active,
+.timer-circle-leave-active {
+	transition: .5s;
+	transition-property: opacity, transform;
+}
+.timer-circle-enter-from {
+	opacity: 0;
+}
+.timer-circle-leave-to {
+	opacity: 0;
+	transform: scale(1.5)!important;
+
+}
+
 // button
 .form-button-enter-active,
-.loading-leave-active {
+.form-button-leave-active {
 	transition: 0.5s ease;
 	transition-property: opacity, transform;
 }

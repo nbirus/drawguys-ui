@@ -1,16 +1,14 @@
 <template>
 	<div class="room-countdown">
 		<transition name="pop-up" mode="out-in" appear>
-			<h3 class="mb-4">The game will start in...</h3>
+			<h3 class="mb-5">The game will start in...</h3>
 		</transition>
 		<transition name="pop-up" mode="out-in" appear>
-			<div class="avatar mb-5 delay-2">
-				<h1 v-text="roomState.countdown"></h1>
-			</div>
+			<timer :value="roomState.countdown" class="mb-7 delay-2" />
 		</transition>
 		<transition name="pop-up" mode="out-in" appear>
 			<button class="custom striped" @click="toggleReady">
-				<span><i class="ri-forbid-line"></i>Cancel</span>
+				Cancel
 			</button>
 		</transition>
 	</div>
@@ -18,9 +16,13 @@
 
 <script>
 import { roomState, toggleReady } from '@/services/Room'
+import Timer from '@/components/Timer'
 
 export default {
 	name: 'room-countdown',
+	components: {
+		Timer,
+	},
 	setup() {
 		return {
 			roomState,
@@ -43,7 +45,6 @@ export default {
 	align-items: center;
 	justify-content: center;
 	flex-direction: column;
-	background-color: fade-out(white, 0.05);
 	z-index: 999;
 
 	.avatar {
@@ -62,7 +63,6 @@ export default {
 		font-size: 0.9rem;
 		position: relative;
 		font-weight: $bold;
-		color: $text-light;
 		overflow: hidden;
 		transition: all 0.2s ease;
 
@@ -78,16 +78,6 @@ export default {
 			align-items: center;
 			justify-content: center;
 		}
-
-		background: repeating-linear-gradient(
-			45deg,
-			lighten($light, 0),
-			lighten($light, 0) 2rem,
-			darken($light, 3) 2rem,
-			darken($light, 3) 4rem
-		);
-		background-size: 200% 200%;
-		animation: barberpole 15s linear infinite;
 	}
 }
 </style>
