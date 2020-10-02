@@ -67,21 +67,21 @@
 // user-event
 .timer-enter-active,
 .timer-leave-active {
-	transition: 0.15s ease;
+	transition: 0.2s ease;
 	transition-property: opacity, transform;
 }
 .timer-enter-from {
 	opacity: 0;
-	transform: translateY(-2px) scale(1.1) rotateY(-80deg) rotateZ(-10deg);
+	transform: scale(1.5) rotateY(-80deg) rotateZ(-30deg)!important;
 }
 .timer-leave-to {
 	opacity: 0;
-	transform: translateY(2px) scale(0.85) rotateY(50deg) rotateZ(10deg);
+	transform: scale(0.5) rotateY(50deg) rotateZ(30deg)!important;
 }
 // timer-circle
 .timer-circle-enter-active,
 .timer-circle-leave-active {
-	transition: .5s;
+	transition: .65s ease;
 	transition-property: opacity, transform;
 }
 .timer-circle-enter-from {
