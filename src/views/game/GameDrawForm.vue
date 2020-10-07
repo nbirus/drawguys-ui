@@ -39,25 +39,31 @@ export default {
 
 		<div class="draw-form__size">
 			<button
-				:class="{ active: drawState.size === 3 }"
+				:class="{ active: drawState.size === 3 && drawState.tool === 'marker' }"
 				@click="drawState.size = 3"
 			>
 				<div class="c"></div>
 			</button>
 			<button
-				:class="{ active: drawState.size === 10 }"
+				:class="{
+					active: drawState.size === 10 && drawState.tool === 'marker',
+				}"
 				@click="drawState.size = 10"
 			>
 				<div class="c"></div>
 			</button>
 			<button
-				:class="{ active: drawState.size === 25 }"
+				:class="{
+					active: drawState.size === 25 && drawState.tool === 'marker',
+				}"
 				@click="drawState.size = 25"
 			>
 				<div class="c"></div>
 			</button>
 			<button
-				:class="{ active: drawState.size === 50 }"
+				:class="{
+					active: drawState.size === 50 && drawState.tool === 'marker',
+				}"
 				@click="drawState.size = 50"
 			>
 				<div class="c"></div>
