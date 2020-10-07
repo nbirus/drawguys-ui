@@ -25,6 +25,6 @@ export default {
 	justify-content: center;
 	top: -3rem;
 	position: absolute;
-	left: 50%;
+	left: calc(50% - 48px);
 }
 </style>

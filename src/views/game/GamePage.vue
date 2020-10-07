@@ -61,7 +61,7 @@ export default {
 .game {
 	display: flex;
 	align-items: center;
-	justify-content: center;
+	padding: 0;
 
 	&__rounds {
 		position: fixed;
@@ -69,16 +69,19 @@ export default {
 		right: 2rem;
 	}
 	&__container {
-		width: 1000px;
 		display: flex;
+		min-width: 1064px;
+		margin: auto;
+		padding: 0 2rem;
 	}
 	&__users {
-		flex: 0 0 235px;
+		flex: 0 0 240px;
 		padding-top: 2rem;
+		margin-right: 2rem;
 	}
 	&__board {
 		flex: 0 1 100%;
-		margin-left: 2rem;
+		width: 750px;
 	}
 }
 </style>

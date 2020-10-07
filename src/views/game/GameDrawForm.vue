@@ -1,15 +1,39 @@
+<script>
+import { colorMap, colorLookupMap } from '@/assets/colors.js'
+import { drawState, reset, undo, undoDisabled } from '@/services/Drawing'
+import { computed } from 'vue'
+export default {
+	name: 'game-draw-form',
+	setup() {
+		return {
+			colorMap,
+			drawState,
+			reset,
+			undo,
+			undoDisabled,
+			activeColor: computed(() => colorLookupMap[drawState.color]),
+		}
+	},
+}
+</script>
+
 <template>
-	<div class="draw-form" :class="activeColor">
-		<ul
-			class="draw-form__colors mr-3"
-			:class="{ disabled: drawState.tool === 'eraser' }"
+	<div class="draw-form card" :class="activeColor">
+		<button
+			class="eraser"
+			:class="{ active: drawState.tool === 'eraser' }"
+			@click="drawState.tool = 'eraser'"
 		>
+			<i class="ri-eraser-line"></i>
+		</button>
+
+		<ul class="draw-form__colors mr-2">
 			<li
 				class="draw-form__colors-color"
 				v-for="(hex, color, i) in colorMap"
 				:key="i"
 				:class="[color, { active: drawState.color === hex }]"
-				@click="drawState.color = hex"
+				@click=";(drawState.color = hex), (drawState.tool = 'marker')"
 			></li>
 		</ul>
 
@@ -40,56 +64,14 @@
 			</button>
 		</div>
 
-		<div class="draw-form__tools" v-if="false">
-			<button
-				class="mr-2"
-				:class="{ active: drawState.tool === 'marker' }"
-				@click="drawState.tool = 'marker'"
-			>
-				<i class="ri-mark-pen-fill"></i>
-			</button>
-			<button
-				class="mr-2"
-				:class="{ active: drawState.tool === 'eraser' }"
-				@click="drawState.tool = 'eraser'"
-			>
-				<i class="ri-eraser-line"></i>
-			</button>
-			<input
-				class="mr-2"
-				v-model="drawState.size"
-				type="range"
-				min="1"
-				max="50"
-			/>
-			<button class="mr-2" @click="undo" :disabled="undoDisabled">
-				<i class="ri-arrow-go-back-line"></i>
-			</button>
-			<button @click="reset">
-				<i class="ri-forbid-line"></i>
-			</button>
-		</div>
+		<button class="mr-1 ml-5" @click="undo" :disabled="undoDisabled">
+			<i class="ri-arrow-go-back-line"></i>
+		</button>
+		<button @click="reset">
+			<i class="ri-forbid-line"></i>
+		</button>
 	</div>
 </template>
-
-<script>
-import { colorMap, colorLookupMap } from '@/assets/colors.js'
-import { drawState, reset, undo, undoDisabled } from '@/services/Drawing'
-import { computed } from 'vue'
-export default {
-	name: 'game-draw-form',
-	setup() {
-		return {
-			colorMap,
-			drawState,
-			reset,
-			undo,
-			undoDisabled,
-			activeColor: computed(() => colorLookupMap[drawState.color]),
-		}
-	},
-}
-</script>
 
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
@@ -97,10 +79,11 @@ export default {
 .draw-form {
 	display: flex;
 	align-items: center;
-	width: 100%;
+	width: auto;
 	position: relative;
-	padding: 0 1.25rem;
-	bottom: -4rem;
+	padding: 0.5rem;
+	top: 2rem;
+	border: solid thin $border-color;
 
 	&__colors {
 		display: flex;
@@ -109,7 +92,6 @@ export default {
 		border-radius: $border-radius;
 		padding: 0 0.75rem;
 		height: 40px;
-		background-color: darken($light, 5);
 
 		&.disabled {
 			pointer-events: none;
@@ -165,13 +147,13 @@ export default {
 			height: 40px;
 			width: 40px;
 			padding: 0;
-			background-color: darken($light, 5);
+			background-color: $light;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 
 			.c {
-				background-color: $black;
+				background-color: transparent;
 				border-radius: 50%;
 			}
 
@@ -179,7 +161,7 @@ export default {
 				margin-right: 0.25rem;
 			}
 			&:not(.active) {
-				opacity: 0.75;
+				opacity: 0.5;
 			}
 			&:hover {
 				opacity: 1;
@@ -203,16 +185,30 @@ export default {
 		}
 	}
 
+	.eraser {
+		height: 40px;
+		width: 40px;
+
+		&.active {
+			box-shadow: inset 0 0 0 2px $black;
+		}
+	}
+
 	@each $color, $name in $colors {
 		&.#{$name} {
 			.draw-form {
 				&__size {
 					.c {
-						background-color: $color;
+						border: solid thin $color;
 					}
 
 					button.active {
 						box-shadow: inset 0 0 0 2px $color;
+						opacity: 1;
+
+						.c {
+							background-color: fade-out($color, 0.25);
+						}
 					}
 				}
 			}

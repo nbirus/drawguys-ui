@@ -201,6 +201,15 @@ a:focus {
 	clip-path: polygon(0 0, 0 68%, 100% 0);
 	border-top-left-radius: $border-radius;
 
+	&__inner {
+		height: 36px;
+		width: 26px;
+		clip-path: polygon(0 0, 0 68%, 100% 0);
+		margin-top: 4px;
+		margin-left: 4px;
+		border-radius: 3px 0 0 0;
+	}
+
 	i {
 		position: absolute;
 		top: 4px;

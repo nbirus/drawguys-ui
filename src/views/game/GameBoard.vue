@@ -67,7 +67,6 @@ export default {
 
 	&__card {
 		width: 100%;
-		height: 500px;
 		position: relative;
 	}
 	&__footer {

@@ -24,10 +24,6 @@ export default {
 			input.value.select()
 		}
 
-		// onMounted(() => {
-		// 	selectInput()
-		// })
-
 		return {
 			link,
 			onCopy,
@@ -58,7 +54,7 @@ export default {
 						:value="link"
 						@input.prevent
 					/>
-					<button class="striped custom dark" @click="onCopy">
+					<button class="striped custom" @click="onCopy">
 						<i class="ri-clipboard-line"></i>Copy
 					</button>
 				</div>

@@ -99,7 +99,7 @@ export default {
 	&__users {
 		grid-row: 1;
 		grid-column: 1;
-		padding: 2.25rem 2rem 0;
+		padding: 2.25rem 1.75rem 0;
 		margin-bottom: 0.75rem;
 	}
 	&__ready {

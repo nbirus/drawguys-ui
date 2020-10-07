@@ -3,7 +3,7 @@ import { reactive, computed, ref } from 'vue'
 let canvas
 let context
 let paint
-let canvasWidth = 768
+let canvasWidth = 750
 let canvasHeight = 500
 
 let clickX = new Array()
@@ -16,7 +16,7 @@ let undoIndex = ref([])
 
 export const drawState = reactive({
 	color: '#111111',
-	size: 5,
+	size: 3,
 	tool: 'marker',
 })
 

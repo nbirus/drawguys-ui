@@ -1,7 +1,7 @@
 <template>
 	<ul class="game-users">
 		<li class="game-users__user" v-for="user of users" :key="user.userid">
-			<user v-bind="user" :ready="false" large />
+			<user v-bind="user" large />
 		</li>
 	</ul>
 </template>

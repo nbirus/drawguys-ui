@@ -91,20 +91,6 @@ button {
 			pointer-events: none;
 		}
 	}
-	&.striped.dark {
-		color: $text;
-
-		i {
-			color: $text;
-		}
-		&:focus,
-		&:hover {
-			box-shadow: 0 0 0 3px $text;
-		}
-		&:active {
-			box-shadow: 0 0 0 3px darken($text, 20);
-		}
-	}
 
 	@each $color, $name in $colors {
 		&.#{$name}:not(.custom) {

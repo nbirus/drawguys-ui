@@ -100,12 +100,12 @@ export function setTyping(typing) {
 function onUpdateRooms(newRooms) {
 	rooms.value = newRooms
 }
-function onUpdateRoom(newRoom) {
+function onUpdateRoom(newRoom, test = false) {
 	Object.keys(roomState).forEach(key => {
 		roomState[key] = newRoom[key]
 	})
 	// update current user
-	roomState.userState = newRoom.usersState[userState.userid]
+	roomState.userState = newRoom.usersState[test ? 'one' : userState.userid]
 }
 function onJoinRoom(roomid) {
 	log('room-join')
@@ -149,42 +149,60 @@ function colorTaken(colorIndex) {
 const roomStateTest = {
 	roomid: 'roomid',
 	roomname: 'Room Name',
-	active: true,
-	countdownActive: false,
-	countdown: 3,
-	users: [
-		{
-			userid: 'user1',
-			username: 'Username one',
-			color: 'blue',
+  timer: 3,
+  timerActive: false,
+  messages: [],
+  gameState: {
+    active: true,
+    event: 'turn_start',
+    timer: 0,
+    gameTimer: null,
+    turnUser: {
+			userid: 'one',
+			username: 'Username One',
+			guesses: [],
+			ready: false,
+			match: false,
+			typing: false,
 			drawing: true,
-			score: 500,
+			selecting: false,
+			color: 'blue',
+			score: 0,
 		},
-		{
-			userid: 'user2',
-			username: 'Username two',
-			color: 'red',
-			score: 650,
+    roundWord: '',
+    round: 0,
+    numberOfRounds: 1,
+  },
+  usersState: {
+		one: {
+			userid: 'one',
+			username: 'Username One',
+			guesses: [],
+			ready: false,
+			match: false,
+			typing: false,
+			drawing: true,
+			selecting: false,
+			color: 'blue',
+			score: 200,
 		},
-	],
-	messages: [],
-	user: {
-		userid: 'user1',
-		username: 'Username one',
-		color: 'blue',
-		drawing: true,
-	},
-	userTurn: {
-		userid: 'user1',
-		username: 'Username one',
-		color: 'blue',
+		two: {
+			userid: 'two',
+			username: 'Username Two',
+			guesses: [],
+			ready: false,
+			match: false,
+			typing: false,
+			drawing: false,
+			selecting: false,
+			color: 'orange',
+			score: 100,
+		},
 	},
 }
 
 export function testRoomState() {
-	Object.keys(roomState).forEach(key => {
-		roomState[key] = roomStateTest[key]
-	})
+	onUpdateRoom(roomStateTest, true)
 }
 
 export function setInactive() {

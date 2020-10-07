@@ -15,7 +15,7 @@
 // ready-btn
 .ready-btn-enter-active,
 .ready-btn-leave-active {
-	transition: 0.5s ease;
+	transition: 0.25s ease;
 	transition-property: opacity, transform;
 }
 .ready-btn-enter-from {
@@ -40,31 +40,36 @@
 	transform: translateY(50px) scale(0.9) rotateY(20deg) rotateX(10deg);
 }
 
-// chat
-// .chat-enter-active,
-// .chat-leave-active {
-// 	transition: .5s ease;
-// 	transition-property: opacity, transform;
-// }
-// .chat-enter-from,
-// .chat-leave-to {
-// 	opacity: 0;
-// 	transform: translateY(50px) scale(.9) rotateY(20deg) rotateX(10deg);
-// }
-
-// user-event
-.user-popup-enter-active,
-.user-popup-leave-active {
+// user-typing
+.user-typing-enter-active,
+.user-typing-leave-active {
 	transition: 0.2s ease;
 	transition-property: opacity, transform;
 }
-.user-popup-enter-from,
-.user-popup-leave-to {
+.user-typing-enter-from,
+.user-typing-leave-to {
 	opacity: 0;
 	transform: translateX(-18px) scale(0.75);
 }
 
 // user-event
+.user-event-enter-active {
+	transition: .2s ease;
+	transition-property: opacity, transform;
+}
+.user-event-leave-active {
+	transition: 2s ease;
+	transition-delay: 5s;
+	transition-property: opacity, transform;
+}
+.user-event-enter-from {
+	opacity: 1!important;
+}
+.user-event-leave-to {
+	opacity: 1!important;
+}
+
+// timer
 .timer-enter-active,
 .timer-leave-active {
 	transition: 0.2s ease;
