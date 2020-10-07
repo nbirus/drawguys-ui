@@ -1,6 +1,7 @@
 import { socket } from '@/services/Socket'
 import { userState } from '@/services/User'
 import { reactive, ref } from 'vue'
+import colors from '@/assets/colors'
 import router from '@/router'
 const LOG = true
 
@@ -68,10 +69,25 @@ export function sendMessage(message) {
 		socket.emit('message', message)
 	}
 }
-export function setColor(color) {
-	log('setColor')
+export function nextColor() {
+	log('nextColor')
 	if (socket && userState.roomid) {
-		socket.emit('color', color)
+		let user = roomState.usersState[userState.userid]
+		let activeColorIndex = colors.findIndex(c => c === user.color)
+		let newColor = true
+		let newColorIndex = activeColorIndex
+
+		while (newColor) {
+			newColorIndex++
+			if (newColorIndex === colors.length) {
+				newColorIndex = 0
+			}
+			if (!colorTaken(newColorIndex)) {
+				newColor = false
+			}
+		}
+
+		socket.emit('color', colors[newColorIndex])
 	}
 }
 export function setTyping(typing) {
@@ -119,6 +135,13 @@ function uid() {
 	return Math.random()
 		.toString(16)
 		.slice(11)
+}
+function colorTaken(colorIndex) {
+	let users = roomState.usersState
+	let takenIndexes = Object.values(users).map(user =>
+		colors.findIndex(c => c === user.color)
+	)
+	return takenIndexes.includes(colorIndex)
 }
 
 ////////////////////////////////////////////////

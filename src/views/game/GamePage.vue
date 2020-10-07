@@ -1,5 +1,6 @@
 <template>
 	<div class="page game">
+		<!-- game over -->
 		<game-over
 			class="game__container"
 			v-if="roomState.gameState.event === 'game_end'"

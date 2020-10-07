@@ -6,7 +6,9 @@
 	right: 0px;
 	bottom: 0px;
 	left: 0px;
-	
+	min-width: 625px;
+	overflow-x: auto;
+	padding: 0 2rem;
 
 	&--center {
 		height: 100vh;

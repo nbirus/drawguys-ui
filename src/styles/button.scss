@@ -1,6 +1,6 @@
 button {
 	height: $block-height;
-	border: solid 1px transparent;
+	border: none;
 	border-radius: $border-radius;
 	background-color: $light;
 	padding: 0 0.75rem;
@@ -12,19 +12,33 @@ button {
 	position: relative;
 
 	&:hover {
-		transform: translateY(-1px);
+		transform: translateY(-1px) scale(1.05);
 		background-color: darken($light, 3);
-		box-shadow: 0 0 0 2px $black;
 	}
 	&:focus,
 	&:active {
 		border-radius: $border-radius;
 		transform: translateY(0px);		
-		box-shadow: 0 0 0 2px $black;
+		transform: scale(1.025);
 	}
 	&:active {
 		background-color: darken($light, 5);
-		box-shadow: 0 0 0 2px $black;
+		transform: scale(1);
+	}
+
+	// outline
+	&:after {
+		content: '';
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		left: 0;
+		box-shadow: inset 0 0 0 0 $black;
+		border-radius: $border-radius;
+		pointer-events: none;
+		transition: 0.2s ease;
+		transition-property: box-shadow;
 	}
 
 
@@ -45,18 +59,10 @@ button {
 	}
 	&.striped {
 		font-weight: $bold;
-		color: $text-light;
+		color: $text;
 		font-size: 0.9rem;
 		transition: all 0.2s ease;
-		background: repeating-linear-gradient(
-			45deg,
-			lighten($light, 0),
-			lighten($light, 0) 2rem,
-			darken($light, 3) 2rem,
-			darken($light, 3) 4rem
-		);
-		background-size: 200% 200%;
-		animation: barberpole 15s linear infinite;
+		@include stripe($light, darken($light, 5));
 
 		span {
 			display: flex;
@@ -65,26 +71,20 @@ button {
 		}
 		i {
 			font-size: 1.2rem;
-			color: $text-light;
+			color: $text;
 			margin-right: 0.5rem;
 			transform: translateY(1px);
 		}
 
 		&:focus,
+		&:active,
 		&:hover {
-			box-shadow: 0 0 0 3px $text-light;
+			&:after {
+				box-shadow: inset 0 0 0 3px $text;
+			}
 		}
 		&:active {
-			box-shadow: 0 0 0 3px darken($text-light, 20);
-			background: repeating-linear-gradient(
-				45deg,
-				darken($light, 1),
-				darken($light, 1) 2rem,
-				darken($light, 6) 2rem,
-				darken($light, 6) 4rem
-			);
-			background-size: 200% 200%;
-			animation: barberpole 15s linear infinite;
+			@include stripe($light, darken($light, 2));
 		}
 
 		&:disabled {
@@ -113,47 +113,40 @@ button {
 
 			&:hover {
 				background-color: darken($color, 3);
-				box-shadow: 0 0 0 2px $color;
+				&:after {
+					box-shadow: inset 0 0 0 3px $color;
+				}
 			}
 			&:focus,
 			&:active {
-				box-shadow: 0 0 0 2px $color;
+				&:after {
+					box-shadow: inset 0 0 0 3px $color;
+				}
 			}
 			&:active {
 				background-color: darken($color, 5);
-				box-shadow: 0 0 0 2px $color;
+				&:after {
+					box-shadow: inset 0 0 0 3px $color;
+				}
 			}
 		}
 		&.#{$name}.striped {
-			background: repeating-linear-gradient(
-				45deg,
-				lighten($color, 0),
-				lighten($color, 0) 2rem,
-				darken($color, 3) 2rem,
-				darken($color, 3) 4rem
-			);
-			background-size: 200% 200%;
-			animation: barberpole 15s linear infinite;
-
+			@include stripe($color, darken($color, 5));
 
 			i, span {
 				color: white;
 			}
 			&:focus,
 			&:hover {
-				box-shadow: 0 0 0 3px darken($color, 20);
+				&:after {
+					box-shadow: inset 0 0 0 3px darken($color, 20);
+				}
 			}
 			&:active {
-				background: repeating-linear-gradient(
-					45deg,
-					darken($color, 2),
-					darken($color, 2) 2rem,
-					darken($color, 6) 2rem,
-					darken($color, 6) 4rem
-				);
-				background-size: 200% 200%;
-				animation: barberpole 15s linear infinite;
-				box-shadow: 0 0 0 3px darken($color, 30);
+				@include stripe($color, darken($color, 3));
+				&:after {
+					box-shadow: inset 0 0 0 3px darken($color, 20);
+				}
 			}
 		}
 	}

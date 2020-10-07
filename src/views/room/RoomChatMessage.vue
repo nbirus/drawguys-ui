@@ -1,13 +1,13 @@
 <template>
 	<div class="message" :class="[color, event, event && 'event']">
 		<!-- avatar -->
-		<div
+		<!-- <div
 			class="message__avatar avatar"
 			v-if="['join-room', 'leave-room'].includes(event)"
 		>
 			<i class="ri-arrow-right-fill" v-if="event === 'join-room'"></i>
 			<i class="ri-arrow-left-fill" v-else-if="event === 'leave-room'"></i>
-		</div>
+		</div> -->
 
 		<!-- username -->
 		<div
@@ -79,23 +79,6 @@ export default {
 
 	&.event {
 		font-style: italic;
-	}
-	&.event.ready {
-		position: relative;
-
-		.message__username {
-			color: $green;
-		}
-
-		&:after {
-			content: '';
-			position: absolute;
-			top: -0.3rem;
-			right: 0px;
-			bottom: -0.3rem;
-			left: 0px;
-			background-color: fade-out($green, 0.9);
-		}
 	}
 	&:not(.event) {
 		.message__username:after {

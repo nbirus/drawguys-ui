@@ -196,16 +196,16 @@ a:focus {
 	top: 0;
 	left: 0;
 	color: white;
-	height: 50px;
+	height: 55px;
 	width: 40px;
 	clip-path: polygon(0 0, 0 68%, 100% 0);
 	border-top-left-radius: $border-radius;
 
 	i {
 		position: absolute;
-		top: 2px;
+		top: 4px;
 		left: 4px;
-		font-size: 1.2rem;
+		font-size: .8rem;
 	}
 
 	@each $color, $name in $colors {

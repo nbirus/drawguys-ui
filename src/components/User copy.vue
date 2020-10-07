@@ -1,0 +1,322 @@
+<script>
+import colors from '@/assets/colors'
+import { setColor, roomState } from '@/services/Room'
+import { userState } from '@/services/User'
+import { computed, ref, watch } from 'vue'
+
+export default {
+	name: 'user',
+	props: {
+		userid: String,
+		username: String,
+		guesses: Array,
+		ready: Boolean,
+		match: Boolean,
+		typing: Boolean,
+		outlined: Boolean,
+		drawing: Boolean,
+		small: Boolean,
+		large: Boolean,
+		changeColor: Boolean,
+		color: String,
+		score: Number,
+	},
+	setup(props) {
+		// colors
+		function nextColor(direction) {
+			let user = roomState.usersState[userState.userid]
+			let activeColorIndex = colors.findIndex(c => c === user.color)
+			let newColor = true
+			let newColorIndex = activeColorIndex
+
+			if (direction === 'right') {
+				while (newColor) {
+					newColorIndex++
+					if (newColorIndex === colors.length) {
+						newColorIndex = 0
+					}
+					if (!colorTaken(newColorIndex)) {
+						newColor = false
+					}
+				}
+			} else {
+				while (newColor) {
+					newColorIndex--
+					if (newColorIndex === -1) {
+						newColorIndex = colors.length - 1
+					}
+					if (!colorTaken(newColorIndex)) {
+						newColor = false
+					}
+				}
+			}
+
+			setColor(colors[newColorIndex])
+		}
+		function colorTaken(colorIndex) {
+			let users = roomState.usersState
+			let takenIndexes = Object.values(users).map(user =>
+				colors.findIndex(c => c === user.color)
+			)
+			return takenIndexes.includes(colorIndex)
+		}
+
+		// status
+		let outlineIcons = ref({
+			drawing: 'pencil',
+			ready: 'check',
+		})
+		let outlineColors = ref({
+			drawing: 'black',
+			ready: 'green',
+		})
+		let status = computed(() => {
+			if (props.drawing) {
+				return 'drawing'
+			} else if (props.ready) {
+				return 'ready'
+			} else {
+				return ''
+			}
+		})
+
+		// popup
+		let guess = ref('')
+		let event = ref('')
+		let eventTimeout = null
+		function setEvent(m) {
+			if (eventTimeout !== null) {
+				clearTimeout(eventTimeout)
+				eventTimeout = null
+			}
+			event.value = m
+			eventTimeout = setTimeout(() => {
+				event.value = ''
+			}, 2000)
+		}
+		watch(
+			status,
+			() => {
+				if (status.value === 'drawing') {
+					setEvent('DRAWING')
+				} else if (status.value === 'ready') {
+					setEvent('READY')
+				} else {
+					setEvent('')
+				}
+			},
+			{
+				immediate: true,
+			}
+		)
+
+		return {
+			nextColor,
+			userState,
+			status,
+			outlineColors,
+			outlineIcons,
+			event,
+			guess,
+		}
+	},
+}
+</script>
+
+<template>
+	<div
+		class="user card"
+		:class="[
+			color,
+			{ small, large, outlined, ready: !!status, 'edit-color': changeColor },
+			`outline-${outlineColors[status]}`,
+		]"
+		@click="nextColor('right')"
+	>
+		<!-- icon banner -->
+		<div class="icon-banner" v-if="!!status" :class="outlineColors[status]">
+			<i :class="`ri-${outlineIcons[status]}-line`"></i>
+		</div>
+
+		<!-- username -->
+		<div class="user__username">
+			{{ username }} <span v-if="userid === userState.userid">(You)</span>
+		</div>
+
+		<!-- score -->
+		<div class="user__score" v-if="score" v-text="score"></div>
+
+		<!-- popup -->
+		<transition name="user-popup" mode="out-in" appear>
+			<!-- event -->
+			<div class="user__popup event" v-if="event" :class="status">
+				<span v-text="event"></span>
+			</div>
+
+			<!-- guess -->
+			<div class="user__popup guess" v-else-if="guess">
+				<span v-text="guess"></span>
+			</div>
+		</transition>
+
+		<!-- typing -->
+		<transition name="user-popup" mode="out-in" appear>
+			<div class="user__popup typing" v-if="!event && !guess && typing">
+				<div></div>
+				<div></div>
+				<div></div>
+			</div>
+		</transition>
+	</div>
+</template>
+
+<style lang="scss" scoped>
+@import '@/styles/component.scss';
+.user {
+	display: flex;
+	position: relative;
+	$dark-light: darken($light, 90);
+	border: none;
+	box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.15),
+		0 5px 5px -5px rgba(0, 0, 0, 0.075);
+	pointer-events: none;
+
+	&.edit-color {
+		pointer-events: auto;
+		transition: 0.2s ease;
+		transition-property: transform;
+		cursor: pointer;
+		&:hover {
+			transform: scale(1.025);
+		}
+		&:active {
+			transform: scale(1.015) translateY(2px);
+		}
+	}
+
+	&__username {
+		flex: 0 1 100%;
+		text-align: center;
+		font-size: 1rem;
+		color: white;
+		font-weight: $bold;
+		padding: 1.35rem 0;
+
+		span {
+			font-weight: $regular;
+			font-size: 0.85rem;
+		}
+	}
+	&__score {
+		flex: 0 0 auto;
+		padding: 0 1.25rem;
+		color: white;
+		border-radius: 0 $border-radius $border-radius 0;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-weight: $bold;
+		font-size: 1.1rem;
+	}
+	&__popup {
+		position: absolute;
+		top: 0.8rem;
+		font-size: 0.8rem;
+		left: calc(100% + 0.5rem);
+		z-index: 9;
+		box-shadow: $box-shadow;
+		border-radius: 25px;
+		white-space: nowrap;
+		overflow: hidden;
+
+		display: flex;
+		align-items: center;
+		padding: 0.5rem 0.65rem;
+		background-color: #fff;
+
+		&.event.drawing {
+			background-color: fade-out($black, 0.1);
+			color: white;
+			font-weight: $bold;
+			font-size: 0.7rem;
+		}
+		&.event.ready {
+			background-color: fade-out($green, 0.1);
+			color: white;
+			font-weight: $bold;
+			font-size: 0.7rem;
+		}
+		&.typing {
+			padding: 0.5rem 0.5rem;
+			top: 0.9rem;
+
+			> div {
+				width: 8px;
+				height: 8px;
+				background-color: $grey;
+				border-radius: 50%;
+				animation: dot 1.5s ease-in-out infinite;
+
+				&:nth-child(2) {
+					animation-delay: 0.5s;
+				}
+				&:nth-child(3) {
+					animation-delay: 1s;
+				}
+				&:not(:last-child) {
+					margin-right: 0.15rem;
+				}
+			}
+		}
+	}
+
+	@each $color, $name in $colors {
+		&.#{$name}:not(.outlined) {
+			background-color: $color;
+
+			.user__score {
+				background-color: darken($color, 20);
+			}
+		}
+		&.#{$name}.outlined {
+			background-color: fade-out($color, 0.9);
+			border-color: lighten($color, 15);
+
+			.user__username {
+				color: $color;
+			}
+		}
+	}
+
+	&.small {
+		box-shadow: 0 5px 10px -5px rgba(0, 0, 0, 0.05),
+			0 3px 3px -3px rgba(0, 0, 0, 0.03);
+
+		.user__username {
+			padding: 1.1rem 0;
+			font-size: 1rem;
+		}
+	}
+	&.large {
+		.user__username {
+			padding: 1.35rem 0;
+			font-size: 1rem;
+		}
+	}
+}
+
+@keyframes dot {
+	0% {
+		opacity: 0.25;
+		transform: scale(0.85);
+	}
+	50% {
+		opacity: 0.75;
+		transform: scale(1);
+	}
+	100% {
+		opacity: 0.25;
+		transform: scale(0.75);
+	}
+}
+</style>

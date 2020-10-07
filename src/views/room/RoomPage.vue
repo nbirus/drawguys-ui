@@ -53,7 +53,6 @@ export default {
 		watch(
 			roomState,
 			() => {
-				console.log(roomState.gameState.active)
 				if (roomState.gameState.active) {
 					router.push(`/${roomid}/g`)
 				}
@@ -95,6 +94,7 @@ export default {
 		border: none;
 		overflow: hidden;
 		position: relative;
+		width: 625px;
 	}
 	&__users {
 		grid-row: 1;

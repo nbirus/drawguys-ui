@@ -63,6 +63,7 @@ export default {
 
 .home {
 	justify-content: flex-start;
+	align-items: center;
 
 	&__title {
 		margin-top: $margin-top;
@@ -73,6 +74,7 @@ export default {
 	&__room-list {
 		padding-top: 3rem;
 		padding-bottom: 3rem;
+		width: $max-width-sm;
 	}
 	&__username-link {
 		position: fixed;

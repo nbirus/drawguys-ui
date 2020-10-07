@@ -3,7 +3,7 @@ $regular: 400;
 $block-height: 45px;
 $block-height-lg: 55px;
 $border-radius: 0.5rem;
-$max-width-sm: 475px;
+$max-width-sm: 480px;
 $max-width: 625px;
 $margin-top: 7.5rem;
 
@@ -38,3 +38,16 @@ $border-color-light: lighten($light, 3);
 // shadows
 $box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
 	0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+
+@mixin stripe($start, $end) {
+	background: repeating-linear-gradient(
+		45deg,
+		$start,
+		$start 2rem,
+		$end 2rem,
+		$end 4rem
+	);
+	background-size: 200% 200%;
+	animation: barberpole 15s linear infinite;
+}
