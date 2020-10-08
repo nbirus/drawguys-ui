@@ -1,5 +1,9 @@
 <template>
-	<timer class="timer" :value="roomState.gameState.timer" />
+	<timer
+		class="timer"
+		:value="gameState.timer"
+		:color="gameState.turnUser.color"
+	/>
 </template>
 
 <script>
@@ -10,7 +14,7 @@ export default {
 	components: { Timer },
 	setup() {
 		return {
-			roomState,
+			gameState: roomState.gameState,
 		}
 	},
 }

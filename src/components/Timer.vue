@@ -2,7 +2,7 @@
 	<div class="timer">
 		<div class="timer__circle" ref="container"></div>
 		<transition name="timer-circle" mode="out-in">
-			<div class="expand" :key="value"></div>
+			<div class="expand" :key="value" :class="color"></div>
 		</transition>
 		<transition name="timer" mode="out-in">
 			<h1 v-text="value" :key="value"></h1>
@@ -12,16 +12,19 @@
 
 <script>
 import ProgressBar from 'progressbar.js'
+import { colorMap } from '@/assets/colors'
+
 export default {
 	name: 'timer',
-	props: ['value'],
+	props: ['value', 'color'],
 	mounted() {
+		let color = colorMap[this.color]
 		var bar = new ProgressBar.Circle(this.$refs.container, {
-			strokeWidth: 6,
+			strokeWidth: 5,
 			duration: this.value * 1000,
-			color: '#111111',
+			color: color || '#111111',
 			trailColor: '#eceff4',
-			trailWidth: 6,
+			trailWidth: 5,
 			svgStyle: null,
 		})
 		bar.animate(1.0) // Number from 0.0 to 1.0
@@ -32,12 +35,12 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
 .timer__circle {
-	width: 6rem;
-	height: 6rem;
+	width: 5.5rem;
+	height: 5.5rem;
 }
 .timer {
-	width: 6rem;
-	height: 6rem;
+	width: 5.5rem;
+	height: 5.5rem;
 	background-color: $light;
 	border-radius: 50%;
 	display: flex;
@@ -48,9 +51,10 @@ export default {
 
 	h1 {
 		font-weight: $bold;
-		font-size: 3.25rem;
+		font-size: 2.85rem !important;
+		letter-spacing: -2px;
 		position: absolute;
-		transform: translateY(-1px);
+		transform: translateY(-2px);
 	}
 }
 
@@ -63,5 +67,11 @@ export default {
 	border-radius: 50%;
 	background-color: fade-out($black, 0.75);
 	transform: scale(0);
+
+	@each $color, $name in $colors {
+		&.#{$name} {
+			background-color: fade-out($color, 0.75);
+		}
+	}
 }
 </style>

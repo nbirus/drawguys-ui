@@ -155,7 +155,7 @@ const roomStateTest = {
   gameState: {
     active: true,
     event: 'turn_start',
-    timer: 0,
+    timer: 10,
     gameTimer: null,
     turnUser: {
 			userid: 'one',
