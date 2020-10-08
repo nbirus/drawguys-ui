@@ -14,6 +14,7 @@ export const roomState = reactive({
 	timerActive: false,
 	messages: [],
 	gameState: {
+		event: 'round_start',
 		active: false,
 		timer: 0,
 		turnUser: {},
@@ -102,6 +103,7 @@ export function setWord(word) {
 	}
 }
 export function getWords() {
+
 	const shuffled = words.sort(() => 0.5 - Math.random())
 	return shuffled.slice(0, 3);
 }
@@ -164,8 +166,8 @@ const roomStateTest = {
   messages: [],
   gameState: {
     active: true,
-    event: 'pre_turn',
-    word: '',
+    event: 'turn_start',
+    word: 'Test',
     timer: 10,
     gameTimer: null,
     turnUser: {
@@ -178,11 +180,11 @@ const roomStateTest = {
 			drawing: true,
 			selecting: false,
 			color: 'blue',
-			score: 0,
+			score: 200,
 		},
     roundWord: '',
-    round: 0,
-    numberOfRounds: 1,
+    round: 2,
+    numberOfRounds: 5,
   },
   usersState: {
 		one: {
@@ -192,8 +194,8 @@ const roomStateTest = {
 			ready: false,
 			match: false,
 			typing: false,
-			drawing: false,
-			selecting: true,
+			drawing: true,
+			selecting: false,
 			color: 'blue',
 			score: 200,
 		},

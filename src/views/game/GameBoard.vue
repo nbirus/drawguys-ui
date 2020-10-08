@@ -1,5 +1,15 @@
 <template>
 	<div class="board">
+		<div
+			class="board__word"
+			v-if="
+				roomState.userState.drawing &&
+					roomState.gameState.event === 'turn_start'
+			"
+		>
+			You are drawing: <b v-text="roomState.gameState.word"></b>
+		</div>
+
 		<transition name="pop-up" appear>
 			<div class="board__card card">
 				<!-- timer -->
@@ -64,6 +74,7 @@ export default {
 .board {
 	width: 100%;
 	height: 100%;
+	position: relative;
 
 	&__card {
 		width: 100%;
@@ -75,6 +86,12 @@ export default {
 		bottom: 0;
 		display: flex;
 		justify-content: center;
+	}
+	&__word {
+		position: absolute;
+		right: 1rem;
+		top: -1.75rem;
+		font-size: 0.9rem;
 	}
 }
 </style>

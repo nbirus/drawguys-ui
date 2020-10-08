@@ -1,17 +1,30 @@
 <template>
-	<div id="canvasDiv" class="drawing" :class="`size-${drawState.size}`"></div>
+	<div
+		id="canvasDiv"
+		class="drawing"
+		:class="[`size-${drawState.size}`, { disabled }]"
+	></div>
 </template>
 
 <script>
-import Drawing, { drawState } from '@/services/Drawing'
+import Drawing, { drawState, reset } from '@/services/Drawing'
+import { roomState } from '@/services/Room'
+import { computed, watch } from 'vue'
 export default {
 	name: 'drawing',
 	mounted() {
 		Drawing()
 	},
 	setup() {
+		watch(
+			() => roomState.gameState.event,
+			() => {
+				reset()
+			}
+		)
 		return {
 			drawState,
+			disabled: computed(() => !roomState.userState.drawing),
 		}
 	},
 }
@@ -24,6 +37,10 @@ export default {
 	border-radius: $border-radius;
 	height: 100%;
 	width: 100%;
+
+	&.disabled {
+		pointer-events: none;
+	}
 
 	&.size-3 {
 		cursor: url('../../../public/cursors/3.png') 3 3, auto;

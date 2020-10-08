@@ -6,8 +6,11 @@
 			class="mb-7 delay-2"
 		/>
 
-		<button class="custom striped" @click="toggleReady">
+		<button class="custom striped mr-2" @click="toggleReady">
 			Play again?
+		</button>
+		<button class="custom striped" @click="$router.push('/')">
+			Leave
 		</button>
 	</div>
 </template>
@@ -32,7 +35,8 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
 
-.game-over {
+.game-over.card {
+	min-width: 300px;
 	width: 300px;
 	display: flex;
 	align-items: center;

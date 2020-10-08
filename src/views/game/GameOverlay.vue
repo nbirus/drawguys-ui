@@ -1,19 +1,24 @@
 <script>
 import { roomState, getWords, setWord } from '@/services/Room'
 import { computed, ref, watch } from 'vue'
+import GameScoreboard from './GameScoreboard'
 
 export default {
 	name: 'game-overlay',
+	components: {
+		GameScoreboard,
+	},
 	setup() {
+		let gameState = computed(() => roomState.gameState)
 		let event = computed(() => roomState.gameState.event)
 		let turnUser = computed(() => roomState.gameState.turnUser)
 		let user = computed(() => roomState.userState)
 		let words = ref([])
 
 		watch(
-			event.value,
+			() => event.value,
 			() => {
-				if (event.value === 'pre_turn' && user.value.selecting) {
+				if (event.value === 'pre_turn') {
 					words.value = getWords()
 				}
 			},
@@ -22,29 +27,29 @@ export default {
 			}
 		)
 
+		let fixed = computed(() =>
+			['round_start', 'round_end', 'game_end'].includes(event.value)
+		)
+
 		return {
 			event,
 			turnUser,
 			roomState,
+			gameState,
 			user,
 			words,
 			setWord,
+			fixed,
 		}
 	},
 }
 </script>
 
 <template>
-	<div class="game-overlay" v-if="event === 'pre_turn'">
+	<div class="game-overlay" :class="{ fixed }">
 		<div class="game-overlay__event" :class="event">
-			<!-- before round -->
-			<div v-if="event === 'pre_round'"></div>
-
-			<!-- on round start -->
-			<div v-else-if="event === 'round_start'"></div>
-
 			<!-- when turn starts -->
-			<div v-else-if="event === 'pre_turn'">
+			<div v-if="event === 'pre_turn'">
 				<!-- if it's your turn -->
 				<div v-if="user.selecting" class="selecting">
 					<h3>Select a word to draw...</h3>
@@ -54,17 +59,29 @@ export default {
 						</li>
 					</ul>
 				</div>
-				<div v-else>{{ turnUser.username }} is selecting a word</div>
+				<div class="waiting" v-else>
+					<b :class="`text-${turnUser.color}`">{{ turnUser.username }}</b> is
+					selecting a word to draw...
+				</div>
 
 				<!-- <div v-if="user.selecting"></div>
 				<div v-else>{{ turnUser.username }} is selecting a word</div> -->
 			</div>
 
 			<!-- when turn ends -->
-			<div v-else-if="event === 'turn_end'"></div>
+			<div v-else-if="event === 'turn_end'">
+				<h3>
+					The word was <b>{{ gameState.word }}</b>
+				</h3>
+			</div>
 
-			<div v-else-if="event === 'round_end'"></div>
-			<div v-else-if="event === 'game_end'"></div>
+			<!-- round ends -->
+			<div v-else-if="event === 'round_end'">
+				<h1 class="mb-7">Round {{ gameState.round }} Results</h1>
+			</div>
+
+			<!-- scoreboard -->
+			<game-scoreboard v-if="fixed" />
 		</div>
 	</div>
 </template>
@@ -81,6 +98,18 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	pointer-events: none;
+
+	&.fixed {
+		position: fixed;
+		background-color: white;
+	}
+
+	&__event {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+	}
 }
 
 .selecting {
@@ -92,6 +121,7 @@ export default {
 		display: flex;
 		align-items: center;
 		margin-top: 2rem;
+		pointer-events: auto;
 
 		&-word {
 			&:not(:last-child) {
@@ -99,5 +129,12 @@ export default {
 			}
 		}
 	}
+}
+.waiting {
+	padding: 1.25rem 1.75rem;
+	background-color: $light;
+	border-radius: $border-radius;
+	font-size: 0.9rem;
+	@include stripe(lighten($light, 1), darken($light, 1));
 }
 </style>

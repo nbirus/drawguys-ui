@@ -13,21 +13,44 @@
 <script>
 import ProgressBar from 'progressbar.js'
 import { colorMap } from '@/assets/colors'
+import { onMounted, ref, watch } from 'vue'
 
 export default {
 	name: 'timer',
-	props: ['value', 'color'],
-	mounted() {
-		let color = colorMap[this.color]
-		var bar = new ProgressBar.Circle(this.$refs.container, {
-			strokeWidth: 5,
-			duration: this.value * 1000,
-			color: color || '#111111',
-			trailColor: '#eceff4',
-			trailWidth: 5,
-			svgStyle: null,
+	props: ['value', 'color', 'update'],
+	setup(props) {
+		let container = ref()
+		let bar
+
+		// init bar
+		onMounted(() => {
+			bar = new ProgressBar.Circle(container.value, {
+				strokeWidth: 5,
+				trailColor: '#eceff4',
+				trailWidth: 5,
+				svgStyle: null,
+			})
+			animateBar()
 		})
-		bar.animate(1.0) // Number from 0.0 to 1.0
+
+		// update on event change
+		watch(props.update, () => {
+			animateBar()
+		})
+
+		function animateBar() {
+			setTimeout(() => {
+				bar.set(0)
+				bar.animate(1.0, {
+					duration: props.value * 1000,
+					color: colorMap[props.color] || '#111111',
+				})
+			}, 100)
+		}
+
+		return {
+			container,
+		}
 	},
 }
 </script>

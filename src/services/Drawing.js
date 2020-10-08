@@ -20,6 +20,7 @@ export const drawState = reactive({
 	tool: 'marker',
 })
 
+// allow undo event
 export const undoDisabled = computed(() => undoIndex.value.length === 0)
 
 export default function() {

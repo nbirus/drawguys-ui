@@ -18,6 +18,7 @@ export default {
 		small: Boolean,
 		large: Boolean,
 		changeColor: Boolean,
+		hideScore: Boolean,
 		color: String,
 		score: Number,
 	},
@@ -67,7 +68,7 @@ export default {
 		</div>
 
 		<!-- score -->
-		<div class="user__score" v-text="score"></div>
+		<div class="user__score" v-if="!hideScore" v-text="score"></div>
 
 		<!-- popout -->
 		<transition name="user-typing" mode="out-in">

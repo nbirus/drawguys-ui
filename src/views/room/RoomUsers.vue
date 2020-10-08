@@ -4,6 +4,7 @@
 			<user
 				v-bind="user"
 				:change-color="user.userid === userState.userid && !ready"
+				hide-score
 			/>
 		</li>
 		<li class="room-users__user invite" v-for="n of userEmpty" :key="n">
