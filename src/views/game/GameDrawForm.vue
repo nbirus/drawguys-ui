@@ -11,71 +11,65 @@ export default {
 			reset,
 			undo,
 			undoDisabled,
-			activeColor: computed(() => colorLookupMap[drawState.color]),
+			sizes: [3, 10, 25, 50],
+			activeColor: computed(() =>
+				drawState.tool === 'eraser' ? 'black' : colorLookupMap[drawState.color]
+			),
+			eraserActive: computed(() => drawState.tool === 'eraser'),
 		}
 	},
 }
 </script>
 
 <template>
-	<div class="draw-form card" :class="activeColor">
+	<div class="draw-form card">
+		<!-- eraser -->
 		<button
-			class="eraser"
-			:class="{ active: drawState.tool === 'eraser' }"
+			class="draw-form__eraser draw-form-button"
+			:class="{ active: eraserActive }"
 			@click="drawState.tool = 'eraser'"
 		>
 			<i class="ri-eraser-line"></i>
 		</button>
 
-		<ul class="draw-form__colors mr-2">
+		<!-- colors -->
+		<ul class="draw-form__colors" :class="{ disabled: eraserActive }">
 			<li
 				class="draw-form__colors-color"
 				v-for="(hex, color, i) in colorMap"
 				:key="i"
-				:class="[color, { active: drawState.color === hex }]"
+				tabindex="0"
+				:class="[color, { active: drawState.color === hex && !eraserActive }]"
 				@click=";(drawState.color = hex), (drawState.tool = 'marker')"
 			></li>
 		</ul>
 
-		<div class="draw-form__size">
+		<!-- sizes -->
+		<ul class="draw-form__sizes">
+			<li class="draw-form__sizes-size" v-for="size in sizes" :key="size">
+				<button
+					class="draw-form__sizes-button draw-form-button"
+					:class="[activeColor, { active: drawState.size === size }]"
+					@click="drawState.size = size"
+				>
+					<div class="c"></div>
+				</button>
+			</li>
+		</ul>
+
+		<!-- actions -->
+		<div class="draw-form__actions">
 			<button
-				:class="{ active: drawState.size === 3 && drawState.tool === 'marker' }"
-				@click="drawState.size = 3"
+				class="draw-form-button mr-1"
+				@click="undo"
+				:disabled="undoDisabled"
 			>
-				<div class="c"></div>
+				<i class="ri-arrow-go-back-line"></i>
 			</button>
-			<button
-				:class="{
-					active: drawState.size === 10 && drawState.tool === 'marker',
-				}"
-				@click="drawState.size = 10"
-			>
-				<div class="c"></div>
-			</button>
-			<button
-				:class="{
-					active: drawState.size === 25 && drawState.tool === 'marker',
-				}"
-				@click="drawState.size = 25"
-			>
-				<div class="c"></div>
-			</button>
-			<button
-				:class="{
-					active: drawState.size === 50 && drawState.tool === 'marker',
-				}"
-				@click="drawState.size = 50"
-			>
-				<div class="c"></div>
+			<button class="draw-form-button" @click="reset">
+				<i class="ri-forbid-line"></i>
 			</button>
 		</div>
-
-		<button class="mr-1 ml-5" @click="undo" :disabled="undoDisabled">
-			<i class="ri-arrow-go-back-line"></i>
-		</button>
-		<button @click="reset">
-			<i class="ri-forbid-line"></i>
-		</button>
 	</div>
 </template>
 
@@ -85,13 +79,18 @@ export default {
 .draw-form {
 	display: flex;
 	align-items: center;
-	width: auto;
-	position: relative;
 	padding: 0.5rem;
 	top: 2rem;
+	position: relative;
 	border: solid thin $border-color;
 
+	&__eraser {
+		&.active {
+			box-shadow: inset 0 0 0 3px $black;
+		}
+	}
 	&__colors {
+		margin-right: 0.25rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -100,7 +99,10 @@ export default {
 		height: 40px;
 
 		&.disabled {
-			pointer-events: none;
+			opacity: 0.5;
+			&:hover {
+				opacity: 1;
+			}
 		}
 
 		&-color {
@@ -146,32 +148,13 @@ export default {
 			}
 		}
 	}
-	&__size {
+	&__sizes {
 		display: flex;
+		align-items: center;
 
-		button {
-			height: 40px;
-			width: 40px;
-			padding: 0;
-			background-color: $light;
-			display: flex;
-			align-items: center;
-			justify-content: center;
+		&-size {
+			margin-right: 0.25rem;
 
-			.c {
-				background-color: transparent;
-				border-radius: 50%;
-			}
-
-			&:not(:last-child) {
-				margin-right: 0.25rem;
-			}
-			&:not(.active) {
-				opacity: 0.5;
-			}
-			&:hover {
-				opacity: 1;
-			}
 			&:nth-child(1) .c {
 				height: 4px;
 				width: 4px;
@@ -189,35 +172,60 @@ export default {
 				width: 25px;
 			}
 		}
-	}
+		&-button {
+			padding: 0;
+			height: 40px;
+			width: 40px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background-color: $light !important;
 
-	.eraser {
-		height: 40px;
-		width: 40px;
-
-		&.active {
-			box-shadow: inset 0 0 0 2px $black;
-		}
-	}
-
-	@each $color, $name in $colors {
-		&.#{$name} {
-			.draw-form {
-				&__size {
+			.c {
+				background-color: transparent;
+				border-radius: 50%;
+				border: solid thin;
+			}
+			@each $color, $name in $colors {
+				&.#{$name} {
 					.c {
-						border: solid thin $color;
+						border-color: $color;
 					}
-
-					button.active {
-						box-shadow: inset 0 0 0 2px $color;
-						opacity: 1;
+					&.active {
+						box-shadow: 0 0 0 2px $color;
 
 						.c {
-							background-color: fade-out($color, 0.25);
+							background-color: fade-out($color, 0.15);
 						}
+					}
+					&:active,
+					&:focus {
+						box-shadow: inset 0 0 0 3px $color;
 					}
 				}
 			}
+
+			&:not(:last-child) {
+				margin-right: 0.25rem;
+			}
+			&:not(.active) {
+				opacity: 0.5;
+			}
+			&:hover {
+				opacity: 1;
+			}
+		}
+	}
+	&__actions {
+		margin-left: 0.75rem;
+		padding-left: 1rem;
+		border-left: solid thin $border-color;
+	}
+
+	&-button {
+		&.disabled,
+		&:disabled {
+			pointer-events: none;
 		}
 	}
 }
