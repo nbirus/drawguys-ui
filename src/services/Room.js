@@ -1,6 +1,7 @@
 import { socket } from '@/services/Socket'
 import { userState } from '@/services/User'
 import { reactive, ref } from 'vue'
+import words from '@/assets/words'
 import colors from '@/assets/colors'
 import router from '@/router'
 const LOG = true
@@ -95,6 +96,15 @@ export function setTyping(typing) {
 		socket.emit('typing', typing)
 	}
 }
+export function setWord(word) {
+	if (socket && userState.roomid) {
+		socket.emit('word', word)
+	}
+}
+export function getWords() {
+	const shuffled = words.sort(() => 0.5 - Math.random())
+	return shuffled.slice(0, 3);
+}
 
 // event handlers
 function onUpdateRooms(newRooms) {
@@ -154,7 +164,8 @@ const roomStateTest = {
   messages: [],
   gameState: {
     active: true,
-    event: 'turn_start',
+    event: 'pre_turn',
+    word: '',
     timer: 10,
     gameTimer: null,
     turnUser: {
@@ -181,8 +192,8 @@ const roomStateTest = {
 			ready: false,
 			match: false,
 			typing: false,
-			drawing: true,
-			selecting: false,
+			drawing: false,
+			selecting: true,
 			color: 'blue',
 			score: 200,
 		},
