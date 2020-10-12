@@ -10,9 +10,7 @@
 			<span v-else-if="ready">
 				<i class="ri-checkbox-circle-line"></i>READY</span
 			>
-			<span v-else>
-				<i class="ri-indeterminate-circle-line"></i>NOT READY
-			</span>
+			<span v-else> <i class="ri-indeterminate-circle-line"></i>READY UP </span>
 		</transition>
 	</button>
 </template>

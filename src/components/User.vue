@@ -9,7 +9,7 @@ export default {
 	props: {
 		userid: String,
 		username: String,
-		guesses: Array,
+		guess: String,
 		ready: Boolean,
 		match: Boolean,
 		selecting: Boolean,
@@ -65,7 +65,7 @@ export default {
 
 		<!-- username -->
 		<div class="user__username">
-			{{ username }} <span v-if="userid === userState.userid">(You)</span>
+			{{ guess }} <span v-if="userid === userState.userid">(You)</span>
 		</div>
 
 		<!-- score -->
@@ -81,6 +81,12 @@ export default {
 		</transition>
 
 		<!-- event -->
+		<div v-if="guess !== ''" class="user__popout event guess" :key="guess">
+			<div class="user__popout-content">
+				{{ guess }}
+			</div>
+		</div>
+
 		<div v-if="event" class="user__popout event" :class="event" :key="event">
 			<div class="user__popout-content" v-if="event === 'drawing'">
 				<div class="user__popout-icon">
@@ -204,6 +210,15 @@ export default {
 		}
 		&.drawing {
 			background-color: $black;
+		}
+		&.guess {
+			padding: 0.3rem 0.75rem 0.5rem;
+
+			.user__popout-content {
+				color: $black !important;
+				font-weight: $regular;
+				font-size: 0.9rem;
+			}
 		}
 		&.typing {
 			padding: 0.5rem 0.5rem;

@@ -13,7 +13,15 @@
 			v-model="value"
 			required
 			@focus="focus = true"
-			@blur="focus = false"
+			@blur="
+				() => {
+					setTyping(false)
+					focus = false
+				}
+			"
+			@keydown="setTyping(true)"
+			@keypress.enter="setTyping(false)"
+			@keypress.delete="setTyping(false)"
 			autocomplete="off"
 		/>
 		<transition name="form-button" mode="out-in">
@@ -25,7 +33,7 @@
 </template>
 
 <script>
-import { roomGuess } from '@/services/Room'
+import { setTyping, roomGuess } from '@/services/Room'
 import { ref, watch } from 'vue'
 export default {
 	name: 'game-form',
@@ -81,6 +89,7 @@ export default {
 			focus,
 			onSubmit,
 			toggleFocus,
+			setTyping,
 		}
 	},
 }

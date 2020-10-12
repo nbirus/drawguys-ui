@@ -1,5 +1,11 @@
 <script>
-import { roomState, getWords, setWord } from '@/services/Room'
+import {
+	roomState,
+	getWords,
+	setWord,
+	setTyping,
+	roomGuess,
+} from '@/services/Room'
 import { computed, ref, watch } from 'vue'
 import GameScoreboard from './GameScoreboard'
 
@@ -18,8 +24,13 @@ export default {
 		watch(
 			() => event.value,
 			() => {
+				setTyping(false)
+				roomGuess('')
 				if (event.value === 'pre_turn') {
 					words.value = getWords()
+				}
+				if (event.value === 'turn_start' && gameState.value.word === '') {
+					setWord(words.value[0])
 				}
 			},
 			{
@@ -134,7 +145,7 @@ export default {
 	padding: 1.25rem 1.75rem;
 	background-color: $light;
 	border-radius: $border-radius;
-	font-size: 0.9rem;
-	@include stripe(lighten($light, 1), darken($light, 1));
+	font-size: 1.1rem;
+	// @include stripe(lighten($light, 1), darken($light, 1));
 }
 </style>
