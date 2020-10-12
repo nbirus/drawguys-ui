@@ -104,7 +104,6 @@ function formatEvent(e) {
 	}
 }
 function setDrawState(newDrawState) {
-	console.log('SET', newDrawState);
 	Object.keys(drawState).forEach(key => {
 		drawState[key] = newDrawState[key]
 	})

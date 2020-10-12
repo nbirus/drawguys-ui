@@ -30,6 +30,7 @@ export default {
 				return 'selecting'
 			} else return ''
 		})
+
 		let userClass = computed(() => [
 			props.color,
 			{

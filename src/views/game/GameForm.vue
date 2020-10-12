@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import { roomGuess } from '@/services/Room'
 import { ref, watch } from 'vue'
 export default {
 	name: 'game-form',
@@ -37,7 +38,8 @@ export default {
 		let focus = ref(false)
 
 		function onSubmit() {
-			emit('submit', value.value)
+			roomGuess(value.value)
+			value.value = ''
 		}
 
 		watch(value, togglePopover)

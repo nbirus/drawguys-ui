@@ -71,6 +71,12 @@ export function sendMessage(message) {
 		socket.emit('message', message)
 	}
 }
+export function roomGuess(guess) {
+	log('guess')
+	if (socket && userState.roomid) {
+		socket.emit('guess', guess)
+	}
+}
 export function nextColor() {
 	log('nextColor')
 	if (socket && userState.roomid) {
