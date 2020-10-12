@@ -1,3 +1,4 @@
+import { socket } from '@/services/Socket'
 import { reactive, computed, ref } from 'vue'
 
 let canvas
@@ -11,8 +12,7 @@ let clickY = new Array()
 let clickDrag = new Array()
 let clickColor = new Array()
 let clickSize = new Array()
-
-let undoIndex = ref([])
+let undoIndex = new Array()
 
 export const drawState = reactive({
 	color: '#111111',
@@ -21,8 +21,10 @@ export const drawState = reactive({
 })
 
 // allow undo event
-export const undoDisabled = computed(() => undoIndex.value.length === 0)
+// export const undoDisabled = computed(() => undoIndex.value === undefined || undoIndex.value.length === 0)
+export const undoDisabled = false
 
+// default run
 export default function() {
 	let canvasDiv = document.getElementById('canvasDiv')
 	canvas = document.createElement('canvas')
@@ -31,17 +33,28 @@ export default function() {
 	canvas.setAttribute('id', 'canvas')
 	canvasDiv.appendChild(canvas)
 	context = canvas.getContext('2d')
-
-	canvas.addEventListener('mousedown', mousedown, false)
-	canvas.addEventListener('mousemove', mousemove, false)
-	canvas.addEventListener('mouseup', mouseup)
-	canvas.addEventListener('mouseout', mouseout, false)
+	canvas.addEventListener('mousedown', (e) => {
+		socket.emit('mousedown', formatEvent(e))
+		mousedown(e)
+	}, false)
+	canvas.addEventListener('mousemove', (e) => {
+		socket.emit('mousemove', formatEvent(e))
+		mousemove(e)
+	}, false)
+	canvas.addEventListener('mouseup', (e) => {
+		socket.emit('mouseup', formatEvent(e))
+		mouseup(e)
+	})
+	canvas.addEventListener('mouseout', (e) => {
+		socket.emit('mouseout', formatEvent(e))
+		mouseout(e)
+	}, false)
 }
 
 // events
 function mousedown(e) {
 	paint = true
-	undoIndex.value.push(clickX.length)
+	undoIndex.push(clickX.length)
 	addClick(e.offsetX, e.offsetY)
 	redraw()
 }
@@ -84,6 +97,28 @@ function redraw() {
 		context.stroke()
 	}
 }
+function formatEvent(e) {
+	return {
+		offsetX: e.offsetX,
+		offsetY: e.offsetY,
+	}
+}
+function setDrawState(newDrawState) {
+	console.log('SET', newDrawState);
+	Object.keys(drawState).forEach(key => {
+		drawState[key] = newDrawState[key]
+	})
+}
+export function updateDrawState() {
+	socket.emit('set_draw_state', drawState)
+}
+
+// socket events
+socket.on('set_draw_state', setDrawState)
+socket.on('mousedown', mousedown)
+socket.on('mousemove', mousemove)
+socket.on('mouseup', mouseup)
+socket.on('mouseout', mouseout)
 
 // actions
 export function reset() {
@@ -94,15 +129,15 @@ export function reset() {
 	context.width = w
 
 	// reset vars
-	clickX = new Array()
-	clickY = new Array()
-	clickDrag = new Array()
-	clickColor = new Array()
-	clickSize = new Array()
-	undoIndex.value = []
+  clickX = new Array()
+  clickY = new Array()
+  clickDrag = new Array()
+  clickColor = new Array()
+  clickSize = new Array()
+  undoIndex = new Array()
 }
 export function undo() {
-	let index = undoIndex.value.pop()
+	let index = undoIndex.pop()
 	let spliceLength = clickX.length - index
 	clickX.splice(index, spliceLength)
 	clickY.splice(index, spliceLength)
@@ -110,4 +145,9 @@ export function undo() {
 	clickColor.splice(index, spliceLength)
 	clickSize.splice(index, spliceLength)
 	redraw()
+}
+export function resetState() {
+	drawState.color = '#111111'
+	drawState.size = 3
+	drawState.tool = 'marker'
 }

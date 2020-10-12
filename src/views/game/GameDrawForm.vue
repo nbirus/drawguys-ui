@@ -1,10 +1,20 @@
 <script>
 import { colorMap, colorLookupMap } from '@/assets/colors.js'
-import { drawState, reset, undo, undoDisabled } from '@/services/Drawing'
-import { computed } from 'vue'
+import {
+	drawState,
+	reset,
+	undo,
+	undoDisabled,
+	updateDrawState,
+} from '@/services/Drawing'
+import { computed, watch } from 'vue'
 export default {
 	name: 'game-draw-form',
 	setup() {
+		watch(drawState, () => {
+			updateDrawState()
+		})
+
 		return {
 			colorMap,
 			drawState,

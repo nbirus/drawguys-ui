@@ -9,7 +9,7 @@
 		<transition name="pop-up" mode="out-in" appear>
 			<div class="delay-1 ps">
 				<form-card
-					init-value="test"
+					init-value=""
 					class="home__form-card"
 					color="blue"
 					enter-text="create room"
@@ -28,8 +28,6 @@
 		<home-page-rooms class="home__room-list" />
 
 		<div class="home__username-link">
-			<!-- Welcome,
-			<b>{{ userState.username }}</b> --->
 			<router-link to="/username">Choose another username</router-link>
 		</div>
 	</div>

@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Drawing, { drawState, reset } from '@/services/Drawing'
+import Drawing, { drawState, reset, resetState } from '@/services/Drawing'
 import { roomState } from '@/services/Room'
 import { computed, watch } from 'vue'
 export default {
@@ -20,11 +20,16 @@ export default {
 			() => roomState.gameState.event,
 			() => {
 				reset()
+				resetState()
 			}
 		)
 		return {
 			drawState,
-			disabled: computed(() => !roomState.userState.drawing),
+			disabled: computed(
+				() =>
+					!roomState.userState.drawing ||
+					roomState.gameState.event !== 'turn_start'
+			),
 		}
 	},
 }
