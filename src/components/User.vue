@@ -65,7 +65,7 @@ export default {
 
 		<!-- username -->
 		<div class="user__username">
-			{{ guess }} <span v-if="userid === userState.userid">(You)</span>
+			{{ username }} <span v-if="userid === userState.userid">(You)</span>
 		</div>
 
 		<!-- score -->
