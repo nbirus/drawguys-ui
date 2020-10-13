@@ -1,11 +1,9 @@
 <template>
 	<div class="room-columns">
-		<transition name="pop-up" mode="out-in" appear>
-			<div class="empty" v-if="roomsEven.length === 0">
-				<i class="ri-forbid-line mr-2"></i>
-				No rooms found
-			</div>
-		</transition>
+		<div class="empty" v-if="roomsEven.length === 0">
+			<i class="ri-forbid-line mr-2"></i>
+			No rooms found
+		</div>
 
 		<transition-group
 			name="list"

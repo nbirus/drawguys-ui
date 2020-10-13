@@ -1,17 +1,20 @@
 <template>
 	<div class="page page--limit page--center room" v-if="roomState.roomid">
 		<!-- countdown -->
-		<room-countdown v-if="roomState.timerActive" />
+		<!-- <room-countdown v-if="roomState.timerActive" /> -->
 
 		<!-- inner -->
-		<div class="room__inner" v-else>
+		<div class="room__inner">
 			<!-- title -->
 			<transition name="pop-up" mode="out-in" appear>
 				<h1 class="room__header" v-text="roomState.roomname"></h1>
 			</transition>
 			<!-- card -->
 			<transition name="pop-up" mode="out-in" appear>
-				<div class="room__card card delay-1 " :class="{ ready }">
+				<div
+					class="room__card card delay-1 "
+					:class="{ ready, active: roomState.timerActive }"
+				>
 					<room-users class="room__users" @share="showModalOpen = true" />
 					<div class="room__ready">
 						<room-ready-btn />
@@ -95,6 +98,38 @@ export default {
 		overflow: hidden;
 		position: relative;
 		width: 625px;
+
+		&.active {
+			animation: bounce 1s infinite linear;
+		}
+
+		&::after {
+			content: '';
+			transition: box-shadow 0.4s ease;
+		}
+
+		&.ready:after {
+			content: '';
+			position: absolute;
+			pointer-events: none;
+			top: 0px;
+			right: 0px;
+			bottom: 0px;
+			left: 0px;
+			box-shadow: inset 0 0 0 4px $green;
+			border-radius: $border-radius;
+		}
+		&.active:after {
+			content: '';
+			position: absolute;
+			pointer-events: none;
+			top: 0px;
+			right: 0px;
+			bottom: 0px;
+			left: 0px;
+			box-shadow: inset 0 0 0 4px $yellow;
+			border-radius: $border-radius;
+		}
 	}
 	&__users {
 		grid-row: 1;
@@ -112,6 +147,21 @@ export default {
 		grid-column: 2;
 		border-left: solid thin $border-color;
 		background-color: lighten($light, 1);
+	}
+}
+
+@keyframes bounce {
+	0% {
+		transform: scale(1);
+	}
+	10% {
+		transform: scale(1.025);
+	}
+	25% {
+		transform: scale(1);
+	}
+	100% {
+		transform: scale(1);
 	}
 }
 </style>

@@ -173,7 +173,7 @@ export default {
 .turn-end-banner {
 	display: flex;
 	align-items: center;
-	margin-top: 4rem;
+	margin-top: 3rem;
 	height: 40px;
 
 	border-radius: $border-radius;
@@ -209,13 +209,13 @@ export default {
 	&.negative {
 		.turn-end-banner {
 			&__score {
-				background-color: darken($red, 15);
+				background-color: darken($red, 10);
 				&:before {
 					content: '-';
 				}
 			}
 			&__text {
-				background-color: $red;
+				background-color: darken($red, 1);
 			}
 		}
 	}
@@ -245,10 +245,6 @@ export default {
 	flex-direction: column;
 	font-size: 1.1rem;
 
-	.avatar {
-		margin-bottom: 3rem;
-		background-color: $light;
-	}
 	b {
 		padding: 0.5rem;
 		border-radius: $border-radius;
@@ -263,7 +259,7 @@ export default {
 
 .pre_turn,
 .turn_end {
-	@include stripe(white, darken(white, 1));
+	@include stripe(white, darken(white, 2));
 	position: absolute;
 	top: 0px;
 	right: 0px;

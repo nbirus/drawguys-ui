@@ -108,7 +108,11 @@ export default {
 	&__eraser {
 		border-radius: 50%;
 		padding: 0;
-		width: 45px;
+		height: 30px;
+		width: 30px;
+		padding: 0;
+		margin-left: 0.5rem;
+
 		&.active {
 			box-shadow: inset 0 0 0 3px $black;
 		}
