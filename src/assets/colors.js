@@ -12,6 +12,7 @@ export const colorMap = {
 	maroon: '#85144b',
 	fuchsia: '#f012be',
 	purple: '#b10dc9',
+	brown: '#8B4513',
 }
 export const colorLookupMap = {
 	'#111111': 'black',
@@ -26,4 +27,5 @@ export const colorLookupMap = {
 	'#85144b': 'maroon',
 	'#f012be': 'fuchsia',
 	'#b10dc9': 'purple',
+	'#8B4513': 'brown',
 	}

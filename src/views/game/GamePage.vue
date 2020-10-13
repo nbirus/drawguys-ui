@@ -1,12 +1,7 @@
 <template>
 	<div class="page game">
 		<!-- game over -->
-		<game-over
-			class="game__container"
-			v-if="roomState.gameState.event === 'game_end'"
-		/>
-
-		<div class="game__container" v-else>
+		<div class="game__container">
 			<div class="game__rounds">
 				<span>{{
 					`Round ${roomState.gameState.round}/${roomState.gameState.numberOfRounds}`
@@ -27,8 +22,8 @@ import GameUsers from '@/views/game/GameUsers'
 import GameBoard from '@/views/game/GameBoard'
 import GameOver from '@/views/game/GameOver'
 import { testRoomState, roomState } from '@/services/Room'
+import { onMounted, watch } from 'vue'
 import router from '@/router'
-import { onMounted } from 'vue'
 
 export default {
 	name: 'game-page',
@@ -38,6 +33,9 @@ export default {
 		GameOver,
 	},
 	setup() {
+		let currentRoute = router.currentRoute.value
+		let roomid = currentRoute.params.id
+
 		if (router.currentRoute.value.name === 'game-test') {
 			testRoomState()
 		}
@@ -47,6 +45,15 @@ export default {
 				router.push('/')
 			}
 		})
+
+		watch(
+			() => roomState.gameState.event,
+			event => {
+				if (event === 'game_end') {
+					router.push(`/${roomid}`)
+				}
+			}
+		)
 
 		return {
 			roomState,
@@ -67,6 +74,7 @@ export default {
 		position: fixed;
 		top: 2rem;
 		right: 2rem;
+		font-size: 1.1rem;
 	}
 	&__container {
 		display: flex;

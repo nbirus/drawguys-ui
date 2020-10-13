@@ -3,6 +3,7 @@
 		class="form-card card nudge"
 		ref="form"
 		:class="[`outline-${color}`, { focus, ready: focus }]"
+		:key="submitKey"
 		@submit.prevent="onSubmit"
 	>
 		<input
@@ -25,16 +26,23 @@
 			autocomplete="off"
 		/>
 		<transition name="form-button" mode="out-in">
-			<button tabindex="0" v-if="value" type="submit" class="lg">
+			<button
+				:class="`btn-${roomState.userState.color}`"
+				tabindex="0"
+				v-if="value"
+				type="submit"
+				class="lg"
+			>
 				Send
+				<!-- <i class="ri-check-line"></i> -->
 			</button>
 		</transition>
 	</form>
 </template>
 
 <script>
-import { setTyping, roomGuess } from '@/services/Room'
-import { ref, watch } from 'vue'
+import { roomState, setTyping, roomGuess } from '@/services/Room'
+import { nextTick, ref, watch } from 'vue'
 export default {
 	name: 'game-form',
 	inheritAttrs: false,
@@ -44,10 +52,15 @@ export default {
 		let input = ref(null)
 		let value = ref('')
 		let focus = ref(false)
+		let submitKey = ref(0)
 
 		function onSubmit() {
+			submitKey.value++
 			roomGuess(value.value)
 			value.value = ''
+			nextTick(() => {
+				input.value.focus()
+			})
 		}
 
 		watch(value, togglePopover)
@@ -66,6 +79,7 @@ export default {
 			let parent = form.value.parentElement
 			if (!oldPopover) {
 				popover.classList.add('popover-form-card')
+				popover.classList.add('board')
 				popover.id = 'popover'
 				popover.innerHTML = `<div>Press <code>Enter</code> to guess</div>`
 				parent.appendChild(popover)
@@ -90,6 +104,8 @@ export default {
 			onSubmit,
 			toggleFocus,
 			setTyping,
+			roomState,
+			submitKey,
 		}
 	},
 }
@@ -100,13 +116,14 @@ export default {
 .form-card {
 	display: flex;
 	align-items: center;
-	padding: 0.75rem 1rem 0.75rem 0.75rem;
+	padding: 0.75rem 2rem 0.75rem 0.75rem;
 	width: 350px;
 	transition: transform 0.2s ease;
 	overflow: hidden;
 	position: relative;
 	border: solid thin $border-color;
 	top: 2.5rem;
+	animation: submit 0.2s;
 
 	input {
 		flex: 0 1 100%;
@@ -122,7 +139,7 @@ export default {
 		display: flex;
 		align-items: center;
 		padding-left: 1.25rem;
-		padding-right: 1rem;
+		padding-right: 1.25rem;
 		height: 50px;
 		font-size: 1.1rem;
 		font-weight: $regular;
@@ -131,28 +148,42 @@ export default {
 			font-size: 1.2rem;
 			transform: translateY(2px);
 		}
-		&:focus {
-			color: $black !important;
+	}
+
+	@each $color, $name in $colors {
+		.btn-#{$name} {
+			&:focus {
+				color: $color !important;
+			}
+			&:hover {
+				background-color: fade-out($color, 0.9);
+			}
 		}
-		&:hover {
-			background-color: darken($light, 5);
+		&.focus .btn-#{$name} {
+			border-color: $color;
+			box-shadow: inset 0 0 0 3px $color;
+			&:hover {
+				border-color: $color;
+			}
 		}
 	}
 
 	&.focus {
 		transform: scale(1.025);
-
-		button {
-			border-color: $black;
-			box-shadow: 0 0 0 1px $black;
-
-			&:hover {
-				border-color: $black;
-			}
-		}
 	}
 }
 
+@keyframes submit {
+	0% {
+		transform: scale(1);
+	}
+	50% {
+		transform: scale(0.975);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
 @keyframes popover {
 	0% {
 		transform: translateY(2rem);

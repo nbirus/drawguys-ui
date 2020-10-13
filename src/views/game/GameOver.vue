@@ -6,6 +6,8 @@
 			class="mb-7 delay-2"
 		/>
 
+		<game-scoreboard />
+
 		<button class="custom striped mr-2" @click="toggleReady">
 			Play again?
 		</button>
@@ -17,11 +19,13 @@
 
 <script>
 import { toggleReady, roomState } from '@/services/Room'
+import GameScoreboard from './GameScoreboard'
 import Timer from '@/components/Timer'
 export default {
 	name: 'game-over',
 	components: {
 		Timer,
+		GameScoreboard,
 	},
 	setup() {
 		return {
@@ -41,6 +45,7 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	flex-direction: column;
 	padding: 2rem;
 }
 </style>

@@ -1,5 +1,6 @@
 <template>
 	<timer
+		v-if="showTimer"
 		class="timer"
 		:value="roomState.gameState.timer"
 		:key="roomState.gameState.event"
@@ -10,12 +11,20 @@
 <script>
 import { roomState } from '@/services/Room'
 import Timer from '@/components/Timer'
+import { computed } from 'vue'
 export default {
 	name: 'game-timer',
 	components: { Timer },
 	setup() {
+		let showTimer = computed(
+			() =>
+				roomState.gameState.event === 'turn_start' ||
+				(roomState.gameState.event === 'pre_turn' &&
+					roomState.userState.selecting)
+		)
 		return {
 			roomState,
+			showTimer,
 		}
 	},
 }

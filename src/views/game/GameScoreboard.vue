@@ -1,9 +1,14 @@
 <template>
-	<ul class="game-scoreboard">
-		<li class="game-scoreboard__user" v-for="user of users" :key="user.userid">
+	<transition-group tag="ul" name="list" class="game-scoreboard" appear>
+		<li
+			class="game-scoreboard__user"
+			v-for="(user, i) of users"
+			:class="`delay-${i}`"
+			:key="user.userid"
+		>
 			<user v-bind="user" large />
 		</li>
-	</ul>
+	</transition-group>
 </template>
 
 <script>

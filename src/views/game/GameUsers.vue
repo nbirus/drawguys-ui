@@ -1,9 +1,14 @@
 <template>
-	<ul class="game-users">
-		<li class="game-users__user" v-for="user of users" :key="user.userid">
+	<transition-group tag="ul" name="list" class="game-users" appear>
+		<li
+			class="game-users__user"
+			v-for="(user, i) of users"
+			:class="`delay-${i}`"
+			:key="user.userid"
+		>
 			<user v-bind="user" large />
 		</li>
-	</ul>
+	</transition-group>
 </template>
 
 <script>
@@ -17,9 +22,7 @@ export default {
 		User,
 	},
 	setup() {
-		let users = computed(() =>
-			Object.values(roomState.usersState).sort((a, b) => b.score - a.score)
-		)
+		let users = computed(() => Object.values(roomState.usersState))
 		return {
 			users,
 			roomState,

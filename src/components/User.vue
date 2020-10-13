@@ -2,7 +2,7 @@
 import colors from '@/assets/colors'
 import { nextColor, roomState } from '@/services/Room'
 import { userState } from '@/services/User'
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 
 export default {
 	name: 'user',
@@ -21,18 +21,55 @@ export default {
 		hideScore: Boolean,
 		color: String,
 		score: Number,
+		matchTime: Number,
 	},
 	setup(props) {
-		let event = computed(() => {
-			if (props.drawing) {
-				return 'drawing'
-			} else if (props.selecting) {
-				return 'selecting'
-			} else return ''
-		})
+		let event = ref('')
+		let turnPointChange = ref(0)
+		let roundPointChange = ref(0)
+		let roomEvent = computed(() => roomState.gameState.event)
+
+		watch(
+			[
+				() => props.drawing,
+				() => props.selecting,
+				() => props.match,
+				() => props.guess,
+				() => props.score,
+			],
+			([drawing, selecting, match, guess, score], [, , , , prevScore]) => {
+				if (selecting) {
+					event.value = 'selecting'
+				} else if (drawing) {
+					if (
+						score !== undefined &&
+						prevScore !== undefined &&
+						score !== prevScore
+					) {
+						turnPointChange.value = score - prevScore
+						event.value = 'drawing-points'
+					} else {
+						event.value = 'drawing'
+					}
+				} else if (match) {
+					event.value = 'match'
+				} else if (guess) {
+					event.value = ''
+					nextTick(() => {
+						event.value = 'guess'
+					})
+				} else {
+					event.value = ''
+				}
+			},
+			{
+				immediate: true,
+			}
+		)
 
 		let userClass = computed(() => [
 			props.color,
+			event.value,
 			{
 				ready: props.ready,
 				match: props.match,
@@ -41,20 +78,44 @@ export default {
 				clickable: props.changeColor,
 				small: props.small,
 				large: props.large,
+				round_end: roomEvent.value === 'round_end',
+				positive: roundPointChange.value >= 0,
 			},
 		])
+
+		// score
+		let lastRoundScore = 0
+		watch(
+			() => roomEvent.value,
+			() => {
+				if (roomEvent.value === 'round_end') {
+					event.value = 'round-end'
+					roundPointChange.value = props.score - lastRoundScore
+					lastRoundScore = props.score
+				}
+			},
+			{
+				immediate: true,
+			}
+		)
+
 		return {
 			userState,
 			userClass,
 			nextColor,
 			event,
+			turnPointChange,
+			turnPointChangeDisplay: computed(() => Math.abs(turnPointChange.value)),
+			roundPointChange,
+			roundPointChangeDisplay: computed(() => Math.abs(roundPointChange.value)),
+			roomEvent,
 		}
 	},
 }
 </script>
 
 <template>
-	<div class="user card" :class="userClass" @click="nextColor">
+	<div class="user card" :class="userClass" :key="event" @click="nextColor">
 		<!-- icon -->
 		<div class="user__icon icon-banner">
 			<div class="icon-banner__inner">
@@ -71,9 +132,19 @@ export default {
 		<!-- score -->
 		<div class="user__score" v-if="!hideScore" v-text="score"></div>
 
-		<!-- popout -->
+		<!-- match -->
 		<transition name="user-typing" mode="out-in">
-			<div class="user__popout typing" v-if="typing">
+			<div v-if="match" class="user__popout match">
+				<div class="user__popout-content">
+					<div class="user__popout-icon">
+						<i class="ri-timer-line"></i>
+					</div>
+					{{ matchTime }}s
+				</div>
+			</div>
+
+			<!-- popout -->
+			<div class="user__popout typing" v-else-if="typing">
 				<div></div>
 				<div></div>
 				<div></div>
@@ -81,24 +152,45 @@ export default {
 		</transition>
 
 		<!-- event -->
-		<div v-if="guess !== ''" class="user__popout event guess" :key="guess">
-			<div class="user__popout-content">
-				{{ guess }}
+		<div
+			v-if="event"
+			class="user__popout event"
+			:class="[event, roundPointChange >= 0 ? 'positive' : '']"
+			:key="event"
+		>
+			<div class="user__popout-content" v-if="event === 'round-end'">
+				<div class="user__popout-icon">
+					<i
+						:class="`ri-${roundPointChange >= 0 ? 'add' : 'subtract'}-line`"
+					></i>
+				</div>
+				{{ roundPointChangeDisplay }}
 			</div>
-		</div>
-
-		<div v-if="event" class="user__popout event" :class="event" :key="event">
 			<div class="user__popout-content" v-if="event === 'drawing'">
 				<div class="user__popout-icon">
 					<i class="ri-pencil-fill"></i>
 				</div>
 				Drawing
 			</div>
+			<div class="user__popout-content" v-if="event === 'drawing-points'">
+				<div class="user__popout-icon">
+					<i
+						:class="`ri-${turnPointChange > 0 ? 'pencil' : 'subtract'}-fill`"
+					></i>
+				</div>
+				{{ turnPointChangeDisplay }}
+			</div>
 			<div class="user__popout-content" v-if="event === 'selecting'">
 				<div class="user__popout-icon">
 					<i class="ri-route-fill"></i>
 				</div>
 				Selecting word...
+			</div>
+			<div class="user__popout-content" v-if="event === 'guess'">
+				<div class="user__popout-icon">
+					<i class="ri-close-line"></i>
+				</div>
+				{{ guess }}
 			</div>
 		</div>
 	</div>
@@ -116,6 +208,7 @@ export default {
 	pointer-events: none;
 	transition: 0.2s ease;
 	transition-property: transform, box-shadow;
+	z-index: 2;
 
 	&:after {
 		content: '';
@@ -176,7 +269,6 @@ export default {
 		border-radius: 25px;
 		white-space: nowrap;
 		overflow: hidden;
-		animation: event 3s;
 
 		display: flex;
 		align-items: center;
@@ -194,7 +286,7 @@ export default {
 			width: 1.25rem;
 			border-radius: 50%;
 			background-color: fade-out(white, 0.85);
-			margin-right: 0.5rem;
+			margin-right: 0.35rem;
 			display: flex;
 			align-items: center;
 			justify-content: center;
@@ -204,6 +296,10 @@ export default {
 
 		&.event {
 			opacity: 0;
+			animation: event 3s;
+		}
+		&.match {
+			@include stripe-sm($green, darken($green, 2));
 		}
 		&.selecting {
 			background-color: $black;
@@ -211,14 +307,18 @@ export default {
 		&.drawing {
 			background-color: $black;
 		}
-		&.guess {
-			padding: 0.3rem 0.75rem 0.5rem;
+		&.drawing-points {
+			background-color: $black;
+		}
+		&.round-end {
+			background-color: $red;
 
-			.user__popout-content {
-				color: $black !important;
-				font-weight: $regular;
-				font-size: 0.9rem;
+			&.positive {
+				background-color: $green;
 			}
+		}
+		&.guess {
+			background-color: $red;
 		}
 		&.typing {
 			padding: 0.5rem 0.5rem;
@@ -256,13 +356,13 @@ export default {
 			// mods
 			&.clickable:not(.ready) {
 				&:hover {
-					@include stripe(darken($color, 0), darken($color, 4));
+					@include stripe($color, darken($color, 4));
 					&:after {
 						box-shadow: inset 0 0 0 3px darken($color, 20);
 					}
 				}
 				&:active {
-					@include stripe(darken($color, 0), darken($color, 2));
+					@include stripe($color, darken($color, 2));
 					&:after {
 						box-shadow: inset 0 0 0 4px darken($color, 30);
 					}
@@ -298,7 +398,20 @@ export default {
 			}
 		}
 	}
+	&.match {
+		transform: scale(1.05);
+	}
+	&.round_end {
+		// &:after {
+		// 	box-shadow: inset 0 0 0 4px $red;
+		// }
+		// &.positive:after {
+		// 	box-shadow: inset 0 0 0 4px $green;
+		// }
+	}
 	&.drawing {
+		transform: scale(1.05);
+
 		&:after {
 			box-shadow: inset 0 0 0 4px $black;
 		}
@@ -323,12 +436,83 @@ export default {
 			transform: scale(1.025);
 		}
 	}
+	&.guess,
+	&.match {
+		animation: shake 0.75s ease;
+	}
+	&.guess:after {
+		animation: guess 0.75s ease;
+	}
+	&.match:after {
+		animation: match 0.75s ease;
+	}
 }
 
+@keyframes match {
+	0% {
+		box-shadow: inset 0 0 0 0 $green;
+		transform: scale(1);
+	}
+	25% {
+		box-shadow: inset 0 0 0 4px $green;
+		transform: scale(1.025);
+	}
+	50% {
+		box-shadow: inset 0 0 0 0 $green;
+		transform: scale(1);
+	}
+	75% {
+		box-shadow: inset 0 0 0 4px $green;
+		transform: scale(1.025);
+	}
+	100% {
+		box-shadow: inset 0 0 0 0 $green;
+		transform: scale(1);
+	}
+}
+@keyframes guess {
+	0% {
+		box-shadow: inset 0 0 0 0 $red;
+		transform: scale(1);
+	}
+	25% {
+		box-shadow: inset 0 0 0 4px $red;
+		transform: scale(1.025);
+	}
+	50% {
+		box-shadow: inset 0 0 0 0 $red;
+		transform: scale(1);
+	}
+	75% {
+		box-shadow: inset 0 0 0 4px $red;
+		transform: scale(1.025);
+	}
+	100% {
+		box-shadow: inset 0 0 0 0 $red;
+		transform: scale(1);
+	}
+}
+@keyframes shake {
+	0% {
+		transform: scale(1);
+	}
+	25% {
+		transform: scale(1.025);
+	}
+	50% {
+		transform: scale(1);
+	}
+	75% {
+		transform: scale(1.025);
+	}
+	100% {
+		transform: scale(1);
+	}
+}
 @keyframes event {
 	0% {
 		opacity: 0;
-		transform: scale(0.85) translateX(-18px);
+		transform: scale(0.5) translateX(-2rem);
 	}
 	10% {
 		opacity: 1;
@@ -340,7 +524,7 @@ export default {
 	}
 	100% {
 		opacity: 0;
-		transform: scale(0.85) translateX(-18px);
+		transform: scale(0.5) translateX(-2rem);
 	}
 }
 @keyframes dot {

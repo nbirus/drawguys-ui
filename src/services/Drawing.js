@@ -4,8 +4,8 @@ import { reactive, computed, ref } from 'vue'
 let canvas
 let context
 let paint
-let canvasWidth = 750
-let canvasHeight = 500
+let canvasWidth = 792
+let canvasHeight = 502
 
 let clickX = new Array()
 let clickY = new Array()
@@ -77,7 +77,7 @@ function addClick(x, y, dragging) {
 	clickY.push(y)
 	clickDrag.push(dragging)
 	clickColor.push(drawState.tool === 'eraser' ? 'white' : drawState.color)
-	clickSize.push(parseInt(drawState.size))
+	clickSize.push([3, 10, 25, 50][parseInt(drawState.size)])
 }
 function redraw() {
 	context.clearRect(0, 0, context.canvas.width, context.canvas.height) // Clears the canvas

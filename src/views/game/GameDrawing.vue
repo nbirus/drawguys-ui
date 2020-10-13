@@ -19,8 +19,10 @@ export default {
 		watch(
 			() => roomState.gameState.event,
 			() => {
-				reset()
-				resetState()
+				setTimeout(() => {
+					reset()
+					resetState()
+				}, 100)
 			}
 		)
 		return {
@@ -47,17 +49,17 @@ export default {
 		pointer-events: none;
 	}
 
+	&.size-0 {
+		cursor: url('../../../public/cursors/0.png') 3 3, auto;
+	}
+	&.size-1 {
+		cursor: url('../../../public/cursors/1.png') 5 5, auto;
+	}
+	&.size-2 {
+		cursor: url('../../../public/cursors/2.png') 12 12, auto;
+	}
 	&.size-3 {
-		cursor: url('../../../public/cursors/3.png') 3 3, auto;
-	}
-	&.size-10 {
-		cursor: url('../../../public/cursors/10.png') 5 5, auto;
-	}
-	&.size-25 {
-		cursor: url('../../../public/cursors/25.png') 12 12, auto;
-	}
-	&.size-50 {
-		cursor: url('../../../public/cursors/50.png') 25 25, auto;
+		cursor: url('../../../public/cursors/3.png') 25 25, auto;
 	}
 }
 </style>

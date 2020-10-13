@@ -7,7 +7,7 @@
 					roomState.gameState.event === 'turn_start'
 			"
 		>
-			You are drawing: <b v-text="roomState.gameState.word"></b>
+			You are drawing <b v-text="roomState.gameState.word"></b>
 		</div>
 
 		<transition name="pop-up" appear>
@@ -90,8 +90,8 @@ export default {
 	&__word {
 		position: absolute;
 		right: 1rem;
-		top: -1.75rem;
-		font-size: 0.9rem;
+		top: -2rem;
+		font-size: 1.1rem;
 	}
 }
 </style>

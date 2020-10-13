@@ -55,7 +55,7 @@ export default {
 		</ul>
 
 		<!-- sizes -->
-		<ul class="draw-form__sizes">
+		<!-- <ul class="draw-form__sizes">
 			<li class="draw-form__sizes-size" v-for="size in sizes" :key="size">
 				<button
 					class="draw-form__sizes-button draw-form-button"
@@ -65,7 +65,18 @@ export default {
 					<div class="c"></div>
 				</button>
 			</li>
-		</ul>
+		</ul> -->
+		<input
+			class="draw-form__slider"
+			type="range"
+			min="0"
+			max="3"
+			v-model="drawState.size"
+		/>
+
+		<div class="draw-form__preview">
+			<div :class="`size-${drawState.size} ${activeColor}`"></div>
+		</div>
 
 		<!-- actions -->
 		<div class="draw-form__actions">
@@ -89,12 +100,15 @@ export default {
 .draw-form {
 	display: flex;
 	align-items: center;
-	padding: 0.5rem;
+	padding: 0.35rem;
 	top: 2rem;
 	position: relative;
 	border: solid thin $border-color;
 
 	&__eraser {
+		border-radius: 50%;
+		padding: 0;
+		width: 45px;
 		&.active {
 			box-shadow: inset 0 0 0 3px $black;
 		}
@@ -116,8 +130,8 @@ export default {
 		}
 
 		&-color {
-			height: 1rem;
-			width: 1rem;
+			height: 1.15rem;
+			width: 1.15rem;
 			border-radius: 50%;
 			transition: 0.2s ease;
 			transition-property: box-shadow, transform;
@@ -126,7 +140,7 @@ export default {
 			justify-content: center;
 
 			&:not(:last-child) {
-				margin-right: 0.5rem;
+				margin-right: 0.4rem;
 			}
 
 			&.active {
@@ -154,6 +168,47 @@ export default {
 					&.active {
 						box-shadow: 0 0 0 4px fade-out($color, 0.75);
 					}
+				}
+			}
+		}
+	}
+	&__preview {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 45px;
+		height: 45px;
+		border-radius: $border-radius;
+		border: solid thin $border-color;
+		margin-left: 0.75rem;
+
+		div {
+			width: 10px;
+			height: 10px;
+			border-radius: 50%;
+			transition: all 0.2s ease;
+
+			&.size-0 {
+				width: 5px;
+				height: 5px;
+			}
+			&.size-1 {
+				width: 10px;
+				height: 10px;
+			}
+			&.size-2 {
+				width: 25px;
+				height: 25px;
+			}
+			&.size-3 {
+				width: 35px;
+				height: 35px;
+			}
+
+			@each $color, $name in $colors {
+				&.#{$name} {
+					border: solid thin $color;
+					background-color: fade-out($color, 0.75);
 				}
 			}
 		}
@@ -238,5 +293,76 @@ export default {
 			pointer-events: none;
 		}
 	}
+}
+
+input[type='range'] {
+	-webkit-appearance: none;
+}
+input[type='range']:focus {
+	outline: none;
+}
+input[type='range']::-webkit-slider-runnable-track {
+	width: 100%;
+	height: 8.4px;
+	cursor: pointer;
+	background: darken($light, 10);
+	border-radius: 25px;
+}
+input[type='range']::-webkit-slider-thumb {
+	box-shadow: $box-shadow;
+	height: 1rem;
+	width: 1rem;
+	border-radius: 50%;
+	background: lighten($text, 20);
+	cursor: pointer;
+	-webkit-appearance: none;
+	margin-top: -0.25rem;
+}
+input[type='range']:focus::-webkit-slider-runnable-track {
+	cursor: pointer;
+	background: darken($light, 10);
+	border-radius: 25px;
+}
+input[type='range']::-moz-range-track {
+	height: 8.4px;
+	cursor: pointer;
+	background: darken($light, 10);
+	border-radius: 25px;
+}
+input[type='range']::-moz-range-thumb {
+	height: 36px;
+	width: 16px;
+	border-radius: 3px;
+	// background: #ffffff;
+	cursor: pointer;
+}
+input[type='range']::-ms-track {
+	height: 8.4px;
+	cursor: pointer;
+	background: transparent;
+	border-color: transparent;
+	border-width: 16px 0;
+	color: transparent;
+}
+input[type='range']::-ms-fill-lower {
+	background: #2a6495;
+
+	border-radius: 2.6px;
+}
+input[type='range']::-ms-fill-upper {
+	background: #3071a9;
+}
+input[type='range']::-ms-thumb {
+	height: 36px;
+	width: 16px;
+	border-radius: 3px;
+	background: #ffffff;
+	cursor: pointer;
+}
+input[type='range']:focus::-ms-fill-lower {
+	background: #3071a9;
+}
+input[type='range']:focus::-ms-fill-upper {
+	background: #367ebd;
 }
 </style>

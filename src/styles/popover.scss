@@ -7,6 +7,10 @@
 	justify-content: center;
 	z-index: 999;
 
+	&.board {
+		top: 8.5rem;
+	}
+
 	div {
 		background-color: $black;
 		width: auto;

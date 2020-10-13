@@ -24,12 +24,17 @@ export default {
 		watch(
 			() => event.value,
 			() => {
+				// set typing to false and reset guess
 				setTyping(false)
-				roomGuess('')
+
+				// get new words
 				if (event.value === 'pre_turn') {
 					words.value = getWords()
 				}
-				if (event.value === 'turn_start' && gameState.value.word === '') {
+
+				// set default if no selection made
+				if (event.value === 'turn_start' && !gameState.value.word) {
+					console.log('NO SELECTOIN')
 					setWord(words.value[0])
 				}
 			},
@@ -88,7 +93,9 @@ export default {
 
 			<!-- round ends -->
 			<div v-else-if="event === 'round_end'">
-				<h1 class="mb-7">Round {{ gameState.round }} Results</h1>
+				<transition name="pop-up" mode="out-in" appear>
+					<h1 class="mb-7">Round {{ gameState.round }} Results</h1>
+				</transition>
 			</div>
 
 			<!-- scoreboard -->
@@ -114,6 +121,7 @@ export default {
 	&.fixed {
 		position: fixed;
 		background-color: white;
+		z-index: 999;
 	}
 
 	&__event {
@@ -145,7 +153,7 @@ export default {
 	padding: 1.25rem 1.75rem;
 	background-color: $light;
 	border-radius: $border-radius;
-	font-size: 1.1rem;
+	font-size: 1.2rem;
 	// @include stripe(lighten($light, 1), darken($light, 1));
 }
 </style>

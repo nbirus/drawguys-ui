@@ -21,11 +21,12 @@ $purple: #b10dc9;
 $black: #111111;
 $grey: #aaaaaa;
 $silver: #dddddd;
+$brown: #8B4513;
 $light: lighten(#eceff4, 3);
 
 $colors: $navy 'navy', $blue 'blue', $olive 'olive', $green 'green',
 	$yellow 'yellow', $orange 'orange', $red 'red', $maroon 'maroon',
-	$fuchsia 'fuchsia', $purple 'purple', $black 'black', $grey 'grey',
+	$fuchsia 'fuchsia', $purple 'purple', $black 'black', $grey 'grey', $brown 'brown',
 	$silver 'silver', $light 'light';
 
 $text: $black;
@@ -47,6 +48,18 @@ $box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
 		$start 2rem,
 		$end 2rem,
 		$end 4rem
+	);
+	background-size: 200% 200%;
+	animation: barberpole 15s linear infinite;
+}
+
+@mixin stripe-sm($start, $end) {
+	background: repeating-linear-gradient(
+		45deg,
+		$start,
+		$start 1rem,
+		$end 1rem,
+		$end 2rem
 	);
 	background-size: 200% 200%;
 	animation: barberpole 15s linear infinite;

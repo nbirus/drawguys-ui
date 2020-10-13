@@ -24,12 +24,6 @@ export default {
 
 		// init bar
 		onMounted(() => {
-			bar = new ProgressBar.Circle(container.value, {
-				strokeWidth: 5,
-				trailColor: '#eceff4',
-				trailWidth: 5,
-				svgStyle: null,
-			})
 			animateBar()
 		})
 
@@ -40,10 +34,16 @@ export default {
 
 		function animateBar() {
 			setTimeout(() => {
+				bar = new ProgressBar.Circle(container.value, {
+					strokeWidth: 8,
+					trailColor: '#eceff4',
+					trailWidth: 5,
+					color: colorMap[props.color] || '#111111',
+					svgStyle: null,
+				})
 				bar.set(0)
 				bar.animate(1.0, {
 					duration: props.value * 1000,
-					color: colorMap[props.color] || '#111111',
 				})
 			}, 100)
 		}
