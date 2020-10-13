@@ -40,5 +40,6 @@ export default {
 	top: -3rem;
 	position: absolute;
 	left: calc(50% - 48px);
+	z-index: 1;
 }
 </style>

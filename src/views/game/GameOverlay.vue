@@ -67,28 +67,60 @@ export default {
 			<!-- when turn starts -->
 			<div v-if="event === 'pre_turn'">
 				<!-- if it's your turn -->
-				<div v-if="user.selecting" class="selecting">
-					<h3>Select a word to draw...</h3>
-					<ul class="selecting__words">
-						<li class="selecting__words-word" v-for="word in words" :key="word">
-							<button @click="setWord(word)" v-text="word"></button>
-						</li>
-					</ul>
-				</div>
-				<div class="waiting" v-else>
-					<b :class="`text-${turnUser.color}`">{{ turnUser.username }}</b> is
-					selecting a word to draw...
-				</div>
-
-				<!-- <div v-if="user.selecting"></div>
-				<div v-else>{{ turnUser.username }} is selecting a word</div> -->
+				<transition name="pop-up" mode="out-in" appear>
+					<div v-if="user.selecting" class="selecting">
+						<h3>Select a word to draw...</h3>
+						<ul class="selecting__words">
+							<li
+								class="selecting__words-word"
+								v-for="word in words"
+								:key="word"
+							>
+								<button @click="setWord(word)" v-text="word"></button>
+							</li>
+						</ul>
+					</div>
+					<!-- if it's another's turn -->
+					<div class="waiting" v-else>
+						<transition name="pop-up" mode="out-in" appear>
+							<div>
+								<b
+									:class="`text-${turnUser.color} bg-${turnUser.color} bg-fade`"
+									>{{ turnUser.username }}</b
+								>
+								is selecting a word to draw...
+							</div>
+						</transition>
+					</div>
+				</transition>
 			</div>
 
 			<!-- when turn ends -->
-			<div v-else-if="event === 'turn_end'">
-				<h3>
-					The word was <b>{{ gameState.word }}</b>
-				</h3>
+			<div class="turn-end" v-else-if="event === 'turn_end'">
+				<transition name="pop-up" mode="out-in" appear>
+					<h3>
+						The word was <b>{{ gameState.word }}</b>
+					</h3>
+				</transition>
+				<transition name="pop-up" mode="out-in" appear>
+					<div
+						class="turn-end-banner"
+						:class="user.turnScore >= 0 ? 'positive' : 'negative'"
+					>
+						<div class="turn-end-banner__score">
+							<b v-text="Math.abs(user.turnScore)"></b>
+						</div>
+						<div class="turn-end-banner__text">
+							<span v-if="!user.drawing">
+								<span v-if="user.match"
+									>Guessed the word in <b v-text="user.matchTime"></b
+								></span>
+								<span v-else>You didn't guess the word</span>
+							</span>
+							<span v-else><b>3</b> players guessed your word</span>
+						</div>
+					</div>
+				</transition>
 			</div>
 
 			<!-- round ends -->
@@ -129,8 +161,63 @@ export default {
 
 	&__event {
 		display: flex;
-		flex-direction: column;
 		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		position: relative;
+		width: 100%;
+		height: 100%;
+	}
+}
+
+.turn-end-banner {
+	display: flex;
+	align-items: center;
+	margin-top: 4rem;
+	height: 40px;
+
+	border-radius: $border-radius;
+	overflow: hidden;
+
+	&__score {
+		display: flex;
+		align-items: center;
+		height: 100%;
+		padding: 0 0.5rem;
+		font-size: 0.9rem;
+		background-color: darken($green, 10);
+		color: white;
+
+		&:before {
+			content: '+';
+		}
+	}
+	&__text {
+		display: flex;
+		align-items: center;
+		height: 100%;
+		padding: 0 0.75rem;
+		font-size: 0.8rem;
+		background-color: $green;
+		color: white;
+
+		b {
+			margin-left: 0.15rem;
+		}
+	}
+
+	&.negative {
+		.turn-end-banner {
+			&__score {
+				background-color: darken($red, 15);
+				&:before {
+					content: '-';
+				}
+			}
+			&__text {
+				background-color: $red;
+			}
+		}
 	}
 }
 
@@ -153,10 +240,50 @@ export default {
 	}
 }
 .waiting {
-	padding: 1.25rem 1.75rem;
-	background-color: $light;
-	border-radius: $border-radius;
-	font-size: 1.2rem;
-	// @include stripe(lighten($light, 1), darken($light, 1));
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+	font-size: 1.1rem;
+
+	.avatar {
+		margin-bottom: 3rem;
+		background-color: $light;
+	}
+	b {
+		padding: 0.5rem;
+		border-radius: $border-radius;
+		margin-right: 0.25rem;
+	}
+}
+.turn-end {
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+}
+
+.pre_turn,
+.turn_end {
+	@include stripe(white, darken(white, 1));
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	left: 0px;
+
+	&:after {
+		content: '';
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		bottom: 0px;
+		left: 0px;
+		background: radial-gradient(transparent, fade-out($black, 0.9)), transparent;
+		background: radial-gradient(
+			transparent,
+			fade-out(white, 0.5),
+			fade-out(white, 0)
+		);
+		pointer-events: none;
+	}
 }
 </style>

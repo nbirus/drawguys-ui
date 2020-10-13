@@ -12,6 +12,19 @@
 	opacity: 0;
 	transform: translateY(50px) scale(0.9) rotateZ(30deg);
 }
+// fade
+.fade-enter-active,
+.fade-leave-active {
+	transition: 0.25s ease;
+	transition-property: opacity;
+}
+.fade-enter-from {
+	opacity: 0;
+}
+.fade-leave-to {
+	opacity: 0;
+}
+
 // ready-btn
 .ready-btn-enter-active,
 .ready-btn-leave-active {
@@ -25,7 +38,6 @@
 .ready-btn-leave-to {
 	opacity: 0;
 	transform: rotateX(-90deg);
-
 }
 
 // list

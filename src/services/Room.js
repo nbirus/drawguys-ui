@@ -172,21 +172,23 @@ const roomStateTest = {
   messages: [],
   gameState: {
     active: true,
-    event: 'pre_turn',
+    event: 'turn_start',
     word: 'Test',
     timer: 10,
     gameTimer: null,
     turnUser: {
-			userid: 'two',
-			username: 'Username Two',
+			userid: 'one',
+			username: 'Username One',
 			guess: '',
 			ready: false,
 			match: false,
 			typing: false,
-			drawing: false,
-			selecting: true,
-			color: 'orange',
+			drawing: true,
+			selecting: false,
+			color: 'blue',
 			matchTime: 0,
+			turnScore: 0,
+			roundScore: 0,
 			score: 0,
 		},
     roundWord: '',
@@ -204,6 +206,9 @@ const roomStateTest = {
 			drawing: false,
 			selecting: false,
 			color: 'blue',
+			matchTime: 0,
+			turnScore: -20,
+			roundScore: 0,
 			score: 0,
 		},
 		two: {
@@ -213,10 +218,12 @@ const roomStateTest = {
 			ready: false,
 			match: false,
 			typing: false,
-			drawing: false,
+			drawing: true,
 			selecting: false,
 			color: 'orange',
 			matchTime: 0,
+			turnScore: 0,
+			roundScore: 0,
 			score: 0,
 		},
 	},
@@ -225,11 +232,9 @@ const roomStateTest = {
 export function testRoomState() {
 	onUpdateRoom(roomStateTest, true)
 
+	// actions
 	setTimeout(() => {
-		roomState.gameState.event = 'game_end'
-	}, 2000)
-	setTimeout(() => {
-		roomState.usersState.two.score = -100
+		roomState.gameState.event = 'turn_end'
 	}, 1000)
 }
 

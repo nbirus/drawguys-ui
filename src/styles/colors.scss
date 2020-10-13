@@ -5,6 +5,9 @@
 		&.bg-darken {
 			background-color: darken($color, 3);
 		}
+		&.bg-fade {
+			background-color: fade-out($color, .95);
+		}
 	}
 	.border-#{$name} {
 		border: solid thin $color;
