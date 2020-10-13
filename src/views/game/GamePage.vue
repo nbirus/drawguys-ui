@@ -49,8 +49,12 @@ export default {
 		watch(
 			() => roomState.gameState.event,
 			event => {
+				console.log(event)
 				if (event === 'game_end') {
-					router.push(`/${roomid}`)
+					setTimeout(() => {
+						console.log(roomid)
+						router.push(`/${roomid}`)
+					}, 100)
 				}
 			}
 		)

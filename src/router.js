@@ -90,7 +90,8 @@ router.beforeEach((to, from, next) => {
 		if (
 			['room', 'game'].includes(from.name) &&
 			userState.roomid &&
-			to.name !== 'game'
+			to.name !== 'game' &&
+			to.name !== 'room'
 		) {
 			leaveRoom()
 		}

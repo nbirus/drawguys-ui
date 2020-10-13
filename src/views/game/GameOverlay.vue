@@ -94,7 +94,10 @@ export default {
 			<!-- round ends -->
 			<div v-else-if="event === 'round_end'">
 				<transition name="pop-up" mode="out-in" appear>
-					<h1 class="mb-7">Round {{ gameState.round }} Results</h1>
+					<h1 class="mb-7" v-if="gameState.round !== gameState.numberOfRounds">
+						Round {{ gameState.round }} Results
+					</h1>
+					<h1 class="mb-7" v-else>Game Over</h1>
 				</transition>
 			</div>
 

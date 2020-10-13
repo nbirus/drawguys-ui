@@ -208,7 +208,7 @@ export default {
 	pointer-events: none;
 	transition: 0.2s ease;
 	transition-property: transform, box-shadow;
-	z-index: 2;
+	z-index: 1;
 
 	&:after {
 		content: '';
