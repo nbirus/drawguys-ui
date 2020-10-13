@@ -20,7 +20,7 @@ export const roomState = reactive({
 		turnUser: {},
 		roundWord: '',
 		round: 1,
-		numberOfRounds: 1,
+		numberOfRounds: 5,
 	},
 	usersState: {},
 	userState: {},
