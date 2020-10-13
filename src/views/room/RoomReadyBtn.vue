@@ -1,12 +1,14 @@
 <template>
 	<button
 		class="lg custom striped"
-		:class="{ green: ready, active, yellow: active }"
+		:class="{ green: ready || active, active }"
 		:disabled="disabled"
 		@click="toggleReady"
 	>
 		<!-- <transition name="ready-btn" mode="out-in"> -->
-		<span v-if="active"> Game starts in {{ timer }}...</span>
+		<span v-if="active">
+			<span>Game starts in {{ timer }}...</span>
+		</span>
 		<span v-else-if="disabled"> Waiting for more players...</span>
 		<span v-else-if="ready"> <i class="ri-checkbox-circle-line"></i>READY</span>
 		<span v-else><i class="ri-checkbox-circle-line"></i> READY UP</span>
@@ -41,12 +43,12 @@ button {
 	pointer-events: auto;
 
 	&.active {
-		@include stripe(fade-out($yellow, 0.95), fade-out($yellow, 0.85));
+		@include stripe(fade-out($green, 0.95), fade-out($green, 0.85));
 		pointer-events: auto;
 
-		span {
+		> span {
 			animation: bounce 1s infinite linear;
-			color: darken($yellow, 45);
+			color: white;
 			z-index: 2;
 			position: absolute;
 			top: 0px;
@@ -54,6 +56,12 @@ button {
 			bottom: 0px;
 			left: 0px;
 			pointer-events: none;
+
+			> span {
+				background-color: fade-out(darken($green, 35), 0.5);
+				padding: 0.5rem;
+				border-radius: $border-radius;
+			}
 		}
 		&:after {
 			pointer-events: none;
@@ -65,7 +73,7 @@ button {
 			left: 0px;
 			border-top-right-radius: 0;
 			border-bottom-right-radius: 0;
-			@include stripe($yellow, darken($yellow, 5));
+			@include stripe($green, darken($green, 5));
 			z-index: 1;
 			animation: after 3s linear;
 		}
@@ -76,10 +84,10 @@ button {
 	0% {
 		transform: scale(1);
 	}
-	10% {
-		transform: scale(1.2);
+	20% {
+		transform: scale(1.1);
 	}
-	15% {
+	45% {
 		transform: scale(1);
 	}
 	100% {

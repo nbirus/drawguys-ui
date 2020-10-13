@@ -108,6 +108,7 @@ export default {
 			transition: box-shadow 0.4s ease;
 		}
 
+		&.active:after,
 		&.ready:after {
 			content: '';
 			position: absolute;
@@ -117,17 +118,6 @@ export default {
 			bottom: 0px;
 			left: 0px;
 			box-shadow: inset 0 0 0 4px $green;
-			border-radius: $border-radius;
-		}
-		&.active:after {
-			content: '';
-			position: absolute;
-			pointer-events: none;
-			top: 0px;
-			right: 0px;
-			bottom: 0px;
-			left: 0px;
-			box-shadow: inset 0 0 0 4px $yellow;
 			border-radius: $border-radius;
 		}
 	}
@@ -154,10 +144,10 @@ export default {
 	0% {
 		transform: scale(1);
 	}
-	10% {
-		transform: scale(1.025);
+	20% {
+		transform: scale(0.995);
 	}
-	25% {
+	45% {
 		transform: scale(1);
 	}
 	100% {
