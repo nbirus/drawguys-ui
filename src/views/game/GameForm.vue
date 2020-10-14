@@ -6,8 +6,8 @@
 			`outline-${timerWarning ? 'yellow' : color}`,
 			{ focus, ready: focus },
 		]"
-		@submit.prevent="onSubmit"
 		v-if="!match"
+		@submit.prevent="onSubmit"
 	>
 		<input
 			ref="input"
