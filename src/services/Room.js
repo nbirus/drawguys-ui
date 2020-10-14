@@ -1,6 +1,6 @@
 import { socket } from '@/services/Socket'
 import { userState } from '@/services/User'
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 import words from '@/assets/words'
 import colors from '@/assets/colors'
 import router from '@/router'
@@ -14,12 +14,13 @@ export const roomState = reactive({
 	timerActive: false,
 	messages: [],
 	gameState: {
-		event: 'round_start',
+		event: 'pre_turn',
 		active: false,
 		timer: 0,
 		turnUser: {},
 		roundWord: '',
 		round: 1,
+		usedWords: [],
 		numberOfRounds: 5,
 	},
 	usersState: {},
@@ -109,9 +110,25 @@ export function setWord(word) {
 	}
 }
 export function getWords() {
-
-	const shuffled = words.sort(() => 0.5 - Math.random())
-	return shuffled.slice(0, 3);
+	let selectedWords = []
+	for(let i = 0; i < 3; i++) {
+		selectedWords.push(getWord())
+	}
+	return selectedWords
+}
+function getWord() {
+	let wordFound = false
+	let word = ''
+	while(!wordFound) {
+		word = words[randomNumber()]
+		wordFound = !roomState.gameState.usedWords.includes(word)
+	}
+	return word
+}
+function randomNumber() {  
+    let min = Math.ceil(0); 
+    let max = Math.floor(words.length); 
+    return Math.floor(Math.random() * (max - min + 1)) + min; 
 }
 
 // event handlers
@@ -136,6 +153,13 @@ function onJoinRoomError() {
 		router.push('/')
 	}, 100)
 }
+
+// watchers
+watch(() => roomState.gameState.event, event => {
+	if (event === 'turn_end') {
+		console.log('HERE');
+	}
+})
 
 // events
 socket.on('update_rooms', onUpdateRooms)
@@ -172,10 +196,11 @@ const roomStateTest = {
   messages: [],
   gameState: {
     active: true,
-    event: 'pre_turn',
+    event: 'turn_start',
     word: 'Test',
-    timer: 10,
+    timer: 2,
     gameTimer: null,
+		usedWords: [],
     turnUser: {
 			userid: 'one',
 			username: 'Username One',
@@ -204,12 +229,12 @@ const roomStateTest = {
 			match: false,
 			typing: false,
 			drawing: false,
-			selecting: true,
+			selecting: false,
 			color: 'blue',
 			matchTime: 0,
-			turnScore: -20,
+			turnScore: -50,
 			roundScore: 0,
-			score: 0,
+			score:  -50,
 		},
 		two: {
 			userid: 'two',
@@ -218,13 +243,13 @@ const roomStateTest = {
 			ready: false,
 			match: false,
 			typing: false,
-			drawing: false,
+			drawing: true,
 			selecting: false,
 			color: 'orange',
 			matchTime: 0,
-			turnScore: 0,
+			turnScore: 100,
 			roundScore: 0,
-			score: 0,
+			score: 100,
 		},
 	},
 }

@@ -74,6 +74,7 @@ export default {
 	border: none;
 	position: relative;
 	overflow: hidden;
+
 	// box-shadow: 0 0 0 3px $black;
 }
 .actions {
@@ -85,12 +86,13 @@ export default {
 	input {
 		text-align: center;
 		margin-right: 1rem;
-		padding: 0.35rem 0.75rem;
-		font-size: 1.1rem;
+		padding: 0.5rem 1rem;
+		font-size: 1rem;
 		transition: box-shadow 0.2s ease;
 		color: $text-light;
 		border: none;
 		background-color: $light;
+		width: 100%;
 
 		&::selection {
 			background: $text;
@@ -108,7 +110,7 @@ export default {
 		align-items: center;
 		justify-content: center;
 		transition-delay: unset;
-		padding: 0rem 1.5rem;
+		padding: 0rem 2rem;
 		height: 60px;
 		font-size: 1rem;
 

@@ -2,7 +2,7 @@
 	<div
 		id="canvasDiv"
 		class="drawing"
-		:class="[`size-${drawState.size}`, { disabled }]"
+		:class="[`size-${drawState.size}`, { disabled, match, warning }]"
 	></div>
 </template>
 
@@ -16,6 +16,13 @@ export default {
 		Drawing()
 	},
 	setup() {
+		let match = computed(() => roomState.userState.match)
+		let warning = computed(
+			() =>
+				roomState.gameState.timer <= 3 &&
+				roomState.gameState.event === 'turn_start'
+		)
+
 		watch(
 			() => roomState.gameState.event,
 			() => {
@@ -26,6 +33,8 @@ export default {
 			}
 		)
 		return {
+			match,
+			warning,
 			drawState,
 			disabled: computed(
 				() =>
@@ -45,8 +54,24 @@ export default {
 	height: 100%;
 	width: 100%;
 
+	&:after {
+		content: '';
+		position: absolute;
+		top: 0px;
+		right: 0px;
+		bottom: 0px;
+		left: 0px;
+		border-radius: $border-radius;
+		transition: box-shadow 0.2s ease;
+	}
 	&.disabled {
 		pointer-events: none;
+	}
+	&.match:after {
+		box-shadow: inset 0 0 0 4px $green;
+	}
+	&.warning:after {
+		box-shadow: inset 0 0 0 4px $yellow;
 	}
 
 	&.size-0 {

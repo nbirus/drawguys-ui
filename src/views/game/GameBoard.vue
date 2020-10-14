@@ -11,7 +11,7 @@
 		</div>
 
 		<transition name="pop-up" appear>
-			<div class="board__card card">
+			<div class="board__card card delay-3">
 				<!-- timer -->
 				<game-timer />
 

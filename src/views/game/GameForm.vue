@@ -2,9 +2,12 @@
 	<form
 		class="form-card card nudge"
 		ref="form"
-		:class="[`outline-${color}`, { focus, ready: focus }]"
-		:key="submitKey"
+		:class="[
+			`outline-${timerWarning ? 'yellow' : color}`,
+			{ focus, ready: focus },
+		]"
 		@submit.prevent="onSubmit"
+		v-if="!match"
 	>
 		<input
 			ref="input"
@@ -27,13 +30,14 @@
 		/>
 		<transition name="form-button" mode="out-in">
 			<button
-				:class="`btn-${roomState.userState.color}`"
+				:class="`btn-${timerWarning ? 'yellow' : roomState.userState.color}`"
 				tabindex="0"
 				v-if="value"
 				type="submit"
 				class="lg"
 			>
 				Send
+				<span v-if="timerWarning">({{ timer }})</span>
 				<!-- <i class="ri-check-line"></i> -->
 			</button>
 		</transition>
@@ -42,7 +46,7 @@
 
 <script>
 import { roomState, setTyping, roomGuess } from '@/services/Room'
-import { nextTick, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 export default {
 	name: 'game-form',
 	inheritAttrs: false,
@@ -53,6 +57,13 @@ export default {
 		let value = ref('')
 		let focus = ref(false)
 		let submitKey = ref(0)
+		let match = computed(() => roomState.userState.match)
+		let timer = computed(() => roomState.gameState.timer)
+		let timerWarning = computed(
+			() =>
+				roomState.gameState.timer <= 3 &&
+				roomState.gameState.event === 'turn_start'
+		)
 
 		function onSubmit() {
 			submitKey.value++
@@ -106,6 +117,9 @@ export default {
 			setTyping,
 			roomState,
 			submitKey,
+			match,
+			timer,
+			timerWarning,
 		}
 	},
 }
@@ -116,10 +130,10 @@ export default {
 .form-card {
 	display: flex;
 	align-items: center;
-	padding: 0.75rem 2rem 0.75rem 0.75rem;
-	width: 350px;
+	padding: 0.75rem 0.75rem 0.75rem 0.75rem;
+	width: 400px;
 	transition: transform 0.2s ease;
-	overflow: hidden;
+	// overflow: hidden;
 	position: relative;
 	border: solid thin $border-color;
 	top: 2.5rem;
@@ -138,8 +152,8 @@ export default {
 		flex: 0 0 auto;
 		display: flex;
 		align-items: center;
-		padding-left: 1.25rem;
-		padding-right: 1.25rem;
+		// padding-left: 1.25rem;
+		// padding-right: 1.25rem;
 		height: 50px;
 		font-size: 1.1rem;
 		font-weight: $regular;
@@ -147,6 +161,9 @@ export default {
 		i {
 			font-size: 1.2rem;
 			transform: translateY(2px);
+		}
+		span {
+			margin-left: 0.2rem;
 		}
 	}
 
@@ -171,6 +188,9 @@ export default {
 	&.focus {
 		transform: scale(1.025);
 	}
+	&.outline-yellow {
+		box-shadow: inset 0 0 0 3px $yellow;
+	}
 }
 
 @keyframes submit {
@@ -191,6 +211,16 @@ export default {
 	}
 	100% {
 		transform: translateY(0);
+		opacity: 1;
+	}
+}
+@keyframes after {
+	0% {
+		width: 100%;
+		opacity: 1;
+	}
+	100% {
+		width: 0%;
 		opacity: 1;
 	}
 }

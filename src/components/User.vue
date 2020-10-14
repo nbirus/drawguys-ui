@@ -192,7 +192,7 @@ export default {
 	pointer-events: none;
 	transition: 0.2s ease;
 	transition-property: transform, box-shadow;
-	z-index: 1;
+	z-index: 2;
 
 	&:after {
 		content: '';
@@ -247,7 +247,6 @@ export default {
 		top: 1rem;
 		font-size: 0.8rem;
 		left: calc(100% + 0.5rem);
-		z-index: 9;
 		background-color: white;
 		box-shadow: $box-shadow;
 		border-radius: 25px;
@@ -280,7 +279,7 @@ export default {
 
 		&.event {
 			opacity: 0;
-			animation: event 3s;
+			animation: event 3s ease;
 		}
 		&.match {
 			@include stripe-sm($green, darken($green, 2));
@@ -513,7 +512,7 @@ export default {
 	}
 	100% {
 		opacity: 0;
-		transform: scale(0.5) translateX(-2rem);
+		transform: scale(0.75) translateX(-2rem);
 	}
 }
 @keyframes dot {

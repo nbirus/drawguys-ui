@@ -5,14 +5,14 @@
 			class="timer"
 			:value="roomState.gameState.timer"
 			:key="roomState.gameState.event"
-			:color="roomState.gameState.turnUser.color"
+			:color="warning ? 'yellow' : roomState.gameState.turnUser.color"
 		/>
-		<div class="bar-conatainer">
+		<!-- <div class="bar-conatainer">
 			<div
 				class="bar"
 				:class="`bg-${roomState.gameState.turnUser.color} bg-striped`"
 			></div>
-		</div>
+		</div> -->
 	</div>
 </template>
 
@@ -30,9 +30,16 @@ export default {
 				(roomState.gameState.event === 'pre_turn' &&
 					roomState.userState.selecting)
 		)
+		let warning = computed(
+			() =>
+				roomState.gameState.timer <= 3 &&
+				roomState.gameState.event === 'turn_start'
+		)
+
 		return {
 			roomState,
 			showTimer,
+			warning,
 		}
 	},
 }

@@ -18,7 +18,7 @@ const routes = [
 		path: '/:id',
 		name: 'room',
 		meta: {
-			title: 'In room',
+			title: 'Waiting for game to start...',
 		},
 		component: () =>
 			import(/* webpackChunkName: "room" */ '@/views/room/RoomPage.vue'),
@@ -27,7 +27,7 @@ const routes = [
 		path: '/test/g',
 		name: 'game-test',
 		meta: {
-			title: 'Game Started',
+			title: 'Drawguys',
 		},
 		component: () =>
 			import(/* webpackChunkName: "game" */ '@/views/game/GamePage.vue'),
@@ -36,7 +36,7 @@ const routes = [
 		path: '/:id/g',
 		name: 'game',
 		meta: {
-			title: 'Game Started',
+			title: 'Drawguys',
 		},
 		component: () =>
 			import(/* webpackChunkName: "game" */ '@/views/game/GamePage.vue'),
