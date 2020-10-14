@@ -19,6 +19,10 @@ export default {
 		let event = computed(() => roomState.gameState.event)
 		let turnUser = computed(() => roomState.gameState.turnUser)
 		let user = computed(() => roomState.userState)
+		let playersGuessed = computed(
+			() =>
+				Object.values(roomState.usersState).filter(user => user.match).length
+		)
 		let words = ref([])
 
 		watch(
@@ -34,8 +38,7 @@ export default {
 
 				// set default if no selection made
 				if (event.value === 'turn_start' && !gameState.value.word) {
-					console.log('NO SELECTOIN')
-					setWord(words.value[0])
+					setWord(getWords()[0])
 				}
 			},
 			{
@@ -55,6 +58,7 @@ export default {
 			user,
 			words,
 			setWord,
+			playersGuessed,
 			fixed,
 		}
 	},
@@ -82,15 +86,13 @@ export default {
 					</div>
 					<!-- if it's another's turn -->
 					<div class="waiting" v-else>
-						<transition name="pop-up" mode="out-in" appear>
-							<div>
-								<b
-									:class="`text-${turnUser.color} bg-${turnUser.color} bg-fade`"
-									>{{ turnUser.username }}</b
-								>
-								is selecting a word to draw...
-							</div>
-						</transition>
+						<div>
+							<b
+								:class="`text-${turnUser.color} bg-${turnUser.color} bg-fade`"
+								>{{ turnUser.username }}</b
+							>
+							is selecting a word to draw...
+						</div>
 					</div>
 				</transition>
 			</div>
@@ -113,11 +115,15 @@ export default {
 						<div class="turn-end-banner__text">
 							<span v-if="!user.drawing">
 								<span v-if="user.match"
-									>Guessed the word in <b v-text="user.matchTime"></b
-								></span>
+									>You guessed the word in <b>{{ user.matchTime }}s</b></span
+								>
 								<span v-else>You didn't guess the word</span>
 							</span>
-							<span v-else><b>3</b> players guessed your word</span>
+							<span v-else
+								><b>{{ playersGuessed }}</b>
+								{{ playersGuessed > 1 ? 'players' : 'player' }} guessed the
+								word</span
+							>
 						</div>
 					</div>
 				</transition>

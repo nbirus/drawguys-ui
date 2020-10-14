@@ -22,11 +22,11 @@ export default {
 		color: String,
 		score: Number,
 		matchTime: Number,
+		turnScore: Number,
+		roundScore: Number,
 	},
 	setup(props) {
 		let event = ref('')
-		let turnPointChange = ref(0)
-		let roundPointChange = ref(0)
 		let roomEvent = computed(() => roomState.gameState.event)
 
 		watch(
@@ -37,20 +37,11 @@ export default {
 				() => props.guess,
 				() => props.score,
 			],
-			([drawing, selecting, match, guess, score], [, , , , prevScore]) => {
+			([drawing, selecting, match, guess]) => {
 				if (selecting) {
 					event.value = 'selecting'
 				} else if (drawing) {
-					if (
-						score !== undefined &&
-						prevScore !== undefined &&
-						score !== prevScore
-					) {
-						turnPointChange.value = score - prevScore
-						event.value = 'drawing-points'
-					} else {
-						event.value = 'drawing'
-					}
+					event.value = 'drawing'
 				} else if (match) {
 					event.value = 'match'
 				} else if (guess) {
@@ -66,6 +57,16 @@ export default {
 				immediate: true,
 			}
 		)
+		watch(
+			() => roomEvent.value,
+			() => {
+				setTimeout(() => {
+					if (roomEvent.value === 'turn_end' && event.value !== 'match') {
+						event.value = 'turn-end'
+					}
+				}, 100)
+			}
+		)
 
 		let userClass = computed(() => [
 			props.color,
@@ -78,36 +79,14 @@ export default {
 				clickable: props.changeColor,
 				small: props.small,
 				large: props.large,
-				round_end: roomEvent.value === 'round_end',
-				positive: roundPointChange.value >= 0,
 			},
 		])
-
-		// score
-		let lastRoundScore = 0
-		watch(
-			() => roomEvent.value,
-			() => {
-				if (roomEvent.value === 'round_end') {
-					event.value = 'round-end'
-					roundPointChange.value = props.score - lastRoundScore
-					lastRoundScore = props.score
-				}
-			},
-			{
-				immediate: true,
-			}
-		)
 
 		return {
 			userState,
 			userClass,
 			nextColor,
 			event,
-			turnPointChange,
-			turnPointChangeDisplay: computed(() => Math.abs(turnPointChange.value)),
-			roundPointChange,
-			roundPointChangeDisplay: computed(() => Math.abs(roundPointChange.value)),
 			roomEvent,
 		}
 	},
@@ -155,37 +134,42 @@ export default {
 		<div
 			v-if="event"
 			class="user__popout event"
-			:class="[event, roundPointChange >= 0 ? 'positive' : '']"
+			:class="[event, turnScore >= 0 ? 'pos' : 'neg']"
 			:key="event"
 		>
-			<div class="user__popout-content" v-if="event === 'round-end'">
+			<!-- round end -->
+			<div class="user__popout-content" v-if="event === 'turn-end'">
 				<div class="user__popout-icon">
-					<i
-						:class="`ri-${roundPointChange >= 0 ? 'add' : 'subtract'}-line`"
-					></i>
+					<i :class="`ri-${turnScore >= 0 ? 'add' : 'subtract'}-line`"></i>
 				</div>
-				{{ roundPointChangeDisplay }}
+				{{ Math.abs(turnScore) }}
 			</div>
+
+			<!-- drawing -->
 			<div class="user__popout-content" v-if="event === 'drawing'">
 				<div class="user__popout-icon">
 					<i class="ri-pencil-fill"></i>
 				</div>
 				Drawing
 			</div>
+
+			<!-- with points -->
 			<div class="user__popout-content" v-if="event === 'drawing-points'">
 				<div class="user__popout-icon">
-					<i
-						:class="`ri-${turnPointChange > 0 ? 'pencil' : 'subtract'}-fill`"
-					></i>
+					<i :class="`ri-${turnScore > 0 ? 'pencil' : 'subtract'}-fill`"></i>
 				</div>
-				{{ turnPointChangeDisplay }}
+				{{ Math.abs(turnScore) }}
 			</div>
+
+			<!-- selecting -->
 			<div class="user__popout-content" v-if="event === 'selecting'">
 				<div class="user__popout-icon">
 					<i class="ri-route-fill"></i>
 				</div>
 				Selecting word...
 			</div>
+
+			<!-- guessed -->
 			<div class="user__popout-content" v-if="event === 'guess'">
 				<div class="user__popout-icon">
 					<i class="ri-close-line"></i>
@@ -307,8 +291,13 @@ export default {
 		&.drawing {
 			background-color: $black;
 		}
-		&.drawing-points {
-			background-color: $black;
+		&.turn-end {
+			&.pos {
+				background-color: $green;
+			}
+			&.neg {
+				background-color: $red;
+			}
 		}
 		&.round-end {
 			background-color: $red;
