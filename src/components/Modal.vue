@@ -15,7 +15,7 @@ export default {
 		open: Boolean,
 		width: {
 			type: String,
-			default: '405',
+			default: '415',
 		},
 	},
 }
