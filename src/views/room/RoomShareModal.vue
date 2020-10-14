@@ -13,7 +13,7 @@ export default {
 	setup() {
 		let currentRoute = router.currentRoute.value
 		let roomid = currentRoute.params.id
-		let link = ref(`drawguys.com/${roomid}`)
+		let link = ref(`www.drawguys.com/${roomid}`)
 		let input = ref(null)
 
 		function onCopy() {
