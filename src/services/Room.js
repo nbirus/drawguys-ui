@@ -172,7 +172,7 @@ const roomStateTest = {
   messages: [],
   gameState: {
     active: true,
-    event: 'turn_start',
+    event: 'pre_turn',
     word: 'Test',
     timer: 10,
     gameTimer: null,
@@ -204,7 +204,7 @@ const roomStateTest = {
 			match: false,
 			typing: false,
 			drawing: false,
-			selecting: false,
+			selecting: true,
 			color: 'blue',
 			matchTime: 0,
 			turnScore: -20,
@@ -218,7 +218,7 @@ const roomStateTest = {
 			ready: false,
 			match: false,
 			typing: false,
-			drawing: true,
+			drawing: false,
 			selecting: false,
 			color: 'orange',
 			matchTime: 0,
@@ -233,9 +233,9 @@ export function testRoomState() {
 	onUpdateRoom(roomStateTest, true)
 
 	// actions
-	setTimeout(() => {
-		roomState.gameState.event = 'turn_end'
-	}, 1000)
+	// setTimeout(() => {
+	// 	roomState.gameState.event = 'turn_end'
+	// }, 1000)
 }
 
 export function setInactive() {

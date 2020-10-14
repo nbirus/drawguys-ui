@@ -38,7 +38,7 @@ export default {
 
 				// set default if no selection made
 				if (event.value === 'turn_start' && !gameState.value.word) {
-					setWord(getWords()[0])
+					setWord(words.value[0])
 				}
 			},
 			{
@@ -71,30 +71,24 @@ export default {
 			<!-- when turn starts -->
 			<div v-if="event === 'pre_turn'">
 				<!-- if it's your turn -->
-				<transition name="pop-up" mode="out-in" appear>
-					<div v-if="user.selecting" class="selecting">
-						<h3>Select a word to draw...</h3>
-						<ul class="selecting__words">
-							<li
-								class="selecting__words-word"
-								v-for="word in words"
-								:key="word"
-							>
-								<button @click="setWord(word)" v-text="word"></button>
-							</li>
-						</ul>
+
+				<div v-if="user.selecting" class="selecting">
+					<h3>Select a word to draw...</h3>
+					<ul class="selecting__words">
+						<li class="selecting__words-word" v-for="word in words" :key="word">
+							<button @click="setWord(word)" v-text="word"></button>
+						</li>
+					</ul>
+				</div>
+				<!-- if it's another's turn -->
+				<div class="waiting" v-else>
+					<div>
+						<b :class="`text-${turnUser.color} bg-${turnUser.color} bg-fade`">{{
+							turnUser.username
+						}}</b>
+						is selecting a word to draw...
 					</div>
-					<!-- if it's another's turn -->
-					<div class="waiting" v-else>
-						<div>
-							<b
-								:class="`text-${turnUser.color} bg-${turnUser.color} bg-fade`"
-								>{{ turnUser.username }}</b
-							>
-							is selecting a word to draw...
-						</div>
-					</div>
-				</transition>
+				</div>
 			</div>
 
 			<!-- when turn ends -->
@@ -239,6 +233,10 @@ export default {
 		pointer-events: auto;
 
 		&-word {
+			button {
+				font-size: 1.1rem;
+				padding: 0.75rem 1rem;
+			}
 			&:not(:last-child) {
 				margin-right: 1rem;
 			}

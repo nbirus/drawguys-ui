@@ -74,7 +74,7 @@ export default {
 
 	h1 {
 		font-weight: $bold;
-		font-size: 2.85rem !important;
+		font-size: 2.75rem !important;
 		letter-spacing: -2px;
 		position: absolute;
 		transform: translateY(-2px);

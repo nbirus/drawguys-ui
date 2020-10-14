@@ -8,6 +8,9 @@
 		&.bg-fade {
 			background-color: fade-out($color, .95);
 		}
+		&.bg-striped {
+			@include stripe($color, darken($color, 5));
+		}
 	}
 	.border-#{$name} {
 		border: solid thin $color;
