@@ -7,6 +7,7 @@ import {
 	undoDisabled,
 	updateDrawState,
 } from '@/services/Drawing'
+import { socket } from '@/services/Socket'
 import { computed, watch } from 'vue'
 export default {
 	name: 'game-draw-form',
@@ -15,11 +16,20 @@ export default {
 			updateDrawState()
 		})
 
+		function onUndo(params) {
+			socket.emit('undo')
+			undo()
+		}
+		function onReset(params) {
+			socket.emit('reset')
+			reset()
+		}
+
 		return {
 			colorMap,
 			drawState,
-			reset,
-			undo,
+			onReset,
+			onUndo,
 			undoDisabled,
 			sizes: [3, 10, 25, 50],
 			activeColor: computed(() =>
@@ -82,12 +92,12 @@ export default {
 		<div class="draw-form__actions">
 			<button
 				class="draw-form-button mr-1"
-				@click="undo"
+				@click="onUndo"
 				:disabled="undoDisabled"
 			>
 				<i class="ri-arrow-go-back-line"></i>
 			</button>
-			<button class="draw-form-button" @click="reset">
+			<button class="draw-form-button" @click="onReset">
 				<i class="ri-forbid-line"></i>
 			</button>
 		</div>

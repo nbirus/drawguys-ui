@@ -14,6 +14,8 @@ let clickColor = new Array()
 let clickSize = new Array()
 let undoIndex = new Array()
 
+let history = new Array()
+
 export const drawState = reactive({
 	color: '#111111',
 	size: 3,
@@ -118,8 +120,20 @@ socket.on('mousedown', mousedown)
 socket.on('mousemove', mousemove)
 socket.on('mouseup', mouseup)
 socket.on('mouseout', mouseout)
+socket.on('undo', undo)
+socket.on('reset', reset)
 
 // actions
+export function saveDrawing() {
+	history.push({
+		clickX,
+		clickY,
+		clickDrag,
+		clickColor,
+		clickSize,
+		undoIndex,
+	})
+}
 export function reset() {
 	context.clearRect(0, 0, context.canvas.width, context.canvas.height)
 	context.beginPath()
