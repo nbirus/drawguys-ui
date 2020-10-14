@@ -18,7 +18,7 @@ export default {
 
 		function onCopy() {
 			selectInput()
-			copy(link.value)
+			copy(`https://www.drawguys.com/${roomid}`)
 		}
 		function selectInput() {
 			input.value.select()
