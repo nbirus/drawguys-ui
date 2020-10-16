@@ -223,8 +223,8 @@ const roomStateTest = {
 			ready: false,
 			match: false,
 			typing: false,
-			drawing: true,
-			selecting: false,
+			drawing: false,
+			selecting: true,
 			color: 'blue',
 			matchTime: 0,
 			turnScore: -50,
@@ -288,8 +288,11 @@ export function testRoomState() {
 		// roomState.usersState.two.drawing = true
 		// roomState.usersState.two.selecting = false
 		roomState.gameState.event = 'turn_start'
-	}, 1000)
+	}, 2000)
 
+	setInterval(() => {
+		roomState.usersState.two.guess += '1'
+	}, 3000)
 	// setTimeout(() => {
 	// 	roomState.gameState.event = 'turn_end'
 	// }, 30000)

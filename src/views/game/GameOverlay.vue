@@ -154,6 +154,7 @@ export default {
 	pointer-events: none;
 	border-radius: $border-radius;
 	overflow: hidden;
+	z-index: 1;
 
 	&.fixed {
 		position: fixed;
@@ -238,6 +239,7 @@ export default {
 			button {
 				font-size: 1.1rem;
 				padding: 0.75rem 1rem;
+				pointer-events: auto;
 			}
 			&:not(:last-child) {
 				margin-right: 1rem;

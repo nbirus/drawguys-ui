@@ -55,15 +55,9 @@ export default {
 		])
 
 		watch(
-			[
-				() => props.drawing,
-				() => props.selecting,
-				() => props.match,
-				() => props.guess,
-				() => props.score,
-			],
+			[() => props.drawing, () => props.selecting, () => props.guess],
 			([drawing, selecting, guess], [, , prevGuess]) => {
-				if (guess && prevGuess && guess !== prevGuess) {
+				if (guess && guess !== prevGuess) {
 					setEvent('guess')
 				} else if (selecting) {
 					setEvent('selecting')
