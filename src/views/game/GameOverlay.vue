@@ -38,7 +38,7 @@ export default {
 
 				// set default if no selection made
 				if (event.value === 'turn_start' && !gameState.value.word) {
-					setWord(words.value[0])
+					setWord(getWords()[0])
 				}
 			},
 			{
