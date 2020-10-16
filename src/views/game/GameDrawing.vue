@@ -2,7 +2,10 @@
 	<div
 		id="canvasDiv"
 		class="drawing"
-		:class="[`size-${drawState.size}`, { disabled, match, warning }]"
+		:class="[
+			`size-${disabled ? '-1' : drawState.size}`,
+			{ disabled, match, warning },
+		]"
 	></div>
 </template>
 

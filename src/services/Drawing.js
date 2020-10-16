@@ -18,7 +18,7 @@ let history = new Array()
 
 export const drawState = reactive({
 	color: '#111111',
-	size: 3,
+	size: 0,
 	tool: 'marker',
 })
 
@@ -162,6 +162,6 @@ export function undo() {
 }
 export function resetState() {
 	drawState.color = '#111111'
-	drawState.size = 3
+	drawState.size = 1
 	drawState.tool = 'marker'
 }
