@@ -81,14 +81,14 @@ export default {
 					</ul>
 				</div>
 				<!-- if it's another's turn -->
-				<div class="waiting" v-else>
+				<!-- <div class="waiting" v-else>
 					<div>
 						<b :class="`text-${turnUser.color} bg-${turnUser.color} bg-fade`">{{
 							turnUser.username
 						}}</b>
 						is selecting a word to draw...
 					</div>
-				</div>
+				</div> -->
 			</div>
 
 			<!-- when turn ends -->

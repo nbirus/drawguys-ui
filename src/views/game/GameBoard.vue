@@ -41,7 +41,10 @@ export default {
 		)
 		let showHeader = computed(
 			() =>
-				roomState.gameState.event === 'turn_end' || roomState.userState.match
+				roomState.gameState.event === 'turn_end' ||
+				roomState.userState.match ||
+				(roomState.gameState.event === 'pre_turn' &&
+					!roomState.userState.selecting)
 		)
 
 		return {
@@ -129,7 +132,7 @@ export default {
 		}
 		&-footer {
 			position: absolute;
-			bottom: -2rem;
+			bottom: -2.5rem;
 			width: 100%;
 		}
 	}

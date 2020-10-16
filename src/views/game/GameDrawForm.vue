@@ -113,6 +113,7 @@ export default {
 	padding: 0.35rem;
 	position: relative;
 	border: solid thin $border-color;
+	transform: translateY(-0.5rem);
 
 	&__eraser {
 		border-radius: 50%;

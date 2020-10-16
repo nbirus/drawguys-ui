@@ -2,7 +2,7 @@
 	<div
 		id="canvasDiv"
 		class="drawing"
-		:class="[`size-${drawState.size}`, { disabled, match, warning, failed }]"
+		:class="[`size-${drawState.size}`, { disabled, match, warning }]"
 	></div>
 </template>
 
@@ -18,7 +18,8 @@ export default {
 	setup() {
 		let match = computed(
 			() =>
-				roomState.userState.match ||
+				(roomState.userState.match &&
+					roomState.gameState.event === 'turn_start') ||
 				(roomState.userState.drawing &&
 					roomState.gameState.event === 'turn_end' &&
 					roomState.gameState.playersGuessed > 0)
@@ -27,15 +28,6 @@ export default {
 			() =>
 				roomState.gameState.timer <= 3 &&
 				roomState.gameState.event === 'turn_start'
-		)
-		let failed = computed(
-			() =>
-				(!roomState.userState.drawing &&
-					!roomState.userState.match &&
-					roomState.gameState.event === 'turn_end') ||
-				(roomState.userState.drawing &&
-					roomState.gameState.event === 'turn_end' &&
-					roomState.gameState.playersGuessed === 0)
 		)
 
 		watch(
@@ -50,7 +42,7 @@ export default {
 		return {
 			match,
 			warning,
-			failed,
+
 			drawState,
 			disabled: computed(
 				() =>

@@ -191,7 +191,7 @@ const roomStateTest = {
   messages: [],
   gameState: {
     active: true,
-    event: 'turn_start',
+    event: 'pre_turn',
     word: 'Test',
     timer: 30,
     gameTimer: null,
@@ -226,7 +226,7 @@ const roomStateTest = {
 			drawing: false,
 			selecting: false,
 			color: 'blue',
-			matchTime: 0,
+			matchTime: 10,
 			turnScore: 200,
 			roundScore: 0,
 			score:  0,
@@ -238,8 +238,8 @@ const roomStateTest = {
 			ready: false,
 			match: false,
 			typing: false,
-			drawing: true,
-			selecting: false,
+			drawing: false,
+			selecting: true,
 			color: 'orange',
 			matchTime: 0,
 			turnScore: 100,
@@ -266,12 +266,12 @@ const roomStateTest = {
 			username: 'Username Three',
 			guess: '',
 			ready: false,
-			match: false,
+			match: true,
 			typing: false,
 			drawing: false,
 			selecting: false,
 			color: 'maroon',
-			matchTime: 0,
+			matchTime: 3,
 			turnScore: 100,
 			roundScore: 0,
 			score: 100,
@@ -285,14 +285,14 @@ export function testRoomState() {
 
 	// actions
 	// setTimeout(() => {
-	// 	roomState.usersState.one.match = false
+	// 	roomState.usersState.one.match = true
 	// }, 3000)
 	// setTimeout(() => {
 	// 	roomState.usersState.for.match = true
 	// }, 3000)
-	setTimeout(() => {
-		roomState.gameState.event = 'turn_end'
-	}, 3000)
+	// setTimeout(() => {
+	// 	roomState.gameState.event = 'turn_start'
+	// }, 3000)
 }
 
 export function setInactive() {

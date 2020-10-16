@@ -83,7 +83,10 @@ export default {
 <template>
 	<div
 		class="game-timeline card outline-red"
-		:class="{ match: user.match || (user.drawing && playersGuessed) }"
+		:class="{
+			round: roundOver,
+			match: (!roundOver && user.match) || (user.drawing && playersGuessed),
+		}"
 	>
 		<div class="game-timeline__bar">
 			<ul class="game-timeline__segments">
@@ -142,7 +145,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
 .game-timeline {
-	padding: 0.75rem 0.75rem 1.75rem;
+	padding: 0.75rem 0.75rem 1.5rem;
 	width: 650px;
 	display: flex;
 	align-items: center;
@@ -159,6 +162,8 @@ export default {
 		left: -1px;
 		border-radius: $border-radius;
 		transition: box-shadow 0.2s ease;
+	}
+	&:not(.round):after {
 		box-shadow: inset 0 0 1px 3px $red;
 	}
 	&.match:after {
@@ -206,6 +211,7 @@ export default {
 				opacity: 0.75;
 				padding: 0.25rem;
 				border-radius: 4px;
+				opacity: 0;
 			}
 			.times {
 				position: absolute;

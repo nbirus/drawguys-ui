@@ -1,63 +1,40 @@
 <template>
-	<div class="game-header card" :class="{ match: active }">
+	<div
+		class="game-header card"
+		:class="{
+			match: active,
+			round: roundOver,
+			[`bg-${turnUser.color} pre`]: roundStart,
+		}"
+	>
 		<div class="game-header__text">
 			<div class="avatar">
 				<i :class="`ri-${active ? 'check' : 'close'}-fill`"></i>
 			</div>
 			<div class="text">
+				<div class="round-start" v-if="roundStart">
+					<b v-text="turnUser.username"></b>
+					is selecting a word to draw...
+				</div>
 				<div v-if="roundOver">
-					<div v-if="playersGuessed === 0 || drawing">
-						<b v-text="playersGuessed" class="mr-1"></b>
+					<div>
+						<b v-text="playersGuessed"></b>
 						<span
-							>{{ playersGuessed === 0 ? 'players' : 'player' }} guessed the
-							word</span
+							>&nbsp;{{ playersGuessed === 0 ? 'players' : 'player' }} guessed
+							the word</span
 						>
-						<b v-text="word"></b>
-					</div>
-					<div v-else>
-						<span>The word was</span>
 						<b v-text="word"></b>
 					</div>
 				</div>
 				<div v-else-if="match">
 					<span>You guessed the word</span>
-					<b class="mr-1" v-text="word"></b>
-					<span>in</span>
+					<b v-text="word"></b>
+					<span>&nbsp;in</span>
 					<b v-text="matchTime"></b>
 					<span>&nbsp;seconds</span>
 				</div>
 			</div>
 		</div>
-
-		<!-- drawing -->
-		<!-- <div class="game-header__text" v-if="drawing || roundOver">
-			<div class="avatar">
-				<i :class="`ri-${playersGuessed > 0 ? 'check' : 'close'}-fill`"></i>
-			</div>
-			<b v-text="playersGuessed" class="mr-1"></b>
-			<span
-				>{{ playersGuessed === 0 ? 'players' : 'player' }} guessed the
-				word</span
-			>
-			<b v-text="word"></b>
-		</div> -->
-
-		<!-- <div class="game-header__text" v-else>
-			<div class="avatar">
-				<i :class="`ri-${match ? 'check' : 'close'}-fill`"></i>
-			</div>
-			<div v-if="match">
-				<span>You guessed</span>
-				<b class="mr-1" v-text="word"></b>
-				<span>in</span>
-				<b v-text="matchTime"></b>
-				<span>&nbsp;seconds</span>
-			</div>
-			<div v-else>
-				<span>The word was</span>
-				<b v-text="word"></b>
-			</div>
-		</div> -->
 	</div>
 </template>
 
@@ -69,11 +46,15 @@ export default {
 	name: 'game-header',
 	setup() {
 		let word = computed(() => roomState.gameState.word)
-		let match = computed(() => roomState.userState.match)
 		let matchTime = computed(() => roomState.userState.matchTime)
+		let match = computed(() => roomState.userState.match && roundOver)
 		let roundOver = computed(() => roomState.gameState.event === 'turn_end')
+		let roundStart = computed(() => roomState.gameState.event === 'pre_turn')
 		let drawing = computed(() => roomState.userState.drawing)
+		let selecting = computed(() => roomState.userState.selecting)
 		let playersGuessed = computed(() => roomState.gameState.playersGuessed)
+		let turnUser = computed(() => roomState.gameState.turnUser)
+
 		let active = computed(
 			() => match.value || (drawing.value && playersGuessed.value > 0)
 		)
@@ -84,8 +65,11 @@ export default {
 			match,
 			matchTime,
 			roundOver,
+			roundStart,
 			drawing,
+			selecting,
 			playersGuessed,
+			turnUser,
 		}
 	},
 }
@@ -113,15 +97,22 @@ export default {
 		left: -1px;
 		border-radius: $border-radius;
 		transition: box-shadow 0.2s ease;
+	}
+	&:not(.round):after {
 		box-shadow: inset 0 0 1px 3px $red;
 	}
-	&.match:after {
+	&.match:not(.round):after {
 		box-shadow: inset 0 0 1px 3px $green;
 	}
 	&.match {
 		.avatar {
 			background-color: fade-out($green, 0.8);
 			color: $green;
+		}
+	}
+	&.pre {
+		&:after {
+			display: none;
 		}
 	}
 
@@ -141,11 +132,22 @@ export default {
 		.avatar {
 			width: 2rem;
 			height: 2rem;
-			margin-right: 1rem;
+			margin-right: 0.75rem;
 			background-color: fade-out($red, 0.8);
 			color: $red;
 			font-size: 1.45rem;
 		}
+	}
+}
+.round-start {
+	font-size: 1rem;
+	color: white;
+
+	b {
+		font-size: 1rem;
+	}
+	span {
+		color: white;
 	}
 }
 </style>
