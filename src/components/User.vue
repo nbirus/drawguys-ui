@@ -130,11 +130,19 @@ export default {
 		<div class="user__place" v-if="showPlace"></div>
 
 		<!-- popout -->
-		<div v-if="showPopout">
+
+		<transition-group
+			v-if="showPopout"
+			tag="div"
+			name="list"
+			mode="out-in"
+			appear
+		>
 			<!-- turn over -->
 			<div
-				class="user__popout turn-end"
 				v-if="roomEvent === 'turn_end'"
+				key="end"
+				class="user__popout turn-end"
 				:class="turnScore > 0 ? 'pos' : 'neg'"
 			>
 				<div class="user__popout-icon">
@@ -146,17 +154,27 @@ export default {
 			</div>
 
 			<!-- turn in progress -->
-			<div class="user__popout match" v-else>
+			<div class="user__popout match" v-else key="match">
 				<div class="user__popout-icon">
 					<i class="ri-timer-line"></i>
 				</div>
 				<div class="user__popout-text">{{ matchTime }}s</div>
 			</div>
-		</div>
+		</transition-group>
 
 		<!-- event popout -->
-		<div v-else-if="showEvent">
-			<div class="user__popout guess" v-if="event === 'guess' && guess">
+		<transition-group
+			tag="div"
+			name="list"
+			mode="out-in"
+			appear
+			v-else-if="showEvent"
+		>
+			<div
+				class="user__popout guess"
+				v-if="event === 'guess' && guess"
+				key="guess"
+			>
 				<div class="user__popout-icon">
 					<i class="ri-forbid-line"></i>
 				</div>
@@ -165,7 +183,11 @@ export default {
 				</div>
 			</div>
 
-			<div class="user__popout selecting" v-else-if="event === 'selecting'">
+			<div
+				class="user__popout selecting"
+				v-else-if="event === 'selecting'"
+				key="selecting"
+			>
 				<div class="user__popout-icon">
 					<i class="ri-route-line"></i>
 				</div>
@@ -174,7 +196,11 @@ export default {
 				</div>
 			</div>
 
-			<div class="user__popout selecting" v-else-if="event === 'drawing'">
+			<div
+				class="user__popout selecting"
+				v-else-if="event === 'drawing'"
+				key="drawing"
+			>
 				<div class="user__popout-icon">
 					<i class="ri-pencil-line"></i>
 				</div>
@@ -182,7 +208,7 @@ export default {
 					Drawing
 				</div>
 			</div>
-		</div>
+		</transition-group>
 	</div>
 </template>
 

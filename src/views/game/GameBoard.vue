@@ -75,6 +75,7 @@ export default {
 						tag="div"
 						name="list"
 						class="absolute-container"
+						mode="out-in"
 						appear
 					>
 						<!-- timer -->
@@ -95,6 +96,7 @@ export default {
 						tag="div"
 						name="list"
 						class="absolute-container"
+						mode="out-in"
 						appear
 					>
 						<!-- game-timline -->
