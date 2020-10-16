@@ -20,9 +20,10 @@
 		<div class="message__message">
 			<span v-if="event === 'join-room'">joined the room</span>
 			<span v-else-if="event === 'leave-room'">left the room</span>
-			<span v-else-if="event === 'countdown'"
-				>Game starts in {{ message }}...</span
-			>
+			<span v-else-if="event === 'countdown'">
+				<span v-if="message === 0">Game started!</span>
+				<span v-else>Game starts in {{ message }}...</span>
+			</span>
 			<span v-else-if="event === 'countdown-cancel'"
 				>stopped the countdown</span
 			>

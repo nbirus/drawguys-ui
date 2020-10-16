@@ -92,7 +92,7 @@ export default {
 			</div>
 
 			<!-- when turn ends -->
-			<div class="turn-end" v-else-if="event === 'turn_end'">
+			<!-- <div class="turn-end" v-else-if="event === 'turn_end'">
 				<transition name="pop-up" mode="out-in" appear>
 					<h3>
 						The word was <b>{{ gameState.word }}</b>
@@ -121,7 +121,7 @@ export default {
 						</div>
 					</div>
 				</transition>
-			</div>
+			</div> -->
 
 			<!-- round ends -->
 			<div v-else-if="event === 'round_end'">
@@ -261,8 +261,7 @@ export default {
 	flex-direction: column;
 }
 
-.pre_turn,
-.turn_end {
+.pre_turn {
 	@include stripe(white, darken(white, 2));
 	position: absolute;
 	top: 0px;

@@ -1,57 +1,10 @@
-<template>
-	<form
-		class="form-card card nudge"
-		ref="form"
-		:class="[
-			`outline-${timerWarning ? 'yellow' : color}`,
-			{ focus, ready: focus },
-		]"
-		v-if="!match"
-		@submit.prevent="onSubmit"
-	>
-		<input
-			ref="input"
-			type="text"
-			class="lg b-none mr-2"
-			placeholder="Type to guess..."
-			v-model="value"
-			required
-			@focus="focus = true"
-			@blur="
-				() => {
-					setTyping(false)
-					focus = false
-				}
-			"
-			@keydown="setTyping(true)"
-			@keypress.enter="setTyping(false)"
-			@keypress.delete="setTyping(false)"
-			autocomplete="off"
-		/>
-		<transition name="form-button" mode="out-in">
-			<button
-				:class="`btn-${timerWarning ? 'yellow' : roomState.userState.color}`"
-				tabindex="0"
-				v-if="value"
-				type="submit"
-				class="lg"
-			>
-				Send
-				<span v-if="timerWarning">({{ timer }})</span>
-				<!-- <i class="ri-check-line"></i> -->
-			</button>
-		</transition>
-	</form>
-</template>
-
 <script>
 import { roomState, setTyping, roomGuess } from '@/services/Room'
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
 export default {
 	name: 'game-form',
 	inheritAttrs: false,
-	props: ['color'],
-	setup(props, { emit }) {
+	setup() {
 		let form = ref(null)
 		let input = ref(null)
 		let value = ref('')
@@ -59,6 +12,10 @@ export default {
 		let submitKey = ref(0)
 		let match = computed(() => roomState.userState.match)
 		let timer = computed(() => roomState.gameState.timer)
+		let color = computed(() =>
+			match.value ? 'green' : roomState.gameState.turnUser.color
+		)
+
 		let timerWarning = computed(
 			() =>
 				roomState.gameState.timer <= 3 &&
@@ -107,6 +64,10 @@ export default {
 			input.value.select()
 		}
 
+		onBeforeUnmount(() => {
+			hidePopover()
+		})
+
 		return {
 			input,
 			form,
@@ -120,10 +81,55 @@ export default {
 			match,
 			timer,
 			timerWarning,
+			color,
 		}
 	},
 }
 </script>
+
+<template>
+	<form
+		class="form-card card nudge"
+		ref="form"
+		:class="[
+			`outline-${timerWarning ? color : color}`,
+			{ focus, ready: focus },
+		]"
+		@submit.prevent="onSubmit"
+	>
+		<input
+			ref="input"
+			type="text"
+			class="lg b-none mr-2"
+			placeholder="Type to guess..."
+			v-model="value"
+			required
+			@focus="focus = true"
+			@blur="
+				() => {
+					setTyping(false)
+					focus = false
+				}
+			"
+			@keydown="setTyping(true)"
+			@keypress.enter="setTyping(false)"
+			@keypress.delete="setTyping(false)"
+			autocomplete="off"
+		/>
+		<transition name="form-button" mode="out-in">
+			<button
+				:class="`btn-${color}`"
+				tabindex="0"
+				v-if="value"
+				type="submit"
+				class="lg"
+			>
+				Send
+				<span v-if="timerWarning">({{ timer }})</span>
+			</button>
+		</transition>
+	</form>
+</template>
 
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
@@ -131,16 +137,16 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: 0.75rem 0.75rem 0.75rem 0.75rem;
-	width: 400px;
+	width: 360px;
 	transition: transform 0.2s ease;
-	// overflow: hidden;
 	position: relative;
 	border: solid thin $border-color;
-	top: 2.5rem;
 	animation: submit 0.2s;
+	pointer-events: auto;
 
 	input {
-		flex: 0 1 100%;
+		flex: 0 1 auto;
+		width: 225px;
 
 		&::selection {
 			background: $black;
@@ -152,8 +158,6 @@ export default {
 		flex: 0 0 auto;
 		display: flex;
 		align-items: center;
-		// padding-left: 1.25rem;
-		// padding-right: 1.25rem;
 		height: 50px;
 		font-size: 1.1rem;
 		font-weight: $regular;

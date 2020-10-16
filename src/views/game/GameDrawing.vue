@@ -2,7 +2,7 @@
 	<div
 		id="canvasDiv"
 		class="drawing"
-		:class="[`size-${drawState.size}`, { disabled, match, warning }]"
+		:class="[`size-${drawState.size}`, { disabled, match, warning, failed }]"
 	></div>
 </template>
 
@@ -16,11 +16,26 @@ export default {
 		Drawing()
 	},
 	setup() {
-		let match = computed(() => roomState.userState.match)
+		let match = computed(
+			() =>
+				roomState.userState.match ||
+				(roomState.userState.drawing &&
+					roomState.gameState.event === 'turn_end' &&
+					roomState.gameState.playersGuessed > 0)
+		)
 		let warning = computed(
 			() =>
 				roomState.gameState.timer <= 3 &&
 				roomState.gameState.event === 'turn_start'
+		)
+		let failed = computed(
+			() =>
+				(!roomState.userState.drawing &&
+					!roomState.userState.match &&
+					roomState.gameState.event === 'turn_end') ||
+				(roomState.userState.drawing &&
+					roomState.gameState.event === 'turn_end' &&
+					roomState.gameState.playersGuessed === 0)
 		)
 
 		watch(
@@ -35,6 +50,7 @@ export default {
 		return {
 			match,
 			warning,
+			failed,
 			drawState,
 			disabled: computed(
 				() =>
@@ -70,9 +86,12 @@ export default {
 	&.match:after {
 		box-shadow: inset 0 0 0 4px $green;
 	}
-	&.warning:after {
-		box-shadow: inset 0 0 0 4px $yellow;
+	&.failed:after {
+		box-shadow: inset 0 0 0 4px $red;
 	}
+	// &.warning:after {
+	// 	box-shadow: inset 0 0 0 4px $yellow;
+	// }
 
 	&.size-0 {
 		cursor: url('../../../public/cursors/0.png') 3 3, auto;

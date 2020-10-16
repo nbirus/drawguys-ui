@@ -22,6 +22,7 @@ export const roomState = reactive({
 		round: 1,
 		usedWords: [],
 		numberOfRounds: 5,
+		playersGuessed: 0,
 	},
 	usersState: {},
 	userState: {},
@@ -141,6 +142,7 @@ function onUpdateRoom(newRoom, test = false) {
 	})
 	// update current user
 	roomState.userState = newRoom.usersState[test ? 'one' : userState.userid]
+	roomState.gameState.playersGuessed = Object.values(newRoom.usersState).filter(u => u.match).length
 }
 function onJoinRoom(roomid) {
 	log('room-join')
@@ -153,13 +155,6 @@ function onJoinRoomError() {
 		router.push('/')
 	}, 100)
 }
-
-// watchers
-watch(() => roomState.gameState.event, event => {
-	if (event === 'turn_end') {
-		console.log('HERE');
-	}
-})
 
 // events
 socket.on('update_rooms', onUpdateRooms)
@@ -198,23 +193,23 @@ const roomStateTest = {
     active: true,
     event: 'turn_start',
     word: 'Test',
-    timer: 2,
+    timer: 30,
     gameTimer: null,
 		usedWords: [],
     turnUser: {
-			userid: 'one',
-			username: 'Username One',
+			userid: 'two',
+			username: 'Username Two',
 			guess: '',
 			ready: false,
 			match: false,
 			typing: false,
 			drawing: true,
 			selecting: false,
-			color: 'blue',
+			color: 'orange',
 			matchTime: 0,
-			turnScore: 0,
+			turnScore: 100,
 			roundScore: 0,
-			score: 0,
+			score: 100,
 		},
     roundWord: '',
     round: 2,
@@ -232,9 +227,9 @@ const roomStateTest = {
 			selecting: false,
 			color: 'blue',
 			matchTime: 0,
-			turnScore: -50,
+			turnScore: 200,
 			roundScore: 0,
-			score:  -50,
+			score:  0,
 		},
 		two: {
 			userid: 'two',
@@ -251,16 +246,53 @@ const roomStateTest = {
 			roundScore: 0,
 			score: 100,
 		},
+		three: {
+			userid: 'three',
+			username: 'Username Three',
+			guess: '',
+			ready: false,
+			match: false,
+			typing: false,
+			drawing: false,
+			selecting: false,
+			color: 'purple',
+			matchTime: 0,
+			turnScore: 100,
+			roundScore: 0,
+			score: 100,
+		},
+		for: {
+			userid: 'for',
+			username: 'Username Three',
+			guess: '',
+			ready: false,
+			match: false,
+			typing: false,
+			drawing: false,
+			selecting: false,
+			color: 'maroon',
+			matchTime: 0,
+			turnScore: 100,
+			roundScore: 0,
+			score: 100,
+		},
 	},
 }
 
 export function testRoomState() {
+	
 	onUpdateRoom(roomStateTest, true)
 
 	// actions
 	// setTimeout(() => {
-	// 	roomState.gameState.event = 'turn_end'
-	// }, 1000)
+	// 	roomState.usersState.one.match = false
+	// }, 3000)
+	// setTimeout(() => {
+	// 	roomState.usersState.for.match = true
+	// }, 3000)
+	setTimeout(() => {
+		roomState.gameState.event = 'turn_end'
+	}, 3000)
 }
 
 export function setInactive() {

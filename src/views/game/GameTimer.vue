@@ -1,11 +1,10 @@
 <template>
 	<div>
 		<timer
-			v-if="showTimer"
 			class="timer"
 			:value="roomState.gameState.timer"
 			:key="roomState.gameState.event"
-			:color="warning ? 'yellow' : roomState.gameState.turnUser.color"
+			:color="roomState.gameState.turnUser.color"
 		/>
 		<!-- <div class="bar-conatainer">
 			<div
@@ -24,12 +23,6 @@ export default {
 	name: 'game-timer',
 	components: { Timer },
 	setup() {
-		let showTimer = computed(
-			() =>
-				roomState.gameState.event === 'turn_start' ||
-				(roomState.gameState.event === 'pre_turn' &&
-					roomState.userState.selecting)
-		)
 		let warning = computed(
 			() =>
 				roomState.gameState.timer <= 3 &&
@@ -38,7 +31,6 @@ export default {
 
 		return {
 			roomState,
-			showTimer,
 			warning,
 		}
 	},
@@ -50,13 +42,8 @@ export default {
 
 .timer {
 	width: auto;
-	display: flex;
-	justify-content: center;
-	top: -3rem;
-	position: absolute;
-	left: calc(50% - 48px);
-	z-index: 2;
 	box-shadow: $box-shadow;
+	z-index: 2;
 }
 .bar-container {
 	position: absolute;

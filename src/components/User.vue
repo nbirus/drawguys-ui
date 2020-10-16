@@ -112,7 +112,7 @@ export default {
 		<div class="user__score" v-if="!hideScore" v-text="score"></div>
 
 		<!-- match -->
-		<transition name="user-typing" mode="out-in">
+		<!-- <transition name="user-typing" mode="out-in">
 			<div v-if="match" class="user__popout match">
 				<div class="user__popout-content">
 					<div class="user__popout-icon">
@@ -121,18 +121,16 @@ export default {
 					{{ matchTime }}s
 				</div>
 			</div>
-
-			<!-- popout -->
 			<div class="user__popout typing" v-else-if="typing">
 				<div></div>
 				<div></div>
 				<div></div>
 			</div>
-		</transition>
+		</transition> -->
 
 		<!-- event -->
 		<div
-			v-if="event"
+			v-if="event && false"
 			class="user__popout event"
 			:class="[event, turnScore >= 0 ? 'pos' : 'neg']"
 			:key="event"

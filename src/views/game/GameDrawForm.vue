@@ -111,7 +111,6 @@ export default {
 	display: flex;
 	align-items: center;
 	padding: 0.35rem;
-	top: 2rem;
 	position: relative;
 	border: solid thin $border-color;
 
