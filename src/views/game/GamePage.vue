@@ -1,7 +1,7 @@
 <template>
 	<div class="page game">
 		<!-- game over -->
-		<game-over v-if="roomState.gameState.event = 'game_end'" />
+		<game-over v-if="roomState.gameState.event === 'game_end'" />
 
 		<div v-else class="game__container">
 			<div class="game__rounds">

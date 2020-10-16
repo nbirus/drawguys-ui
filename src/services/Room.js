@@ -287,7 +287,7 @@ export function testRoomState() {
 	setTimeout(() => {
 		// roomState.usersState.two.drawing = true
 		// roomState.usersState.two.selecting = false
-		roomState.gameState.event = 'round_end'
+		roomState.gameState.event = 'game_end'
 	}, 1000)
 
 	// setTimeout(() => {
