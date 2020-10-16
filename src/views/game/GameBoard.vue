@@ -68,20 +68,16 @@ export default {
 			</div>
 		</transition>
 
-		<transition name="pop-up" appear>
+		<transition name="pop-up" mode="out-in" appear>
 			<div class="board__card delay-3">
 				<div class="board__card-header">
-					<transition-group
-						tag="div"
-						name="list"
-						class="absolute-container"
-						mode="out-in"
-						appear
-					>
-						<!-- timer -->
-						<game-header key="header" v-if="showHeader" />
-						<game-timer key="timer" v-else-if="showTimer" />
-					</transition-group>
+					<div class="absolute-container">
+						<transition name="user-popup" mode="out-in" appear>
+							<!-- timer -->
+							<game-header key="header" v-if="showHeader" />
+							<game-timer key="timer" v-else-if="showTimer" />
+						</transition>
+					</div>
 				</div>
 				<div class="board__card-body card">
 					<!-- overlay -->
@@ -134,11 +130,13 @@ export default {
 			position: absolute;
 			top: -3rem;
 			width: 100%;
+			pointer-events: none;
 		}
 		&-footer {
 			position: absolute;
 			bottom: -2.5rem;
 			width: 100%;
+			pointer-events: none;
 		}
 	}
 	&__info {

@@ -57,12 +57,16 @@ export default {
 					is selecting a word...
 				</div>
 				<div v-if="roundOver">
-					<div>
+					<div v-if="match || drawing">
 						<b v-text="playersGuessed"></b>
 						<span
 							>&nbsp;{{ playersGuessed === 0 ? 'players' : 'player' }} guessed
 							the word</span
 						>
+						<b v-text="word"></b>
+					</div>
+					<div v-else>
+						You ran out of time. The word was
 						<b v-text="word"></b>
 					</div>
 				</div>

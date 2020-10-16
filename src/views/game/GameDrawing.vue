@@ -42,7 +42,6 @@ export default {
 		return {
 			match,
 			warning,
-
 			drawState,
 			disabled: computed(
 				() =>
@@ -60,6 +59,7 @@ export default {
 .drawing {
 	height: 100%;
 	width: 100%;
+	pointer-events: none;
 
 	&:after {
 		content: '';
@@ -72,7 +72,7 @@ export default {
 		transition: box-shadow 0.2s ease;
 	}
 	&.disabled {
-		pointer-events: none;
+		pointer-events: auto;
 	}
 	&.match:after {
 		box-shadow: inset 0 0 0 4px $green;
@@ -80,9 +80,6 @@ export default {
 	&.failed:after {
 		box-shadow: inset 0 0 0 4px $red;
 	}
-	// &.warning:after {
-	// 	box-shadow: inset 0 0 0 4px $yellow;
-	// }
 
 	&.size-0 {
 		cursor: url('../../../public/cursors/0.png') 3 3, auto;

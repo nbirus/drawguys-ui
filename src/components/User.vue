@@ -3,6 +3,7 @@ import colors from '@/assets/colors'
 import { nextColor, roomState } from '@/services/Room'
 import { userState } from '@/services/User'
 import { computed, nextTick, ref, watch } from 'vue'
+let eventTimeout = null
 
 export default {
 	name: 'user',
@@ -73,17 +74,13 @@ export default {
 			}
 		)
 
-		let eventTimeout = null
 		function setEvent(eventName) {
-			event.value = ''
-			nextTick(() => {
-				event.value = eventName
-			})
-
-			if (eventTimeout) {
+			if (eventTimeout !== null) {
 				clearTimeout(eventTimeout)
 				eventTimeout = null
 			}
+
+			event.value = eventName
 
 			eventTimeout = setTimeout(() => {
 				event.value = ''
@@ -105,7 +102,7 @@ export default {
 </script>
 
 <template>
-	<div class="user card" :class="userClass" :key="event" @click="nextColor">
+	<div class="user card" :class="userClass" @click="nextColor">
 		<!-- icon -->
 		<div class="user__icon icon-banner">
 			<div class="icon-banner__inner">
@@ -130,17 +127,10 @@ export default {
 		<div class="user__place" v-if="showPlace"></div>
 
 		<!-- popout -->
-
-		<transition-group
-			v-if="showPopout"
-			tag="div"
-			name="list"
-			mode="out-in"
-			appear
-		>
+		<transition-group name="user-popup" mode="out-in" appear>
 			<!-- turn over -->
 			<div
-				v-if="roomEvent === 'turn_end'"
+				v-if="showPopout && roomEvent === 'turn_end'"
 				key="end"
 				class="user__popout turn-end"
 				:class="turnScore > 0 ? 'pos' : 'neg'"
@@ -154,25 +144,17 @@ export default {
 			</div>
 
 			<!-- turn in progress -->
-			<div class="user__popout match" v-else key="match">
+			<div v-else-if="showPopout" class="user__popout match" key="match">
 				<div class="user__popout-icon">
 					<i class="ri-timer-line"></i>
 				</div>
 				<div class="user__popout-text">{{ matchTime }}s</div>
 			</div>
-		</transition-group>
 
-		<!-- event popout -->
-		<transition-group
-			tag="div"
-			name="list"
-			mode="out-in"
-			appear
-			v-else-if="showEvent"
-		>
+			<!-- player guessed -->
 			<div
+				v-else-if="showEvent && event === 'guess' && guess"
 				class="user__popout guess"
-				v-if="event === 'guess' && guess"
 				key="guess"
 			>
 				<div class="user__popout-icon">
@@ -183,6 +165,7 @@ export default {
 				</div>
 			</div>
 
+			<!-- player selecting -->
 			<div
 				class="user__popout selecting"
 				v-else-if="event === 'selecting'"
@@ -196,6 +179,7 @@ export default {
 				</div>
 			</div>
 
+			<!-- player drawing -->
 			<div
 				class="user__popout selecting"
 				v-else-if="event === 'drawing'"
@@ -208,6 +192,8 @@ export default {
 					Drawing
 				</div>
 			</div>
+
+			<div v-else key="empty"></div>
 		</transition-group>
 	</div>
 </template>
@@ -438,7 +424,7 @@ export default {
 
 			.icon-banner__inner {
 				border-top-left-radius: 3px;
-				// background-color: darken($red, 8);
+				background-color: darken($red, 8);
 			}
 		}
 	}
@@ -464,100 +450,6 @@ export default {
 		&:active {
 			transform: scale(1.025);
 		}
-	}
-}
-
-@keyframes match {
-	0% {
-		box-shadow: inset 0 0 0 0 $green;
-		transform: scale(1);
-	}
-	25% {
-		box-shadow: inset 0 0 0 4px $green;
-		transform: scale(1.025);
-	}
-	50% {
-		box-shadow: inset 0 0 0 0 $green;
-		transform: scale(1);
-	}
-	75% {
-		box-shadow: inset 0 0 0 4px $green;
-		transform: scale(1.025);
-	}
-	100% {
-		box-shadow: inset 0 0 0 0 $green;
-		transform: scale(1);
-	}
-}
-@keyframes guess {
-	0% {
-		box-shadow: inset 0 0 0 0 $red;
-		transform: scale(1);
-	}
-	25% {
-		box-shadow: inset 0 0 0 4px $red;
-		transform: scale(1.025);
-	}
-	50% {
-		box-shadow: inset 0 0 0 0 $red;
-		transform: scale(1);
-	}
-	75% {
-		box-shadow: inset 0 0 0 4px $red;
-		transform: scale(1.025);
-	}
-	100% {
-		box-shadow: inset 0 0 0 0 $red;
-		transform: scale(1);
-	}
-}
-@keyframes shake {
-	0% {
-		transform: scale(1);
-	}
-	25% {
-		transform: scale(1.025);
-	}
-	50% {
-		transform: scale(1);
-	}
-	75% {
-		transform: scale(1.025);
-	}
-	100% {
-		transform: scale(1);
-	}
-}
-@keyframes event {
-	0% {
-		opacity: 0;
-		transform: scale(0.5) translateX(-2rem);
-	}
-	10% {
-		opacity: 1;
-		transform: scale(1) translateX(0px);
-	}
-	90% {
-		opacity: 1;
-		transform: scale(1) translateX(0px);
-	}
-	100% {
-		opacity: 0;
-		transform: scale(0.75) translateX(-2rem);
-	}
-}
-@keyframes dot {
-	0% {
-		opacity: 0.25;
-		transform: scale(0.85);
-	}
-	50% {
-		opacity: 0.75;
-		transform: scale(1);
-	}
-	100% {
-		opacity: 0.25;
-		transform: scale(0.75);
 	}
 }
 </style>

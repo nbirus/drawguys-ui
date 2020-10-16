@@ -16,11 +16,11 @@ export default {
 			updateDrawState()
 		})
 
-		function onUndo(params) {
+		function onUndo() {
 			socket.emit('undo')
 			undo()
 		}
-		function onReset(params) {
+		function onReset() {
 			socket.emit('reset')
 			reset()
 		}
@@ -114,6 +114,7 @@ export default {
 	position: relative;
 	border: solid thin $border-color;
 	transform: translateY(-0.5rem);
+	pointer-events: auto;
 
 	&__eraser {
 		border-radius: 50%;

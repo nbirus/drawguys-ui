@@ -31,9 +31,12 @@ export default function() {
 	let canvasDiv = document.getElementById('canvasDiv')
 	canvas = document.createElement('canvas')
 	canvas.setAttribute('width', canvasWidth)
+	canvas.setAttribute('style', 'pointer-events: auto;')
 	canvas.setAttribute('height', canvasHeight)
 	canvas.setAttribute('id', 'canvas')
 	canvasDiv.appendChild(canvas)
+
+	console.log(canvas);
 	context = canvas.getContext('2d')
 	canvas.addEventListener('mousedown', (e) => {
 		socket.emit('mousedown', formatEvent(e))

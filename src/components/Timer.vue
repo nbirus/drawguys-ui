@@ -28,9 +28,12 @@ export default {
 		})
 
 		// update on event change
-		watch(props.update, () => {
-			animateBar()
-		})
+		watch(
+			() => props.update,
+			() => {
+				animateBar()
+			}
+		)
 
 		function animateBar() {
 			setTimeout(() => {
