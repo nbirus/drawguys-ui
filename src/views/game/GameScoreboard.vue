@@ -6,7 +6,7 @@
 			:class="`delay-${i}`"
 			:key="user.userid"
 		>
-			<user v-bind="user" large />
+			<user v-bind="user" showPlace :place="i + 1" large />
 		</li>
 	</transition-group>
 </template>

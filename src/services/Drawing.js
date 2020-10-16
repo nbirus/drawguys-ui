@@ -35,8 +35,6 @@ export default function() {
 	canvas.setAttribute('height', canvasHeight)
 	canvas.setAttribute('id', 'canvas')
 	canvasDiv.appendChild(canvas)
-
-	console.log(canvas);
 	context = canvas.getContext('2d')
 	canvas.addEventListener('mousedown', (e) => {
 		socket.emit('mousedown', formatEvent(e))

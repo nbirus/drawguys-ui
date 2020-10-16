@@ -26,6 +26,7 @@ export default {
 		matchTime: Number,
 		turnScore: Number,
 		roundScore: Number,
+		place: Number,
 	},
 	setup(props) {
 		let event = ref('')
@@ -49,6 +50,7 @@ export default {
 				clickable: props.changeColor,
 				small: props.small,
 				large: props.large,
+				showPlace: props.showPlace,
 			},
 		])
 
@@ -79,9 +81,7 @@ export default {
 				clearTimeout(eventTimeout)
 				eventTimeout = null
 			}
-
 			event.value = eventName
-
 			eventTimeout = setTimeout(() => {
 				event.value = ''
 			}, 3000)
@@ -104,7 +104,7 @@ export default {
 <template>
 	<div class="user card" :class="userClass" @click="nextColor">
 		<!-- icon -->
-		<div class="user__icon icon-banner">
+		<div class="user__icon icon-banner" v-if="!showPlace">
 			<div class="icon-banner__inner">
 				<i
 					v-if="roundOver"
@@ -124,10 +124,12 @@ export default {
 		<div class="user__score" v-if="!hideScore" v-text="score"></div>
 
 		<!-- placement -->
-		<div class="user__place" v-if="showPlace"></div>
+		<div class="user__place" v-if="showPlace">
+			<span v-text="place"></span>
+		</div>
 
 		<!-- popout -->
-		<transition-group name="user-popup" mode="out-in" appear>
+		<transition-group v-else name="user-popup" mode="out-in" appear>
 			<!-- turn over -->
 			<div
 				v-if="showPopout && roomEvent === 'turn_end'"
@@ -353,6 +355,22 @@ export default {
 			}
 		}
 	}
+	&__place {
+		position: absolute;
+		top: -0.75rem;
+		left: -0.75rem;
+		width: 2rem;
+		height: 2rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-radius: 50%;
+
+		background-color: fade-out(black, 0.15);
+		color: white;
+		font-weight: $bold;
+		z-index: 2;
+	}
 
 	// color
 	@each $color, $name in $colors {
@@ -403,35 +421,41 @@ export default {
 	&.roundOver.pos,
 	&.ready,
 	&.match {
-		&:after {
-			box-shadow: inset 0 0 0 4px $green;
-		}
-		.user__icon {
-			background-color: $green;
+		&:not(.showPlace) {
+			&:after {
+				box-shadow: inset 0 0 0 4px $green;
+			}
+			.user__icon {
+				background-color: $green;
 
-			.icon-banner__inner {
-				border-top-left-radius: 3px;
-				background-color: darken($green, 3);
+				.icon-banner__inner {
+					border-top-left-radius: 3px;
+					background-color: darken($green, 3);
+				}
 			}
 		}
 	}
 	&.roundOver.neg {
-		&:after {
-			box-shadow: inset 0 0 0 4px $red;
-		}
-		.user__icon {
-			background-color: $red;
+		&:not(.showPlace) {
+			&:after {
+				box-shadow: inset 0 0 0 4px $red;
+			}
+			.user__icon {
+				background-color: $red;
 
-			.icon-banner__inner {
-				border-top-left-radius: 3px;
-				background-color: darken($red, 8);
+				.icon-banner__inner {
+					border-top-left-radius: 3px;
+					background-color: darken($red, 8);
+				}
 			}
 		}
 	}
 	&.round_end,
 	&.turn_end {
-		&:after {
-			box-shadow: inset 0 0 0 4px $green;
+		&:not(.showPlace) {
+			&:after {
+				box-shadow: inset 0 0 0 4px $green;
+			}
 		}
 	}
 	&.drawing {

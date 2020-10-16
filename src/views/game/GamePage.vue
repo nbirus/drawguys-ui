@@ -1,7 +1,9 @@
 <template>
 	<div class="page game">
 		<!-- game over -->
-		<div class="game__container">
+		<game-over v-if="roomState.gameState.event = 'game_end'" />
+
+		<div v-else class="game__container">
 			<div class="game__rounds">
 				<span>{{
 					`Round ${roomState.gameState.round}/${roomState.gameState.numberOfRounds}`
@@ -45,17 +47,6 @@ export default {
 				router.push('/')
 			}
 		})
-
-		watch(
-			() => roomState.gameState.event,
-			event => {
-				if (event === 'game_end') {
-					setTimeout(() => {
-						router.push(`/${roomid}`)
-					}, 100)
-				}
-			}
-		)
 
 		return {
 			roomState,
