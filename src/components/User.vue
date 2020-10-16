@@ -21,6 +21,7 @@ export default {
 		large: Boolean,
 		changeColor: Boolean,
 		hideScore: Boolean,
+		first: Boolean,
 		color: String,
 		score: Number,
 		matchTime: Number,
@@ -50,6 +51,7 @@ export default {
 				clickable: props.changeColor,
 				small: props.small,
 				large: props.large,
+				first: props.first,
 				showPlace: props.showPlace,
 			},
 		])
@@ -119,7 +121,8 @@ export default {
 
 		<!-- placement -->
 		<div class="user__place" v-if="showPlace">
-			<span v-text="place"></span>
+			<i v-if="first" class="ri-vip-crown-line"></i>
+			<span v-text="[, '1st', '2nd', '3rd', '4th', '5th', '6th'][place]"></span>
 		</div>
 
 		<!-- popout -->
@@ -206,7 +209,7 @@ export default {
 	pointer-events: none;
 	transition: 0.2s ease;
 	transition-property: transform, box-shadow;
-	z-index: 2;
+	z-index: 1;
 
 	&:after {
 		content: '';
@@ -222,10 +225,12 @@ export default {
 	}
 
 	&__icon {
+		overflow: visible;
 		i {
 			border-radius: 50%;
 			color: white;
 			padding: 0.1rem;
+			font-size: 0.9rem;
 		}
 	}
 	&__username {
@@ -353,17 +358,33 @@ export default {
 		position: absolute;
 		top: -0.75rem;
 		left: -0.75rem;
-		width: 2rem;
-		height: 2rem;
+		padding: 0 0.25rem;
+		height: 1.5rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		border-radius: 50%;
+		border-radius: $border-radius;
 
-		background-color: fade-out(black, 0.15);
+		background-color: fade-out(black, 0.1);
+		border: solid 3px fade-out(black, 0.05);
 		color: white;
 		font-weight: $bold;
 		z-index: 2;
+		transform: scale(0.9);
+
+		i {
+			font-weight: $regular;
+			margin-right: 0.25rem;
+		}
+	}
+
+	&.first {
+		transform: scale(1.075);
+	}
+	&.large {
+		.user__username {
+			font-size: 1rem;
+		}
 	}
 
 	// color
@@ -389,6 +410,7 @@ export default {
 					}
 				}
 			}
+			&.first,
 			&.ready,
 			&.drawing {
 				@include stripe($color, lighten($color, 5));

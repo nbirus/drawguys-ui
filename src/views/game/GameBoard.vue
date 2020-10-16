@@ -80,21 +80,15 @@ export default {
 					</div>
 				</div>
 				<div class="board__card-body card">
-					<!-- overlay -->
-					<game-overlay />
-
 					<!-- drawing -->
 					<game-drawing />
+
+					<!-- overlay -->
+					<game-overlay />
 				</div>
-				<div class="board__card-footer">
-					<transition-group
-						v-if="showFooter"
-						tag="div"
-						name="list"
-						class="absolute-container"
-						mode="out-in"
-						appear
-					>
+				<div class="board__card-footer" v-show="showFooter">
+					<!-- <transition name="user-popup" mode="out-in" appear> -->
+					<div class="absolute-container">
 						<!-- game-timline -->
 						<game-timeline key="timeline" v-if="showTimeline" />
 
@@ -106,7 +100,8 @@ export default {
 
 						<!-- game form -->
 						<game-form key="form" v-else />
-					</transition-group>
+					</div>
+					<!-- </transition> -->
 				</div>
 			</div>
 		</transition>

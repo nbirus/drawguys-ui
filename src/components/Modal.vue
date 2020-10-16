@@ -24,12 +24,12 @@ export default {
 <style lang="scss">
 .dialog {
 	position: fixed;
-	z-index: 1;
+	z-index: 999;
 	left: 0;
 	top: 0;
 	bottom: 0;
 	width: 100%;
-	background-color: fade-out(black, 0.5);
+	background-color: fade-out(black, 0.15);
 	animation: fade 0.3s ease;
 
 	display: flex;

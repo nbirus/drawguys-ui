@@ -19,13 +19,18 @@ export default {
 		Drawing()
 	},
 	setup() {
+		// let match = computed(
+		// 	() =>
+		// 		(roomState.userState.match &&
+		// 			roomState.gameState.event === 'turn_start') ||
+		// 		(roomState.userState.drawing &&
+		// 			roomState.gameState.event === 'turn_end' &&
+		// 			roomState.gameState.playersGuessed > 0)
+		// )
+
 		let match = computed(
 			() =>
-				(roomState.userState.match &&
-					roomState.gameState.event === 'turn_start') ||
-				(roomState.userState.drawing &&
-					roomState.gameState.event === 'turn_end' &&
-					roomState.gameState.playersGuessed > 0)
+				roomState.userState.match && roomState.gameState.event === 'turn_start'
 		)
 		let warning = computed(
 			() =>
@@ -37,8 +42,10 @@ export default {
 			() => roomState.gameState.event,
 			() => {
 				setTimeout(() => {
-					reset()
-					resetState()
+					if (roomState.gameState.event !== 'turn_end') {
+						reset()
+						resetState()
+					}
 				}, 100)
 			}
 		)

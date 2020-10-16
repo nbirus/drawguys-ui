@@ -5,18 +5,11 @@
 				v-bind="user"
 				:change-color="user.userid === userState.userid && !ready"
 				hide-score
+				large
 			/>
 		</li>
 		<li class="room-users__user invite" v-for="n of userEmpty" :key="n">
-			<button @click="$emit('share')" :disabled="ready">
-				<i class="ri-user-add-fill"></i>
-			</button>
-		</li>
-		<li
-			class="room-users__user invite"
-			v-if="users.length > 3 && users.length < 8"
-		>
-			<button @click="$emit('share')" :disabled="ready">
+			<button @click="$emit('share')">
 				<i class="ri-user-add-fill"></i>
 			</button>
 		</li>
@@ -39,9 +32,16 @@ export default {
 			ready,
 			userState,
 			users,
-			userEmpty: computed(() =>
-				users.value.length > 4 ? 0 : 4 - users.value.length
-			),
+			userEmpty: computed(() => {
+				// users.value.length > 6 ? 0 : 6 - users.value.length
+				if (users.value.length === 1) {
+					return 3
+				} else if (users.value.length === 2) {
+					return 2
+				} else if (users.value.length < 6) {
+					return 1
+				}
+			}),
 		}
 	},
 }
@@ -51,11 +51,11 @@ export default {
 @import '@/styles/component.scss';
 .room-users {
 	&__user {
-		margin-bottom: 0.8rem;
+		margin-bottom: 0.75rem;
 
 		&.invite button {
 			width: 100%;
-			height: $block-height-lg;
+			height: 60px;
 			background-color: $light;
 			border-radius: $border-radius;
 			color: $text-extra-light;

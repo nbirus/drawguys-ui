@@ -6,7 +6,7 @@
 			:class="`delay-${i}`"
 			:key="user.userid"
 		>
-			<user v-bind="user" showPlace :place="i + 1" large />
+			<user v-bind="user" showPlace :place="i + 1" :first="i === 0" large />
 		</li>
 	</transition-group>
 </template>
@@ -40,7 +40,11 @@ export default {
 	width: 235px;
 
 	&__user {
-		margin-bottom: 1rem;
+		margin-bottom: 1.25rem;
+
+		&:first-child {
+			margin-bottom: 1.75rem;
+		}
 	}
 }
 </style>

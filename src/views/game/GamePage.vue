@@ -11,11 +11,14 @@
 			</div>
 
 			<!-- users -->
-			<game-users class="game__users" />
+			<game-users class="game__users" @share="showModalOpen = true" />
 
 			<!-- board -->
 			<game-board class="game__board" />
 		</div>
+
+		<!-- share modal -->
+		<room-share-modal v-model:open="showModalOpen" />
 	</div>
 </template>
 
@@ -23,8 +26,9 @@
 import GameUsers from '@/views/game/GameUsers'
 import GameBoard from '@/views/game/GameBoard'
 import GameOver from '@/views/game/GameOver'
+import RoomShareModal from '@/views/room/RoomShareModal'
 import { testRoomState, roomState } from '@/services/Room'
-import { onMounted, watch } from 'vue'
+import { onMounted, watch, ref } from 'vue'
 import router from '@/router'
 
 export default {
@@ -33,8 +37,10 @@ export default {
 		GameUsers,
 		GameBoard,
 		GameOver,
+		RoomShareModal,
 	},
 	setup() {
+		let showModalOpen = ref(false)
 		let currentRoute = router.currentRoute.value
 		let roomid = currentRoute.params.id
 
@@ -50,6 +56,7 @@ export default {
 
 		return {
 			roomState,
+			showModalOpen,
 		}
 	},
 }
@@ -79,6 +86,7 @@ export default {
 		flex: 0 0 240px;
 		padding-top: 2rem;
 		margin-right: 2rem;
+		z-index: 1;
 	}
 	&__board {
 		flex: 0 1 100%;

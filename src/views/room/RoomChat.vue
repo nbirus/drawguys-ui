@@ -1,7 +1,12 @@
 <template>
 	<div class="chat" :class="{ focus }">
 		<div class="chat__box">
-			<transition-group tag="ul" name="chat" class="chat__messages">
+			<transition-group
+				tag="ul"
+				name="chat"
+				class="chat__messages"
+				:style="`height: ${messagesHeight}px;`"
+			>
 				<chat-message
 					v-for="(message, i) in messages"
 					:key="i"
@@ -57,6 +62,16 @@ export default {
 		let focus = ref(false)
 		let message = ref('')
 		let messages = computed(() => roomState.messages)
+		let messagesHeight = computed(() => {
+			let length = Object.keys(roomState.usersState).length
+			if (length <= 3) {
+				return 358
+			} else if (length === 4) {
+				return 428
+			} else {
+				return 500
+			}
+		})
 
 		function onSubmit() {
 			sendMessage(message.value)
@@ -70,6 +85,7 @@ export default {
 			message,
 			messages: computed(() => messages.value.reverse()),
 			roomState,
+			messagesHeight,
 		}
 	},
 }
@@ -92,7 +108,7 @@ export default {
 		justify-content: flex-start;
 		overflow-y: auto;
 		overflow-x: hidden;
-		height: 358px;
+
 		width: 327px;
 	}
 	&__input {

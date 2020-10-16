@@ -43,7 +43,7 @@ export default {
 .timer {
 	width: auto;
 	box-shadow: $box-shadow;
-	z-index: 2;
+	z-index: 1;
 }
 .bar-container {
 	position: absolute;

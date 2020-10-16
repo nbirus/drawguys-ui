@@ -58,10 +58,10 @@ export default {
 				</div>
 				<div v-if="roundOver">
 					<div v-if="match || drawing">
-						<b v-text="playersGuessed"></b>
+						<span v-text="playersGuessed"></span>
 						<span
-							>&nbsp;{{ playersGuessed === 0 ? 'players' : 'player' }} guessed
-							the word</span
+							>{{ playersGuessed === 0 ? 'players' : 'player' }} guessed the
+							word</span
 						>
 						<b v-text="word"></b>
 					</div>
@@ -90,7 +90,7 @@ export default {
 	align-items: center;
 	justify-content: center;
 
-	padding: 1.25rem 1.5rem 1.25rem 1.25rem;
+	padding: 1.25rem 1.65rem 1.25rem 1.25rem;
 	z-index: 2;
 	margin-top: 0.5rem;
 	position: relative;
@@ -107,6 +107,8 @@ export default {
 	}
 	&.pre {
 		border: none;
+		padding: 0.75rem 1.65rem 0.75rem 1.25rem !important;
+		margin-top: 0.75rem;
 
 		.avatar {
 			background-color: fade-out(white, 0.8);
@@ -119,6 +121,14 @@ export default {
 	}
 	&.match:not(.round):after {
 		box-shadow: inset 0 0 1px 3px $green;
+	}
+	&.round:not(.match) {
+		background-color: lighten($red, 38);
+		border: none;
+
+		&:after {
+			box-shadow: inset 0 0 0 3px $red;
+		}
 	}
 	&.match {
 		.avatar {

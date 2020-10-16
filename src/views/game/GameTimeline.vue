@@ -1,6 +1,6 @@
 <script>
 import { roomState } from '@/services/Room'
-import { computed, watch } from 'vue'
+import { computed, watch, ref } from 'vue'
 
 export default {
 	name: 'game-timeline',
@@ -11,12 +11,13 @@ export default {
 		}
 	},
 	setup() {
+		let users = ref([])
 		let timer = computed(() => roomState.gameState.timer)
 		let playersGuessed = computed(() => roomState.gameState.playersGuessed > 0)
 		let user = computed(() => roomState.userState)
-		let users = computed(() =>
-			Object.values(roomState.usersState).filter(user => !user.drawing)
-		)
+		// let users = computed(() =>
+		// 	Object.values(roomState.usersState).filter(user => !user.drawing)
+		// )
 		let roundOver = computed(() => roomState.gameState.event === 'turn_end')
 		let segmentMatched = computed(() => {
 			if (!user.value.match) {
@@ -33,6 +34,12 @@ export default {
 			}
 			return segments
 		})
+		let match = computed(
+			() =>
+				!roundOver.value &&
+				!roomState.userState.drawing &&
+				roomState.userState.match
+		)
 
 		function getSegment(time) {
 			if (time >= 20) {
@@ -50,8 +57,21 @@ export default {
 
 		watch(
 			() => roomState.gameState.event,
-			() => {
-				segmentIndex = [0, 0, 0, 0, 0]
+			event => {
+				console.log(event)
+				if (event === 'turn_end') {
+					segmentIndex = [0, 0, 0, 0, 0]
+					users.value = Object.values(roomState.usersState)
+						.filter(u => !u.drawing)
+						.map(u => ({
+							...u,
+							segment: getSegment(u.matchTime),
+							row: getRow(u.matchTime),
+						}))
+				}
+			},
+			{
+				immediate: true,
 			}
 		)
 
@@ -75,6 +95,7 @@ export default {
 			getPosition,
 			playersGuessed,
 			getRow,
+			match,
 		}
 	},
 }
@@ -83,10 +104,7 @@ export default {
 <template>
 	<div
 		class="game-timeline card outline-red"
-		:class="{
-			round: roundOver,
-			match: (!roundOver && user.match) || (user.drawing && playersGuessed),
-		}"
+		:class="{ round: roundOver, match }"
 	>
 		<div class="game-timeline__bar">
 			<ul class="game-timeline__segments">
@@ -124,15 +142,13 @@ export default {
 					:key="i"
 					class="game-timeline__users-user"
 					:class="
-						`bg-${user.color} grid-${getSegment(
-							user.matchTime
-						)} grid-row-${getRow(user.matchTime)} delay-${i}`
+						`bg-${user.color} grid-${user.segment} grid-row-${user.row} delay-${i}`
 					"
 				>
 					<div class="icon" v-if="user.match">
 						<b v-text="user.matchTime"></b>s
 					</div>
-					<div class="icon" v-else><i class="ri-forbid-line"></i></div>
+					<!-- <div class="icon" v-else><i class="ri-forbid-line"></i></div> -->
 					<div class="text">
 						<span v-text="user.username"></span>
 					</div>
@@ -145,7 +161,7 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
 .game-timeline {
-	padding: 0.5rem 0.5rem 1.25rem;
+	padding: 1rem 1rem 1.25rem;
 	width: 695px;
 	display: flex;
 	align-items: center;
@@ -325,12 +341,16 @@ export default {
 				padding-right: 0.45rem;
 				font-size: 0.7rem;
 				color: white;
-				text-align: center;
+				width: 100%;
 			}
 
 			&.grid-1 {
 				grid-column: 1;
 				border: solid 3px $red;
+
+				.text {
+					text-align: center;
+				}
 			}
 			&.grid-2 {
 				grid-column: 2;

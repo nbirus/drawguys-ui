@@ -24,6 +24,7 @@ export default {
 				Object.values(roomState.usersState).filter(user => user.match).length
 		)
 		let words = ref([])
+		let hasSelected = false
 
 		watch(
 			() => event.value,
@@ -37,14 +38,25 @@ export default {
 				}
 
 				// set default if no selection made
-				if (event.value === 'turn_start' && !gameState.value.word) {
-					setWord(getWords()[0])
+				if (
+					roomState.userState.drawing &&
+					event.value === 'turn_start' &&
+					!hasSelected
+				) {
+					let word = getWords()[0]
+					console.log('word', word)
+					setWord(word)
 				}
 			},
 			{
 				immediate: true,
 			}
 		)
+
+		function selectWord(word) {
+			hasSelected = true
+			setWord(word)
+		}
 
 		let fixed = computed(() =>
 			['round_start', 'round_end', 'game_end'].includes(event.value)
@@ -60,6 +72,7 @@ export default {
 			setWord,
 			playersGuessed,
 			fixed,
+			selectWord,
 		}
 	},
 }
@@ -76,60 +89,16 @@ export default {
 					<h3>Select a word to draw...</h3>
 					<ul class="selecting__words">
 						<li class="selecting__words-word" v-for="word in words" :key="word">
-							<button @click="setWord(word)" v-text="word"></button>
+							<button @click="selectWord(word)" v-text="word"></button>
 						</li>
 					</ul>
 				</div>
-				<!-- if it's another's turn -->
-				<!-- <div class="waiting" v-else>
-					<div>
-						<b :class="`text-${turnUser.color} bg-${turnUser.color} bg-fade`">{{
-							turnUser.username
-						}}</b>
-						is selecting a word to draw...
-					</div>
-				</div> -->
 			</div>
-
-			<!-- when turn ends -->
-			<!-- <div class="turn-end" v-else-if="event === 'turn_end'">
-				<transition name="pop-up" mode="out-in" appear>
-					<h3>
-						The word was <b>{{ gameState.word }}</b>
-					</h3>
-				</transition>
-				<transition name="pop-up" mode="out-in" appear>
-					<div
-						class="turn-end-banner"
-						:class="user.turnScore >= 0 ? 'positive' : 'negative'"
-					>
-						<div class="turn-end-banner__score">
-							<b v-text="Math.abs(user.turnScore)"></b>
-						</div>
-						<div class="turn-end-banner__text">
-							<span v-if="!user.drawing">
-								<span v-if="user.match"
-									>You guessed the word in <b>{{ user.matchTime }}s</b></span
-								>
-								<span v-else>You didn't guess the word</span>
-							</span>
-							<span v-else
-								><b>{{ playersGuessed }}</b>
-								{{ playersGuessed > 1 ? 'players' : 'player' }} guessed the
-								word</span
-							>
-						</div>
-					</div>
-				</transition>
-			</div> -->
 
 			<!-- round ends -->
 			<div v-else-if="event === 'round_end'">
 				<transition name="pop-up" mode="out-in" appear>
-					<h1 class="mb-7" v-if="gameState.round !== gameState.numberOfRounds">
-						Round {{ gameState.round }} Results
-					</h1>
-					<h1 class="mb-7" v-else>Game Over</h1>
+					<h1 class="mb-7">Round {{ gameState.round }} Results</h1>
 				</transition>
 			</div>
 
@@ -154,7 +123,7 @@ export default {
 	pointer-events: none;
 	border-radius: $border-radius;
 	overflow: hidden;
-	z-index: 1;
+	// z-index: 1;
 
 	&.fixed {
 		position: fixed;
