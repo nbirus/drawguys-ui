@@ -207,7 +207,7 @@ const roomStateTest = {
 			selecting: false,
 			color: 'orange',
 			matchTime: 0,
-			turnScore: 100,
+			turnScore: 0,
 			roundScore: 0,
 			score: 100,
 		},
@@ -226,8 +226,8 @@ const roomStateTest = {
 			drawing: false,
 			selecting: false,
 			color: 'blue',
-			matchTime: 10,
-			turnScore: 200,
+			matchTime: 0,
+			turnScore: 0,
 			roundScore: 0,
 			score:  0,
 		},
@@ -242,7 +242,7 @@ const roomStateTest = {
 			selecting: true,
 			color: 'orange',
 			matchTime: 0,
-			turnScore: 100,
+			turnScore: 200,
 			roundScore: 0,
 			score: 100,
 		},
@@ -251,12 +251,12 @@ const roomStateTest = {
 			username: 'Username Three',
 			guess: '',
 			ready: false,
-			match: false,
+			match: true,
 			typing: false,
 			drawing: false,
 			selecting: false,
 			color: 'purple',
-			matchTime: 0,
+			matchTime: 20,
 			turnScore: 100,
 			roundScore: 0,
 			score: 100,
@@ -266,15 +266,15 @@ const roomStateTest = {
 			username: 'Username Three',
 			guess: '',
 			ready: false,
-			match: true,
+			match: false,
 			typing: false,
 			drawing: false,
 			selecting: false,
 			color: 'maroon',
-			matchTime: 3,
-			turnScore: 100,
+			matchTime: 0,
+			turnScore: -50,
 			roundScore: 0,
-			score: 100,
+			score: 300,
 		},
 	},
 }
@@ -283,16 +283,14 @@ export function testRoomState() {
 	
 	onUpdateRoom(roomStateTest, true)
 
-	// actions
-	// setTimeout(() => {
-	// 	roomState.usersState.one.match = true
-	// }, 3000)
-	// setTimeout(() => {
-	// 	roomState.usersState.for.match = true
-	// }, 3000)
-	// setTimeout(() => {
-	// 	roomState.gameState.event = 'turn_start'
-	// }, 3000)
+
+	// setInterval(() => {
+	// 	roomState.usersState.one.guess += '1'
+	// }, 10000)
+
+	setTimeout(() => {
+		roomState.gameState.event = 'turn_start'
+	}, 5000)
 }
 
 export function setInactive() {

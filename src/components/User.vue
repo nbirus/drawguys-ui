@@ -13,6 +13,7 @@ export default {
 		ready: Boolean,
 		match: Boolean,
 		selecting: Boolean,
+		showPlace: Boolean,
 		typing: Boolean,
 		drawing: Boolean,
 		small: Boolean,
@@ -28,6 +29,27 @@ export default {
 	setup(props) {
 		let event = ref('')
 		let roomEvent = computed(() => roomState.gameState.event)
+		let roundOver = computed(
+			() => roomEvent.value === 'turn_end' && props.turnScore !== 0
+		)
+		let showPopout = computed(() => roundOver.value || props.match)
+		let showEvent = computed(() => event.value)
+		let userClass = computed(() => [
+			props.color,
+			event.value,
+			{
+				ready: props.ready,
+				match: props.match,
+				typing: props.typing,
+				drawing: props.drawing || props.selecting,
+				roundOver: roundOver.value,
+				pos: props.turnScore > 0,
+				neg: props.turnScore < 0,
+				clickable: props.changeColor,
+				small: props.small,
+				large: props.large,
+			},
+		])
 
 		watch(
 			[
@@ -37,57 +59,46 @@ export default {
 				() => props.guess,
 				() => props.score,
 			],
-			([drawing, selecting, match, guess]) => {
-				if (selecting) {
-					event.value = 'selecting'
+			([drawing, selecting, guess], [, , prevGuess]) => {
+				if (guess && prevGuess && guess !== prevGuess) {
+					setEvent('guess')
+				} else if (selecting) {
+					setEvent('selecting')
 				} else if (drawing) {
-					event.value = 'drawing'
-				} else if (match) {
-					event.value = 'match'
-				} else if (guess) {
-					event.value = ''
-					nextTick(() => {
-						event.value = 'guess'
-					})
-				} else {
-					event.value = ''
+					setEvent('drawing')
 				}
 			},
 			{
 				immediate: true,
 			}
 		)
-		watch(
-			() => roomEvent.value,
-			() => {
-				setTimeout(() => {
-					if (roomEvent.value === 'turn_end' && event.value !== 'match') {
-						event.value = 'turn-end'
-					}
-				}, 100)
-			}
-		)
 
-		let userClass = computed(() => [
-			props.color,
-			event.value,
-			{
-				ready: props.ready,
-				match: props.match,
-				typing: props.typing,
-				drawing: props.drawing || props.selecting,
-				clickable: props.changeColor,
-				small: props.small,
-				large: props.large,
-			},
-		])
+		let eventTimeout = null
+		function setEvent(eventName) {
+			event.value = ''
+			nextTick(() => {
+				event.value = eventName
+			})
+
+			if (eventTimeout) {
+				clearTimeout(eventTimeout)
+				eventTimeout = null
+			}
+
+			eventTimeout = setTimeout(() => {
+				event.value = ''
+			}, 3000)
+		}
 
 		return {
 			userState,
 			userClass,
 			nextColor,
 			event,
+			roundOver,
 			roomEvent,
+			showPopout,
+			showEvent,
 		}
 	},
 }
@@ -98,7 +109,11 @@ export default {
 		<!-- icon -->
 		<div class="user__icon icon-banner">
 			<div class="icon-banner__inner">
-				<i v-if="ready || match" class="ri-check-fill"></i>
+				<i
+					v-if="roundOver"
+					:class="`ri-${turnScore > 0 ? 'check' : 'forbid'}-line`"
+				></i>
+				<i v-else-if="ready || match" class="ri-check-fill"></i>
 				<i v-else-if="drawing || selecting" class="ri-pencil-fill"></i>
 			</div>
 		</div>
@@ -111,68 +126,61 @@ export default {
 		<!-- score -->
 		<div class="user__score" v-if="!hideScore" v-text="score"></div>
 
-		<!-- match -->
-		<!-- <transition name="user-typing" mode="out-in">
-			<div v-if="match" class="user__popout match">
-				<div class="user__popout-content">
-					<div class="user__popout-icon">
-						<i class="ri-timer-line"></i>
-					</div>
-					{{ matchTime }}s
-				</div>
-			</div>
-			<div class="user__popout typing" v-else-if="typing">
-				<div></div>
-				<div></div>
-				<div></div>
-			</div>
-		</transition> -->
+		<!-- placement -->
+		<div class="user__place" v-if="showPlace"></div>
 
-		<!-- event -->
-		<div
-			v-if="event && false"
-			class="user__popout event"
-			:class="[event, turnScore >= 0 ? 'pos' : 'neg']"
-			:key="event"
-		>
-			<!-- round end -->
-			<div class="user__popout-content" v-if="event === 'turn-end'">
+		<!-- popout -->
+		<div v-if="showPopout">
+			<!-- turn over -->
+			<div
+				class="user__popout turn-end"
+				v-if="roomEvent === 'turn_end'"
+				:class="turnScore > 0 ? 'pos' : 'neg'"
+			>
 				<div class="user__popout-icon">
-					<i :class="`ri-${turnScore >= 0 ? 'add' : 'subtract'}-line`"></i>
+					<i :class="`ri-${turnScore > 0 ? 'add' : 'subtract'}-line`"></i>
 				</div>
-				{{ Math.abs(turnScore) }}
+				<div class="user__popout-text">
+					<b>{{ Math.abs(turnScore) }}</b>
+				</div>
 			</div>
 
-			<!-- drawing -->
-			<div class="user__popout-content" v-if="event === 'drawing'">
+			<!-- turn in progress -->
+			<div class="user__popout match" v-else>
 				<div class="user__popout-icon">
-					<i class="ri-pencil-fill"></i>
+					<i class="ri-timer-line"></i>
 				</div>
-				Drawing
+				<div class="user__popout-text">{{ matchTime }}s</div>
+			</div>
+		</div>
+
+		<!-- event popout -->
+		<div v-else-if="showEvent">
+			<div class="user__popout guess" v-if="event === 'guess' && guess">
+				<div class="user__popout-icon">
+					<i class="ri-forbid-line"></i>
+				</div>
+				<div class="user__popout-text">
+					<b v-text="guess"></b>
+				</div>
 			</div>
 
-			<!-- with points -->
-			<div class="user__popout-content" v-if="event === 'drawing-points'">
+			<div class="user__popout selecting" v-else-if="event === 'selecting'">
 				<div class="user__popout-icon">
-					<i :class="`ri-${turnScore > 0 ? 'pencil' : 'subtract'}-fill`"></i>
+					<i class="ri-route-line"></i>
 				</div>
-				{{ Math.abs(turnScore) }}
+				<div class="user__popout-text">
+					Selecting word...
+				</div>
 			</div>
 
-			<!-- selecting -->
-			<div class="user__popout-content" v-if="event === 'selecting'">
+			<div class="user__popout selecting" v-else-if="event === 'drawing'">
 				<div class="user__popout-icon">
-					<i class="ri-route-fill"></i>
+					<i class="ri-pencil-line"></i>
 				</div>
-				Selecting word...
-			</div>
-
-			<!-- guessed -->
-			<div class="user__popout-content" v-if="event === 'guess'">
-				<div class="user__popout-icon">
-					<i class="ri-close-line"></i>
+				<div class="user__popout-text">
+					Drawing
 				</div>
-				{{ guess }}
 			</div>
 		</div>
 	</div>
@@ -199,7 +207,6 @@ export default {
 		right: 0;
 		bottom: 0;
 		left: 0;
-		box-shadow: inset 0 0 0 0 $black;
 		border-radius: $border-radius;
 		pointer-events: none;
 		transition: 0.2s ease;
@@ -216,7 +223,7 @@ export default {
 	&__username {
 		flex: 0 1 100%;
 		text-align: center;
-		font-size: 1rem;
+		font-size: 0.9rem;
 		color: white;
 		font-weight: $bold;
 		display: flex;
@@ -244,16 +251,16 @@ export default {
 		position: absolute;
 		top: 1rem;
 		font-size: 0.8rem;
-		left: calc(100% + 0.5rem);
+		left: calc(100% + 0.35rem);
 		background-color: white;
 		box-shadow: $box-shadow;
 		border-radius: 25px;
 		white-space: nowrap;
 		overflow: hidden;
+		z-index: 99;
 
 		display: flex;
 		align-items: center;
-		padding: 0.3rem 0.75rem 0.35rem 0.35rem;
 
 		&-content {
 			display: flex;
@@ -265,25 +272,30 @@ export default {
 		&-icon {
 			height: 1.25rem;
 			width: 1.25rem;
-			border-radius: 50%;
-			background-color: fade-out(white, 0.85);
+			border-radius: 50% 0 0 50%;
+			background-color: fade-out(black, 0.85);
 			margin-right: 0.35rem;
+			padding: 0.25rem 0.15rem 0.25rem 0.25rem;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 			color: white;
-			font-size: 0.8rem;
+			font-size: 1rem;
+		}
+		&-text {
+			margin-right: 0.75rem;
+			color: white;
 		}
 
-		&.event {
-			opacity: 0;
-			animation: event 3s ease;
-		}
-		&.match {
-			@include stripe-sm($green, darken($green, 2));
-		}
 		&.selecting {
 			background-color: $black;
+
+			.user__popout-icon {
+				background-color: fade-out(white, 0.85);
+			}
+		}
+		&.match {
+			background-color: $green;
 		}
 		&.drawing {
 			background-color: $black;
@@ -334,9 +346,8 @@ export default {
 	@each $color, $name in $colors {
 		&.#{$name} {
 			background-color: $color;
-
 			.user__score {
-				background-color: darken($color, 10);
+				background-color: darken($color, 15);
 			}
 
 			// mods
@@ -354,8 +365,14 @@ export default {
 					}
 				}
 			}
-			&.ready {
-				@include stripe(darken($color, 0), darken($color, 4));
+			&.ready,
+			&.drawing {
+				@include stripe($color, lighten($color, 5));
+
+				.user__score {
+					@include stripe-sm(darken($color, 12), darken($color, 13));
+					animation: barberpole 15s linear infinite;
+				}
 			}
 		}
 	}
@@ -367,52 +384,52 @@ export default {
 			0 2px 4px -5px rgba(0, 0, 0, 0.025);
 		.user {
 			&__username {
-				font-size: 0.9rem;
+				font-size: 0.85rem;
 			}
 		}
 	}
+	&.roundOver.pos,
 	&.ready,
 	&.match {
 		&:after {
-			box-shadow: inset 0 0 0 4px darken($green, 5);
+			box-shadow: inset 0 0 0 4px $green;
 		}
 		.user__icon {
-			background-color: darken($green, 5);
+			background-color: $green;
 
 			.icon-banner__inner {
-				background-color: darken($green, 10);
+				border-top-left-radius: 3px;
+				background-color: darken($green, 3);
 			}
 		}
 	}
-	&.match {
-		transform: scale(1.05);
+	&.roundOver.neg {
+		&:after {
+			box-shadow: inset 0 0 0 4px $red;
+		}
+		.user__icon {
+			background-color: $red;
+
+			.icon-banner__inner {
+				border-top-left-radius: 3px;
+				// background-color: darken($red, 8);
+			}
+		}
 	}
-	&.round_end {
-		// &:after {
-		// 	box-shadow: inset 0 0 0 4px $red;
-		// }
-		// &.positive:after {
-		// 	box-shadow: inset 0 0 0 4px $green;
-		// }
+	&.round_end,
+	&.turn_end {
+		&:after {
+			box-shadow: inset 0 0 0 4px $green;
+		}
 	}
 	&.drawing {
-		transform: scale(1.05);
-
-		&:after {
-			box-shadow: inset 0 0 0 4px $black;
-		}
 		.user__icon {
-			background-color: $black;
-
-			.icon-banner__inner {
-				background-color: lighten($black, 15);
-			}
+			background-color: fade-out($black, 0.75);
 		}
 	}
 	&.clickable:not(.ready) {
 		cursor: pointer;
 		pointer-events: auto;
-
 		&:hover {
 			transform: scale(1.05);
 			box-shadow: 0 10px 15px -5px rgba(0, 0, 0, 0.25),
@@ -421,16 +438,6 @@ export default {
 		&:active {
 			transform: scale(1.025);
 		}
-	}
-	&.guess,
-	&.match {
-		animation: shake 0.75s ease;
-	}
-	&.guess:after {
-		animation: guess 0.75s ease;
-	}
-	&.match:after {
-		animation: match 0.75s ease;
 	}
 }
 

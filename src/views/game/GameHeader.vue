@@ -1,43 +1,3 @@
-<template>
-	<div
-		class="game-header card"
-		:class="{
-			match: active,
-			round: roundOver,
-			[`bg-${turnUser.color} pre`]: roundStart,
-		}"
-	>
-		<div class="game-header__text">
-			<div class="avatar">
-				<i :class="`ri-${active ? 'check' : 'close'}-fill`"></i>
-			</div>
-			<div class="text">
-				<div class="round-start" v-if="roundStart">
-					<b v-text="turnUser.username"></b>
-					is selecting a word to draw...
-				</div>
-				<div v-if="roundOver">
-					<div>
-						<b v-text="playersGuessed"></b>
-						<span
-							>&nbsp;{{ playersGuessed === 0 ? 'players' : 'player' }} guessed
-							the word</span
-						>
-						<b v-text="word"></b>
-					</div>
-				</div>
-				<div v-else-if="match">
-					<span>You guessed the word</span>
-					<b v-text="word"></b>
-					<span>&nbsp;in</span>
-					<b v-text="matchTime"></b>
-					<span>&nbsp;seconds</span>
-				</div>
-			</div>
-		</div>
-	</div>
-</template>
-
 <script>
 import { roomState } from '@/services/Room'
 import { computed } from 'vue'
@@ -75,6 +35,49 @@ export default {
 }
 </script>
 
+<template>
+	<div
+		class="game-header card"
+		:class="{
+			match: active,
+			round: roundOver,
+			[`bg-${turnUser.color} pre`]: roundStart,
+		}"
+	>
+		<div class="game-header__text">
+			<div class="avatar pre" v-if="roundStart">
+				<i class="ri-pencil-fill"></i>
+			</div>
+			<div class="avatar" v-else>
+				<i :class="`ri-${active ? 'check' : 'forbid'}-line`"></i>
+			</div>
+			<div class="text">
+				<div class="round-start" v-if="roundStart">
+					<b v-text="turnUser.username"></b>
+					is selecting a word...
+				</div>
+				<div v-if="roundOver">
+					<div>
+						<b v-text="playersGuessed"></b>
+						<span
+							>&nbsp;{{ playersGuessed === 0 ? 'players' : 'player' }} guessed
+							the word</span
+						>
+						<b v-text="word"></b>
+					</div>
+				</div>
+				<div v-else-if="match">
+					<span>You guessed the word</span>
+					<b v-text="word"></b>
+					<span>&nbsp;in</span>
+					<b v-text="matchTime"></b>
+					<span>&nbsp;seconds</span>
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
+
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
 .game-header {
@@ -97,6 +100,15 @@ export default {
 		left: -1px;
 		border-radius: $border-radius;
 		transition: box-shadow 0.2s ease;
+	}
+	&.pre {
+		border: none;
+
+		.avatar {
+			background-color: fade-out(white, 0.8);
+			color: white;
+			font-size: 1rem;
+		}
 	}
 	&:not(.round):after {
 		box-shadow: inset 0 0 1px 3px $red;
@@ -123,7 +135,7 @@ export default {
 
 		span {
 			margin-right: 0.35rem;
-			font-size: 1.2rem;
+			font-size: 1.1rem;
 		}
 		b {
 			font-size: 1.3rem;

@@ -58,7 +58,6 @@ export default {
 @import '@/styles/component.scss';
 
 .drawing {
-	border-radius: $border-radius;
 	height: 100%;
 	width: 100%;
 

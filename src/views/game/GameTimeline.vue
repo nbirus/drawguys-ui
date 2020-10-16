@@ -145,8 +145,8 @@ export default {
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
 .game-timeline {
-	padding: 0.75rem 0.75rem 1.5rem;
-	width: 650px;
+	padding: 0.5rem 0.5rem 1.25rem;
+	width: 695px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -192,6 +192,7 @@ export default {
 			align-items: center;
 			justify-content: center;
 			position: relative;
+			border-right: solid thin fade-out(black, 0.9);
 
 			&.active,
 			&.match {
@@ -295,7 +296,7 @@ export default {
 		grid-auto-rows: auto;
 		// align-items: stretch;
 		align-content: end;
-		grid-gap: 0.25rem;
+		grid-gap: 0.35rem 0.15rem;
 
 		&-user {
 			display: flex;
@@ -305,6 +306,27 @@ export default {
 			grid-column-start: 1;
 			grid-row-start: 1;
 			border: solid 3px $green;
+
+			.icon {
+				padding: 0.4rem 0.25rem 0.4rem 0.3rem;
+				background-color: fade-out(black, 0.75);
+				border-radius: $border-radius 0 0 $border-radius;
+				color: white;
+				flex: 0 0 auto;
+				font-size: 0.7rem;
+
+				i {
+					font-size: 0.8rem;
+				}
+			}
+			.text {
+				flex: 0 0 auto;
+				padding: 0.35rem;
+				padding-right: 0.45rem;
+				font-size: 0.7rem;
+				color: white;
+				text-align: center;
+			}
 
 			&.grid-1 {
 				grid-column: 1;
@@ -339,27 +361,6 @@ export default {
 			}
 			&.grid-row-6 {
 				grid-row: 6;
-			}
-
-			.icon {
-				padding: 0.45rem 0.35rem;
-				background-color: fade-out(black, 0.75);
-				border-radius: $border-radius 0 0 $border-radius;
-				color: white;
-				flex: 0 0 auto;
-				font-size: 0.75rem;
-
-				i {
-					font-size: 0.8rem;
-				}
-			}
-			.text {
-				flex: 0 0 auto;
-				padding: 0.35rem;
-				padding-right: 0.45rem;
-				font-size: 0.7rem;
-				color: white;
-				text-align: center;
 			}
 		}
 	}

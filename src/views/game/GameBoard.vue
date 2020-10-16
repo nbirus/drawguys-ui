@@ -78,8 +78,8 @@ export default {
 						appear
 					>
 						<!-- timer -->
-						<game-header v-if="showHeader" />
-						<game-timer v-else-if="showTimer" />
+						<game-header key="header" v-if="showHeader" />
+						<game-timer key="timer" v-else-if="showTimer" />
 					</transition-group>
 				</div>
 				<div class="board__card-body card">
@@ -98,13 +98,16 @@ export default {
 						appear
 					>
 						<!-- game-timline -->
-						<game-timeline v-if="showTimeline" />
+						<game-timeline key="timeline" v-if="showTimeline" />
 
 						<!-- draw form -->
-						<game-draw-form v-else-if="roomState.userState.drawing" />
+						<game-draw-form
+							key="draw"
+							v-else-if="roomState.userState.drawing"
+						/>
 
 						<!-- game form -->
-						<game-form v-else />
+						<game-form key="form" v-else />
 					</transition-group>
 				</div>
 			</div>

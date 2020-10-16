@@ -13,7 +13,7 @@
     "progressbar.js": "^1.1.0",
     "remixicon": "^2.5.0",
     "socket.io-client": "^2.3.0",
-    "vue": "^3.0.0-0",
+    "vue": "^3.0.1",
     "vue-router": "^4.0.0-0"
   },
   "devDependencies": {

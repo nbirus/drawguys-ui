@@ -152,6 +152,8 @@ export default {
 	align-items: center;
 	justify-content: center;
 	pointer-events: none;
+	border-radius: $border-radius;
+	overflow: hidden;
 
 	&.fixed {
 		position: fixed;
