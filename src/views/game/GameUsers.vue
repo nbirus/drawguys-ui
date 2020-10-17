@@ -10,7 +10,7 @@
 		</li>
 		<li
 			class="game-users__user invite"
-			v-if="users.length > 3 && users.length < 8"
+			v-if="users.length > 3 && users.length < 6"
 		>
 			<button @click="$emit('share')" :disabled="ready">
 				<i class="ri-user-add-fill"></i>

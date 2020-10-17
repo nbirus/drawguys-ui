@@ -6,7 +6,7 @@ export default {
 	name: 'game-timeline',
 	data() {
 		return {
-			scores: ['-50', '+50', '+100', '+200', '+300'],
+			scores: ['Loser', '+50', '+100', '+200', '+300'],
 			times: ['', '0s', '5s', '10s', '20s'],
 		}
 	},
@@ -311,6 +311,7 @@ export default {
 		grid-template-columns: repeat(5, 1fr);
 		grid-auto-rows: auto;
 		// align-items: stretch;
+		justify-content: center;
 		align-content: end;
 		grid-gap: 0.35rem 0.15rem;
 
@@ -349,6 +350,7 @@ export default {
 				border: solid 3px $red;
 
 				.text {
+					padding-right: 0rem;
 					text-align: center;
 				}
 			}
