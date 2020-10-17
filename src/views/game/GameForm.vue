@@ -1,6 +1,6 @@
 <script>
 import { roomState, setTyping, roomGuess } from '@/services/Room'
-import { computed, nextTick, onBeforeUnmount, ref, watch } from 'vue'
+import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 export default {
 	name: 'game-form',
 	inheritAttrs: false,
@@ -15,6 +15,12 @@ export default {
 		let color = computed(() =>
 			match.value ? 'green' : roomState.gameState.turnUser.color
 		)
+
+		onMounted(() => {
+			nextTick(() => {
+				input.value.focus()
+			})
+		})
 
 		let timerWarning = computed(
 			() =>
