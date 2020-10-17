@@ -30,7 +30,9 @@ export default {
 		User,
 	},
 	setup() {
-		let users = computed(() => Object.values(roomState.usersState))
+		let users = computed(() =>
+			Object.values(roomState.usersState).sort((a, b) => b.score - a.score)
+		)
 		return {
 			users,
 			roomState,
