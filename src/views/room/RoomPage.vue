@@ -1,5 +1,8 @@
 <template>
-	<div class="page page--limit page--center room" v-if="roomState.roomid">
+	<div
+		class="page page--limit page--center room"
+		v-if="roomState.roomid && !hidePage"
+	>
 		<!-- countdown -->
 		<!-- <room-countdown v-if="roomState.timerActive" /> -->
 
@@ -26,6 +29,10 @@
 
 		<!-- share modal -->
 		<room-share-modal v-model:open="showModalOpen" />
+
+		<div class="room__username-link">
+			<router-link to="/">Leave Game</router-link>
+		</div>
 	</div>
 </template>
 
@@ -52,12 +59,17 @@ export default {
 		let showModalOpen = ref(false)
 		let currentRoute = router.currentRoute.value
 		let roomid = currentRoute.params.id
+		let hidePage = ref(false)
 
 		watch(
 			roomState,
 			() => {
 				if (roomState.gameState.active) {
 					router.push(`/${roomid}/g`)
+				}
+				if (roomState.timerActive) {
+					console.log(roomState.timer)
+					hidePage = roomState.timer === 0
 				}
 			},
 			{
@@ -66,6 +78,7 @@ export default {
 		)
 
 		return {
+			hidePage,
 			roomState,
 			showModalOpen,
 			ready: computed(() => roomState.userState.ready),
@@ -138,20 +151,15 @@ export default {
 		border-left: solid thin $border-color;
 		background-color: lighten($light, 1);
 	}
-}
+	&__username-link {
+		position: fixed;
+		bottom: 1rem;
+		left: 1rem;
+		font-size: 1.1rem;
 
-@keyframes bounce {
-	0% {
-		transform: scale(1);
-	}
-	20% {
-		transform: scale(0.995);
-	}
-	45% {
-		transform: scale(1);
-	}
-	100% {
-		transform: scale(1);
+		&.right {
+			left: 8rem;
+		}
 	}
 }
 </style>

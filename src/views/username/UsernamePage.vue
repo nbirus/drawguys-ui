@@ -60,6 +60,7 @@ export default {
 .page {
 	justify-content: flex-start;
 	position: relative;
+	padding: 0;
 
 	h1 {
 		margin-top: 15rem;

@@ -1,7 +1,9 @@
 <template>
-	<router-view v-if="socketState.connected || $route.name === 'game-test'" />
-	<socket-loading v-else-if="socketState.loading" />
-	<socket-error v-else-if="socketState.error" />
+	<transition name="page" mode="out-in" appear>
+		<router-view v-if="socketState.connected || $route.name === 'game-test'" />
+		<socket-loading v-else-if="socketState.loading" />
+		<socket-error v-else-if="socketState.error" />
+	</transition>
 </template>
 
 <script>

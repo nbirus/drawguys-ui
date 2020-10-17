@@ -46,8 +46,11 @@ button {
 		@include stripe(fade-out($green, 0.95), fade-out($green, 0.85));
 		pointer-events: auto;
 
+		&:hover span {
+			transform: scale(1.025);
+		}
+
 		> span {
-			animation: bounce 1s infinite linear;
 			color: white;
 			z-index: 2;
 			position: absolute;
@@ -56,6 +59,7 @@ button {
 			bottom: 0px;
 			left: 0px;
 			pointer-events: none;
+			transition: transform 0.2s ease;
 
 			> span {
 				background-color: fade-out(darken($green, 35), 0.5);
@@ -80,20 +84,20 @@ button {
 	}
 }
 
-@keyframes bounce {
-	0% {
-		transform: scale(1);
-	}
-	20% {
-		transform: scale(1.1);
-	}
-	45% {
-		transform: scale(1);
-	}
-	100% {
-		transform: scale(1);
-	}
-}
+// @keyframes bounce {
+// 	0% {
+// 		transform: scale(1);
+// 	}
+// 	15% {
+// 		transform: scale(1.2);
+// 	}
+// 	25% {
+// 		transform: scale(1);
+// 	}
+// 	100% {
+// 		transform: scale(1);
+// 	}
+// }
 @keyframes after {
 	0% {
 		width: 100%;

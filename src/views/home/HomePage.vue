@@ -1,5 +1,5 @@
 <template>
-	<div class="page page--limit-sm page--center home">
+	<div class="page page--limit-sm page--center home" v-if="!hidePage">
 		<!-- title -->
 		<transition name="pop-up" mode="out-in" appear>
 			<h1 class="home__title mb-6">Create or join a room</h1>
@@ -25,7 +25,7 @@
 		</transition>
 
 		<!-- room list -->
-		<home-page-rooms class="home__room-list" />
+		<home-page-rooms class="home__room-list" @open="onClick" />
 
 		<div class="home__username-link">
 			<router-link to="/username">Choose another username</router-link>
@@ -38,6 +38,7 @@ import HomePageRooms from './HomePageRooms'
 import FormCard from '@/components/FormCard'
 import { createRoom, getRooms, setInactive } from '@/services/Room'
 import { userState } from '@/services/User'
+import { ref } from 'vue'
 
 export default {
 	name: 'home-page',
@@ -46,11 +47,19 @@ export default {
 		FormCard,
 	},
 	setup() {
+		let hidePage = ref(false)
 		getRooms()
 		setInactive()
+
+		function onClick() {
+			hidePage.value = true
+		}
+
 		return {
 			createRoom,
 			userState,
+			hidePage,
+			onClick,
 		}
 	},
 }

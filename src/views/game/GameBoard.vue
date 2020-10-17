@@ -101,7 +101,6 @@ export default {
 						<!-- game form -->
 						<game-form key="form" v-else />
 					</div>
-					<!-- </transition> -->
 				</div>
 			</div>
 		</transition>

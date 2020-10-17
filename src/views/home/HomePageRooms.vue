@@ -18,7 +18,7 @@
 				v-for="(room, i) in roomsEven"
 				:key="i"
 			>
-				<home-page-room v-bind="room"></home-page-room>
+				<home-page-room v-bind="room" @open="$emit('open')"></home-page-room>
 			</li>
 		</transition-group>
 		<transition-group
@@ -34,7 +34,7 @@
 				v-for="(room, i) in roomsOdd"
 				:key="i"
 			>
-				<home-page-room v-bind="room"></home-page-room>
+				<home-page-room v-bind="room" @open="$emit('open')"></home-page-room>
 			</li>
 		</transition-group>
 	</div>

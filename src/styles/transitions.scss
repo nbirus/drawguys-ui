@@ -1,4 +1,19 @@
 // page
+.page-enter-active,
+.page-leave-active {
+	transition: 0.5s ease;
+	transition-property: opacity, transform;
+}
+.page-enter-from {
+	opacity: 0;
+	transform: translateY(50px);
+}
+.page-leave-to {
+	opacity: 0;
+	transform: translateY(-50px);
+}
+
+// page
 .pop-up-enter-active,
 .pop-up-leave-active {
 	transition: 0.5s ease;

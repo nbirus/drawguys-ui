@@ -7,11 +7,11 @@
 		@mouseover="hover = true"
 		@mouseout="hover = false"
 	>
-		<div class="room__header">
+		<div class="room__header" @click.self="$emit('open')">
 			<h3 v-text="roomname"></h3>
 			<!-- <div class="pill" v-text="`${userList.length}/8`"></div> -->
 		</div>
-		<ul class="room__users">
+		<ul class="room__users" @click.self="$emit('open')">
 			<li class="room__users-user" v-for="user of userList" :key="user.userid">
 				<user small v-bind="user" />
 			</li>
