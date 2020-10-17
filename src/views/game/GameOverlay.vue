@@ -23,35 +23,7 @@ export default {
 			() =>
 				Object.values(roomState.usersState).filter(user => user.match).length
 		)
-		let words = ref([])
 		let hasSelected = false
-
-		watch(
-			() => event.value,
-			() => {
-				// set typing to false and reset guess
-				setTyping(false)
-
-				// get new words
-				if (event.value === 'pre_turn') {
-					words.value = getWords()
-				}
-
-				// set default if no selection made
-				if (
-					roomState.userState.drawing &&
-					event.value === 'turn_start' &&
-					!hasSelected
-				) {
-					let word = getWords()[0]
-					console.log('word', word)
-					setWord(word)
-				}
-			},
-			{
-				immediate: true,
-			}
-		)
 
 		function selectWord(word) {
 			hasSelected = true
@@ -68,7 +40,6 @@ export default {
 			roomState,
 			gameState,
 			user,
-			words,
 			setWord,
 			playersGuessed,
 			fixed,
@@ -88,7 +59,11 @@ export default {
 				<div v-if="user.selecting" class="selecting">
 					<h3>Select a word to draw...</h3>
 					<ul class="selecting__words">
-						<li class="selecting__words-word" v-for="word in words" :key="word">
+						<li
+							class="selecting__words-word"
+							v-for="word in roomState.gameState.words"
+							:key="word"
+						>
 							<button @click="selectWord(word)" v-text="word"></button>
 						</li>
 					</ul>

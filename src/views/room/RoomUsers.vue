@@ -1,5 +1,5 @@
 <template>
-	<ul class="room-users">
+	<transition-group tag="ul" name="list" class="room-users" appear>
 		<li class="room-users__user" v-for="user of users" :key="user.userid">
 			<user
 				v-bind="user"
@@ -13,7 +13,7 @@
 				<i class="ri-user-add-fill"></i>
 			</button>
 		</li>
-	</ul>
+	</transition-group>
 </template>
 
 <script>
@@ -33,12 +33,11 @@ export default {
 			userState,
 			users,
 			userEmpty: computed(() => {
-				// users.value.length > 6 ? 0 : 6 - users.value.length
 				if (users.value.length === 1) {
 					return 3
 				} else if (users.value.length === 2) {
 					return 2
-				} else if (users.value.length < 6) {
+				} else if (users.value.length < 8) {
 					return 1
 				}
 			}),

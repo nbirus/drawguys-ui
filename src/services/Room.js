@@ -7,7 +7,7 @@ import router from '@/router'
 const LOG = true
 
 export const rooms = ref([])
-export const roomState = reactive({
+export let roomState = reactive({
 	roomid: '',
 	roomname: '',
 	timer: 3,
@@ -18,8 +18,9 @@ export const roomState = reactive({
 		active: false,
 		timer: 0,
 		turnUser: {},
-		roundWord: '',
 		round: 1,
+		word: '',
+		words: [],
 		usedWords: [],
 		numberOfRounds: 5,
 		playersGuessed: 0,
@@ -110,12 +111,16 @@ export function setWord(word) {
 		socket.emit('word', word)
 	}
 }
-export function getWords() {
-	let selectedWords = []
-	for(let i = 0; i < 3; i++) {
-		selectedWords.push(getWord())
+export function setWordDefault(word) {
+	if (socket && userState.roomid) {
+		socket.emit('word_default', word)
 	}
-	return selectedWords
+}
+export function getWords() {
+	roomState.gameState.words = []
+	for(let i = 0; i < 3; i++) {
+		roomState.gameState.words.push(getWord())
+	}
 }
 function getWord() {
 	let wordFound = false
@@ -138,10 +143,19 @@ function onUpdateRooms(newRooms) {
 }
 function onUpdateRoom(newRoom, test = false) {
 	Object.keys(roomState).forEach(key => {
-		roomState[key] = newRoom[key]
+		if (key) {
+			if (key === 'gameState') {
+				roomState.gameState = merge(roomState.gameState, newRoom.gameState)
+			}
+			else {
+				roomState[key] = newRoom[key]
+			}
+
+		}
 	})
+
 	// update current user
-	roomState.userState = newRoom.usersState[test ? 'one' : userState.userid]
+	roomState.userState = roomState.usersState[test ? 'one' : userState.userid]
 	roomState.gameState.playersGuessed = Object.values(newRoom.usersState).filter(u => u.match).length
 }
 function onJoinRoom(roomid) {
@@ -162,6 +176,20 @@ socket.on('update_room', onUpdateRoom)
 socket.on('join_room_error', onJoinRoomError)
 socket.on('join_room', onJoinRoom)
 
+// watchers
+watch(() => roomState.gameState.event, event => {
+	if (roomState.userState.selecting && event === 'pre_turn') {
+		getWords()
+	}
+	if (roomState.userState.selecting && event === 'turn_pre_start' && roomState.gameState.word === '') {
+		console.log(roomState.gameState.words[0]);
+		setWordDefault(roomState.gameState.words[0])
+	}
+	// console.log(roomState.gameState.word);
+	// console.log(roomState.gameState.words);
+	// console.log(roomState.userState);
+})
+
 // helpers
 function log(event) {
 	if (LOG) {
@@ -179,6 +207,16 @@ function colorTaken(colorIndex) {
 		colors.findIndex(c => c === user.color)
 	)
 	return takenIndexes.includes(colorIndex)
+}
+
+function merge(obj1, obj2) {
+	Object.keys(obj2).forEach(key => {
+		if (key !== undefined) {
+			obj1[key] = obj2[key]
+		}
+	})
+
+	return obj1
 }
 
 ////////////////////////////////////////////////
@@ -282,9 +320,6 @@ const roomStateTest = {
 export function testRoomState() {
 	
 	onUpdateRoom(roomStateTest, true)
-
-
-
 
 	// setInterval(() => {
 	// 	roomState.usersState.two.guess += '1'

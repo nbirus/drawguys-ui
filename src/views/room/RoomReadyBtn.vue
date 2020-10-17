@@ -79,7 +79,7 @@ button {
 			border-bottom-right-radius: 0;
 			@include stripe($green, darken($green, 5));
 			z-index: 1;
-			animation: after 3s linear;
+			animation: after 3.2s linear;
 		}
 	}
 }
@@ -101,6 +101,9 @@ button {
 @keyframes after {
 	0% {
 		width: 100%;
+	}
+	90% {
+		width: 0%;
 	}
 	100% {
 		width: 0%;

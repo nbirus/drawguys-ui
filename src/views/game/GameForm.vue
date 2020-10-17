@@ -111,15 +111,7 @@ export default {
 			v-model="value"
 			required
 			@focus="focus = true"
-			@blur="
-				() => {
-					setTyping(false)
-					focus = false
-				}
-			"
-			@keydown="setTyping(true)"
-			@keypress.enter="setTyping(false)"
-			@keypress.delete="setTyping(false)"
+			@blur="focus = false"
 			autocomplete="off"
 		/>
 		<transition name="form-button" mode="out-in">

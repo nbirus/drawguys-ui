@@ -20,7 +20,7 @@
 				>
 					<room-users class="room__users" @share="showModalOpen = true" />
 					<div class="room__ready">
-						<room-ready-btn />
+						<room-ready-btn v-if="!hidePage" />
 					</div>
 					<room-chat class="room__chat" />
 				</div>
@@ -68,7 +68,6 @@ export default {
 					router.push(`/${roomid}/g`)
 				}
 				if (roomState.timerActive) {
-					console.log(roomState.timer)
 					hidePage = roomState.timer === 0
 				}
 			},
