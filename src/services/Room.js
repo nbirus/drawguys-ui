@@ -286,12 +286,12 @@ const roomStateTest = {
 			username: 'Username Three',
 			guess: '',
 			ready: false,
-			match: false,
+			match: true,
 			typing: false,
 			drawing: false,
 			selecting: false,
 			color: 'purple',
-			matchTime: 0,
+			matchTime: 12,
 			turnScore: 0,
 			roundScore: 0,
 			score: 50,
@@ -308,7 +308,7 @@ export function testRoomState() {
 
 	setInterval(() => {
 		start()
-	}, 350000);
+	}, 30000);
 
 	function start() {
 
@@ -324,12 +324,12 @@ export function testRoomState() {
 			roomState.usersState.two.drawing = true
 			roomState.usersState.two.selecting = false
 			roomState.gameState.event = 'turn_start'
-		}, 1000)
-		// setTimeout(() => {
-		// 	roomState.usersState.one.match = true
-		// 	roomState.usersState.one.matchTime = 12
-		// 	roomState.gameState.playersGuessed = 1
-		// }, 15000)
+		}, 100)
+		setTimeout(() => {
+			roomState.usersState.one.match = true
+			roomState.usersState.one.matchTime = 12
+			roomState.gameState.playersGuessed = 1
+		}, 2000)
 		// setTimeout(() => {
 		// 	roomState.gameState.event = 'turn_end'
 		// }, 31000)

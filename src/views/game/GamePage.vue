@@ -4,11 +4,7 @@
 		<game-over v-if="roomState.gameState.event === 'game_end'" />
 
 		<div v-else class="game__container">
-			<div class="game__rounds">
-				<span>{{
-					`Round ${roomState.gameState.round}/${roomState.gameState.numberOfRounds}`
-				}}</span>
-			</div>
+			<div class="game__rounds"></div>
 
 			<!-- users -->
 			<game-users class="game__users" @share="showModalOpen = true" />
@@ -19,6 +15,16 @@
 
 		<!-- share modal -->
 		<room-share-modal v-model:open="showModalOpen" />
+
+		<div class="game__username-link">
+			<router-link to="/">Leave Game</router-link>
+			<span
+				class="ml-3"
+				v-text="
+					`Round ${roomState.gameState.round}/${roomState.gameState.numberOfRounds}`
+				"
+			></span>
+		</div>
 	</div>
 </template>
 
@@ -91,6 +97,12 @@ export default {
 	&__board {
 		flex: 0 1 100%;
 		width: 750px;
+	}
+	&__username-link {
+		position: fixed;
+		bottom: 1.25rem;
+		left: 1.25rem;
+		font-size: 1.1rem;
 	}
 }
 </style>

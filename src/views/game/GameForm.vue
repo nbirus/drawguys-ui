@@ -169,8 +169,9 @@ export default {
 	padding: 0.75rem 0.75rem 0.75rem 0.75rem;
 	width: 360px;
 	transition: transform 0.2s ease;
-	position: relative;
 	border: solid thin $border-color;
+	position: relative;
+
 	pointer-events: auto;
 
 	&__placeholder {
@@ -181,16 +182,12 @@ export default {
 		left: 29px;
 		display: flex;
 		align-items: center;
-		letter-spacing: 2px;
 		pointer-events: none;
 		font-size: 1.3rem;
-		font-stretch: ultra-condensed;
 	}
 
 	input {
 		flex: 0 1 100%;
-		letter-spacing: 1px;
-		font-stretch: ultra-condensed;
 
 		&::selection {
 			background: $black;
@@ -227,8 +224,13 @@ export default {
 				background-color: fade-out($color, 0.9);
 			}
 		}
+		&.focus {
+			border: solid thin $color;
+		}
+
 		&.focus .btn-#{$name} {
 			color: $color;
+
 			// box-shadow: inset 0 0 0 3px $color;
 			&:hover {
 				border-color: $color;
@@ -238,9 +240,7 @@ export default {
 
 	&.focus {
 		transform: scale(1.025);
-	}
-	&.outline-yellow {
-		box-shadow: inset 0 0 0 3px $yellow;
+		border: none;
 	}
 	&.guess {
 		animation: submit 0.2s;

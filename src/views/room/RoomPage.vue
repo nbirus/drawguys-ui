@@ -32,6 +32,7 @@
 
 		<div class="room__username-link">
 			<router-link to="/">Leave Game</router-link>
+			<router-link class="right" to="/username">Change Username</router-link>
 		</div>
 	</div>
 </template>

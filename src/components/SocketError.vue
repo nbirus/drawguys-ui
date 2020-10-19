@@ -1,7 +1,7 @@
 <template>
 	<div class="page page--center">
 		<transition name="pop-up" mode="out-in" appear>
-			<div class="avatar bg-light bg-darken mb-5">
+			<div class="avatar bg-light bg-darken-sm mb-5">
 				<i class="ri-cloud-off-line"></i>
 			</div>
 		</transition>

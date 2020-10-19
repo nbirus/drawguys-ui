@@ -5,6 +5,9 @@
 		&.bg-darken {
 			background-color: darken($color, 10);
 		}
+		&.bg-darken-sm {
+			background-color: darken($color, 3);
+		}
 		&.bg-lighten {
 			background-color: lighten($color, 10);
 		}
