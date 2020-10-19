@@ -8,11 +8,8 @@
 		>
 			<user v-bind="user" large />
 		</li>
-		<li
-			class="game-users__user invite"
-			v-if="users.length > 3 && users.length < 6"
-		>
-			<button @click="$emit('share')" :disabled="ready">
+		<li class="game-users__user invite" v-for="n of userEmpty" :key="n">
+			<button @click="$emit('share')">
 				<i class="ri-user-add-fill"></i>
 			</button>
 		</li>
@@ -30,12 +27,19 @@ export default {
 		User,
 	},
 	setup() {
-		let users = computed(() =>
-			Object.values(roomState.usersState).sort((a, b) => b.score - a.score)
-		)
+		let users = computed(() => Object.values(roomState.usersState))
 		return {
 			users,
 			roomState,
+			userEmpty: computed(() => {
+				if (users.value.length === 1) {
+					return 3
+				} else if (users.value.length === 2) {
+					return 2
+				} else if (users.value.length < 8) {
+					return 1
+				}
+			}),
 		}
 	},
 }
@@ -51,7 +55,7 @@ export default {
 		&.invite button {
 			width: 100%;
 			height: $block-height-lg;
-			background-color: darken($light, 5);
+			background-color: darken($light, 4);
 			border-radius: $border-radius;
 			color: fade-out($text-light, 0.5);
 			display: flex;
@@ -61,7 +65,7 @@ export default {
 
 			&:focus,
 			&:hover {
-				box-shadow: 0 0 0 3px darken($light, 10);
+				box-shadow: 0 0 0 3px darken($light, 6);
 				color: $text-light;
 				background: repeating-linear-gradient(
 					45deg,

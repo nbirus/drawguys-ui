@@ -1,4 +1,5 @@
 <script>
+import { socket } from '@/services/Socket'
 import { roomState, setTyping, roomGuess } from '@/services/Room'
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 export default {
@@ -9,12 +10,41 @@ export default {
 		let input = ref(null)
 		let value = ref('')
 		let focus = ref(false)
+		let fail = ref(false)
+		let correct = ref(false)
 		let submitKey = ref(0)
 		let match = computed(() => roomState.userState.match)
 		let timer = computed(() => roomState.gameState.timer)
 		let color = computed(() =>
 			match.value ? 'green' : roomState.gameState.turnUser.color
 		)
+		let focusColor = computed(() => {
+			if (correct.value) {
+				return 'green'
+			} else if (fail.value) {
+				return 'red'
+			} else if (focus.value) {
+				return color.value
+			} else return ''
+		})
+
+		socket.on('guess_result', result => {
+			if (result) {
+				onCorrect()
+			} else {
+				onFail()
+			}
+		})
+
+		function onCorrect() {
+			correct.value = true
+		}
+		function onFail() {
+			fail.value = true
+			setTimeout(() => {
+				fail.value = false
+			}, 200)
+		}
 
 		onMounted(() => {
 			nextTick(() => {
@@ -74,6 +104,15 @@ export default {
 			hidePopover()
 		})
 
+		let word = computed(() => roomState.gameState.word)
+		let placeholder = computed(() => {
+			let placeholderLines = ''
+			word.value.split('').forEach(letter => {
+				placeholderLines += letter === ' ' ? ' ' : '_'
+			})
+			return placeholderLines
+		})
+
 		return {
 			input,
 			form,
@@ -88,6 +127,9 @@ export default {
 			timer,
 			timerWarning,
 			color,
+			fail,
+			focusColor,
+			placeholder,
 		}
 	},
 }
@@ -95,19 +137,16 @@ export default {
 
 <template>
 	<form
-		class="form-card card nudge"
+		class="form-card card nudge outline"
 		ref="form"
-		:class="[
-			`outline-${timerWarning ? color : color}`,
-			{ focus, ready: focus },
-		]"
+		:class="[`outline-${focusColor}`, { fail, focus, ready: focus }]"
 		@submit.prevent="onSubmit"
 	>
 		<input
 			ref="input"
 			type="text"
 			class="lg b-none mr-2"
-			placeholder="Type to guess..."
+			placeholder="Guess word..."
 			v-model="value"
 			required
 			@focus="focus = true"
@@ -115,15 +154,8 @@ export default {
 			autocomplete="off"
 		/>
 		<transition name="form-button" mode="out-in">
-			<button
-				:class="`btn-${color}`"
-				tabindex="0"
-				v-if="value"
-				type="submit"
-				class="lg"
-			>
-				Send
-				<span v-if="timerWarning">({{ timer }})</span>
+			<button :class="`btn-${color}`" tabindex="0" type="submit" class="lg">
+				<i class="ri-send-plane-fill"></i>
 			</button>
 		</transition>
 	</form>
@@ -139,12 +171,26 @@ export default {
 	transition: transform 0.2s ease;
 	position: relative;
 	border: solid thin $border-color;
-	animation: submit 0.2s;
 	pointer-events: auto;
 
+	&__placeholder {
+		position: absolute;
+		top: 8px;
+		right: 0px;
+		bottom: 0px;
+		left: 29px;
+		display: flex;
+		align-items: center;
+		letter-spacing: 2px;
+		pointer-events: none;
+		font-size: 1.3rem;
+		font-stretch: ultra-condensed;
+	}
+
 	input {
-		flex: 0 1 auto;
-		width: 225px;
+		flex: 0 1 100%;
+		letter-spacing: 1px;
+		font-stretch: ultra-condensed;
 
 		&::selection {
 			background: $black;
@@ -159,6 +205,8 @@ export default {
 		height: 50px;
 		font-size: 1.1rem;
 		font-weight: $regular;
+		padding: 0 1rem;
+		color: $text-extra-light;
 
 		i {
 			font-size: 1.2rem;
@@ -175,12 +223,13 @@ export default {
 				color: $color !important;
 			}
 			&:hover {
+				color: $color;
 				background-color: fade-out($color, 0.9);
 			}
 		}
 		&.focus .btn-#{$name} {
-			border-color: $color;
-			box-shadow: inset 0 0 0 3px $color;
+			color: $color;
+			// box-shadow: inset 0 0 0 3px $color;
 			&:hover {
 				border-color: $color;
 			}
@@ -192,6 +241,9 @@ export default {
 	}
 	&.outline-yellow {
 		box-shadow: inset 0 0 0 3px $yellow;
+	}
+	&.guess {
+		animation: submit 0.2s;
 	}
 }
 

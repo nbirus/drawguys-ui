@@ -21,30 +21,30 @@ export default {
 		GameHeader,
 	},
 	setup() {
-		let showInfo = computed(
-			() =>
-				roomState.userState.drawing &&
-				roomState.gameState.event === 'turn_start'
-		)
+		let event = computed(() => roomState.gameState.event)
+		let drawing = computed(() => roomState.userState.drawing)
+		let selecting = computed(() => roomState.userState.selecting)
+		let match = computed(() => roomState.userState.match)
+		let showInfo = computed(() => drawing.value && event.value === 'turn_start')
 		let showFooter = computed(() =>
-			['turn_start', 'turn_end'].includes(roomState.gameState.event)
+			['turn_start', 'turn_end'].includes(event.value)
 		)
-		let showTimeline = computed(
-			() =>
-				roomState.gameState.event === 'turn_end' || roomState.userState.match
-		)
+		let showTimeline = computed(() => event.value === 'turn_end' || match.value)
+		let showWord = computed(() => event.value === 'turn_end' || match.value)
 		let showTimer = computed(
 			() =>
-				roomState.gameState.event === 'turn_start' ||
-				(roomState.gameState.event === 'pre_turn' &&
-					roomState.userState.selecting)
+				(!match.value && event.value === 'turn_start' && !drawing.value) ||
+				(event.value === 'turn_start' && drawing.value)
+		)
+		let showGameForm = computed(
+			() => !match.value && event.value === 'turn_start'
 		)
 		let showHeader = computed(
 			() =>
-				roomState.gameState.event === 'turn_end' ||
-				roomState.userState.match ||
-				(roomState.gameState.event === 'pre_turn' &&
-					!roomState.userState.selecting)
+				match.value ||
+				(['pre_turn', 'turn_pre_start'].includes(event.value) &&
+					!selecting.value) ||
+				event.value === 'turn_end'
 		)
 
 		return {
@@ -54,6 +54,8 @@ export default {
 			showTimeline,
 			showTimer,
 			showHeader,
+			showWord,
+			showGameForm,
 		}
 	},
 }
@@ -68,15 +70,18 @@ export default {
 			</div>
 		</transition>
 
+		<transition name="pop-up" appear>
+			<div class="board__word" v-if="showWord">
+				<h2>The word was <b v-text="roomState.gameState.word"></b></h2>
+			</div>
+		</transition>
+
 		<transition name="pop-up" mode="out-in" appear>
 			<div class="board__card delay-3">
 				<div class="board__card-header">
-					<div class="absolute-container">
-						<transition name="user-popup" mode="out-in" appear>
-							<!-- timer -->
-							<game-header key="header" v-if="showHeader" />
-							<game-timer key="timer" v-else-if="showTimer" />
-						</transition>
+					<div class="absolute-container" key="header">
+						<game-header v-if="showHeader" />
+						<game-timer v-else-if="showTimer" />
 					</div>
 				</div>
 				<div class="board__card-body card">
@@ -87,19 +92,19 @@ export default {
 					<game-overlay />
 				</div>
 				<div class="board__card-footer" v-show="showFooter">
-					<!-- <transition name="user-popup" mode="out-in" appear> -->
 					<div class="absolute-container">
+						<!-- <transition name="game-widget" mode="out-in" appear> -->
 						<!-- game-timline -->
-						<game-timeline key="timeline" v-if="showTimeline" />
+						<game-timeline key="timeline" :show="showTimeline" />
 
 						<!-- draw form -->
 						<game-draw-form
 							key="draw"
-							v-else-if="roomState.userState.drawing"
+							v-if="!showTimeline && roomState.userState.drawing"
 						/>
 
 						<!-- game form -->
-						<game-form key="form" v-else />
+						<game-form key="form" v-else-if="showGameForm" />
 					</div>
 				</div>
 			</div>
@@ -133,11 +138,20 @@ export default {
 			pointer-events: none;
 		}
 	}
+	&__word {
+		width: 100%;
+		text-align: center;
+		position: absolute;
+		top: -5rem;
+		pointer-events: none;
+	}
 	&__info {
 		position: absolute;
-		right: 2rem;
-		top: -2.5rem;
-		font-size: 1.2rem;
+		right: 1.5rem;
+		top: -2.25rem;
+		font-size: 1.25rem;
+		pointer-events: none;
+		user-select: none;
 	}
 }
 .absolute-container {
@@ -148,5 +162,6 @@ export default {
 	position: relative;
 	pointer-events: none;
 	margin: auto;
+	z-index: 2;
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
 	<router-link
 		ref="card"
-		class="room card outline-black"
-		:class="{ ready: hover }"
+		class="room card outline"
+		:class="{ ready: hover, 'outline-black': hover }"
 		:to="`/${roomid}`"
 		@mouseover="hover = true"
 		@mouseout="hover = false"

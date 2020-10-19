@@ -53,7 +53,7 @@ export default {
 		</button>
 
 		<!-- colors -->
-		<ul class="draw-form__colors" :class="{ disabled: eraserActive }">
+		<ul class="draw-form__colors">
 			<li
 				class="draw-form__colors-color"
 				v-for="(hex, color, i) in colorMap"
@@ -110,17 +110,17 @@ export default {
 .draw-form {
 	display: flex;
 	align-items: center;
-	padding: 0.35rem;
+	padding: 0 0.25rem 0 0.75rem;
 	position: relative;
 	border: solid thin $border-color;
-	transform: translateY(-0.5rem);
+	transform: translateY(-1rem);
 	pointer-events: auto;
 
 	&__eraser {
-		border-radius: 50%;
 		padding: 0;
-		height: 30px;
-		width: 30px;
+		height: 1.5rem;
+		width: 1.5rem;
+		border-radius: 6px;
 		padding: 0;
 		margin-left: 0.5rem;
 
@@ -137,25 +137,18 @@ export default {
 		padding: 0 0.75rem;
 		height: 40px;
 
-		&.disabled {
-			opacity: 0.5;
-			&:hover {
-				opacity: 1;
-			}
-		}
-
 		&-color {
-			height: 1.15rem;
-			width: 1.15rem;
-			border-radius: 50%;
-			transition: 0.2s ease;
+			height: 1.5rem;
+			width: 1.5rem;
+			border-radius: 3px;
+			transition: 0.1ss ease;
 			transition-property: box-shadow, transform;
 			display: flex;
 			align-items: center;
 			justify-content: center;
 
 			&:not(:last-child) {
-				margin-right: 0.4rem;
+				margin-right: 0.35rem;
 			}
 
 			&.active {
@@ -163,8 +156,8 @@ export default {
 
 				&:after {
 					content: '';
-					height: 0.25rem;
-					width: 0.25rem;
+					height: 0.35rem;
+					width: 0.35rem;
 					border-radius: 50%;
 					background-color: #fff;
 				}
@@ -181,7 +174,7 @@ export default {
 					background-color: $color;
 
 					&.active {
-						box-shadow: 0 0 0 4px fade-out($color, 0.75);
+						box-shadow: 0 0 0 3px fade-out($color, 0.75);
 					}
 				}
 			}
@@ -193,8 +186,7 @@ export default {
 		justify-content: center;
 		width: 45px;
 		height: 45px;
-		border-radius: $border-radius;
-		border: solid thin $border-color;
+		border-left: solid thin darken($border-color, 5);
 		margin-left: 0.75rem;
 
 		div {
@@ -297,12 +289,16 @@ export default {
 		}
 	}
 	&__actions {
-		margin-left: 0.75rem;
-		padding-left: 1rem;
-		border-left: solid thin $border-color;
+		padding-left: 0.5rem;
+		border-left: solid thin darken($border-color, 2);
 	}
 
 	&-button {
+		background-color: transparent;
+		border-radius: 0px;
+		margin: 0;
+		padding-top: 0.25rem;
+
 		&.disabled,
 		&:disabled {
 			pointer-events: none;
@@ -311,6 +307,7 @@ export default {
 }
 
 input[type='range'] {
+	width: 80px;
 	-webkit-appearance: none;
 }
 input[type='range']:focus {

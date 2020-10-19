@@ -19,7 +19,7 @@
 					@submit="createRoom"
 				>
 					<span>Create</span>
-					<i class="ri-arrow-right-fill ml-1"></i>
+					<i class="ri-arrow-right-fill arrow ml-1"></i>
 				</form-card>
 			</div>
 		</transition>
@@ -67,6 +67,10 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
+
+.arrow {
+	text-decoration: unset !important;
+}
 
 .home {
 	justify-content: flex-start;

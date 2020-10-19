@@ -40,6 +40,21 @@
 	opacity: 0;
 }
 
+// game-widget
+.game-widget-enter-active,
+.game-widget-leave-active {
+	transition: 0.25s ease;
+	transition-property: opacity, transform;
+}
+.game-widget-enter-from {
+	opacity: 0;
+	transform: translateY(.5rem) scale(0.9) rotateX(-25deg);
+}
+.game-widget-leave-to {
+	opacity: 0;
+	transform: translateY(-.5rem) scale(0.9) rotateX(25deg);
+}
+
 // user-popup
 .user-popup-enter-active,
 .user-popup-leave-active {
@@ -48,11 +63,11 @@
 }
 .user-popup-enter-from {
 	opacity: 0;
-	transform: translateX(-18px) scale(0.75);
+	transform: translateX(-18px) scale(0.9);
 }
 .user-popup-leave-to {
 	opacity: 0;
-	transform: translateX(18px) scale(0.75);
+	transform: translateX(-18px) scale(0.9);
 }
 
 // ready-btn

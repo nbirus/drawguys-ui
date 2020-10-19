@@ -4,7 +4,7 @@
 		class="drawing"
 		:class="[
 			`size-${disabled ? '-1' : drawState.size}`,
-			{ disabled, match, warning },
+			{ disabled, match, fail },
 		]"
 	></div>
 </template>
@@ -19,24 +19,29 @@ export default {
 		Drawing()
 	},
 	setup() {
-		// let match = computed(
-		// 	() =>
-		// 		(roomState.userState.match &&
-		// 			roomState.gameState.event === 'turn_start') ||
-		// 		(roomState.userState.drawing &&
-		// 			roomState.gameState.event === 'turn_end' &&
-		// 			roomState.gameState.playersGuessed > 0)
-		// )
+		let match = computed(() => {
+			if (roomState.userState.drawing) {
+				return (
+					roomState.gameState.event === 'turn_end' &&
+					roomState.gameState.playersGuessed > 0
+				)
+			} else {
+				return roomState.userState.match
+			}
+		})
 
-		let match = computed(
-			() =>
-				roomState.userState.match && roomState.gameState.event === 'turn_start'
-		)
-		let warning = computed(
-			() =>
-				roomState.gameState.timer <= 3 &&
-				roomState.gameState.event === 'turn_start'
-		)
+		let fail = computed(() => {
+			if (roomState.userState.drawing) {
+				return (
+					roomState.gameState.event === 'turn_end' &&
+					roomState.gameState.playersGuessed === 0
+				)
+			} else {
+				return (
+					roomState.gameState.event === 'turn_end' && !roomState.userState.match
+				)
+			}
+		})
 
 		watch(
 			() => roomState.gameState.event,
@@ -49,10 +54,11 @@ export default {
 				}, 100)
 			}
 		)
+
 		return {
 			match,
-			warning,
 			drawState,
+			fail,
 			disabled: computed(
 				() =>
 					!roomState.userState.drawing ||
@@ -87,7 +93,7 @@ export default {
 	&.match:after {
 		box-shadow: inset 0 0 0 4px $green;
 	}
-	&.failed:after {
+	&.fail:after {
 		box-shadow: inset 0 0 0 4px $red;
 	}
 

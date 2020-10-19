@@ -1,8 +1,8 @@
 <template>
 	<form
-		class="form-card card outline-black nudge"
+		class="form-card card outline nudge"
 		ref="form"
-		:class="{ focus, ready: focus }"
+		:class="{ focus, 'outline-black': focus }"
 		@submit.prevent="onSubmit"
 	>
 		<div class="wave"></div>
@@ -95,6 +95,7 @@ export default {
 	transition: transform 0.2s ease;
 	overflow: hidden;
 	position: relative;
+	border: none;
 
 	input {
 		flex: 0 1 100%;
@@ -124,7 +125,13 @@ export default {
 		transform: scale(1.025);
 
 		button {
-			box-shadow: 0 0 0 2px $black;
+			span {
+				text-decoration: underline;
+			}
+			i {
+				text-decoration: unset;
+			}
+			// box-shadow: 0 0 0 3px $black;
 		}
 	}
 }

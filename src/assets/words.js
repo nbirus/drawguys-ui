@@ -505,7 +505,6 @@ export default [
 'Olympics',
 'Recycle',
 'Black hole',
-'Applause',
 'Blizzard',
 'Sunburn',
 'Time machine',

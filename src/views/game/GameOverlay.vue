@@ -1,85 +1,121 @@
 <script>
-import {
-	roomState,
-	getWords,
-	setWord,
-	setTyping,
-	roomGuess,
-} from '@/services/Room'
+import { roomState, setWord } from '@/services/Room'
 import { computed, ref, watch } from 'vue'
-import GameScoreboard from './GameScoreboard'
+import { colorMap } from '@/assets/colors'
+import ProgressBar from 'progressbar.js'
 
 export default {
 	name: 'game-overlay',
-	components: {
-		GameScoreboard,
-	},
+
 	setup() {
 		let gameState = computed(() => roomState.gameState)
-		let event = computed(() => roomState.gameState.event)
 		let turnUser = computed(() => roomState.gameState.turnUser)
 		let user = computed(() => roomState.userState)
-		let playersGuessed = computed(
-			() =>
-				Object.values(roomState.usersState).filter(user => user.match).length
-		)
-		let hasSelected = false
 
 		function selectWord(word) {
-			hasSelected = true
 			setWord(word)
 		}
 
-		let fixed = computed(() =>
-			['round_start', 'round_end', 'game_end'].includes(event.value)
+		let event = computed(() => roomState.gameState.event)
+		let selecting = computed(() => roomState.userState.selecting)
+		let show = computed(() =>
+			['pre_turn', 'turn_pre_start'].includes(event.value)
 		)
 
+		let slider = ref()
+		let bar
+
+		watch(
+			() => event.value,
+			() => {
+				if (event.value === 'turn_pre_start') {
+					animateBar(2650)
+				}
+				if (event.value === 'pre_turn' && user.value.selecting) {
+					animateBar(5000)
+				}
+			}
+		)
+
+		let interval = null
+		let turnCountDown = ref(3)
+		function animateBar(duration) {
+			if (interval) {
+				clearInterval(interval)
+			}
+			turnCountDown.value = 3
+
+			interval = setInterval(() => {
+				turnCountDown.value--
+
+				if (turnCountDown.value === 0) {
+					clearInterval(interval)
+				}
+			}, 1000)
+
+			setTimeout(() => {
+				bar = new ProgressBar.Circle(slider.value, {
+					strokeWidth: 20,
+					color: '#fff',
+					trailWidth: 12,
+					trailColor: colorMap[roomState.gameState.turnUser.color] || '#111111',
+					svgStyle: null,
+				})
+				bar.set(0)
+				bar.animate(1.0, {
+					duration,
+				})
+			}, 350)
+		}
+
 		return {
+			show,
 			event,
+			selecting,
 			turnUser,
 			roomState,
 			gameState,
 			user,
 			setWord,
-			playersGuessed,
-			fixed,
 			selectWord,
+			slider,
+			turnCountDown,
 		}
 	},
 }
 </script>
 
 <template>
-	<div class="game-overlay" :class="{ fixed }">
-		<div class="game-overlay__event" :class="event">
-			<!-- when turn starts -->
-			<div v-if="event === 'pre_turn'">
-				<!-- if it's your turn -->
-
-				<div v-if="user.selecting" class="selecting">
-					<h3>Select a word to draw...</h3>
-					<ul class="selecting__words">
-						<li
-							class="selecting__words-word"
-							v-for="word in roomState.gameState.words"
-							:key="word"
-						>
-							<button @click="selectWord(word)" v-text="word"></button>
+	<div class="game-overlay" v-if="show">
+		<transition name="game-widget" mode="out-in" appear>
+			<div class="game-overlay__event" :key="event" v-if="selecting">
+				<div class="slider" ref="slider"></div>
+				<!-- pre turn -->
+				<div class="game-overlay__selecting" v-if="event === 'pre_turn'">
+					<h3>Choose a word to draw...</h3>
+					<ul>
+						<li v-for="word in roomState.gameState.words" :key="word">
+							<button
+								class="outline"
+								@click="selectWord(word)"
+								v-text="word"
+							></button>
 						</li>
 					</ul>
 				</div>
-			</div>
 
-			<!-- round ends -->
-			<div v-else-if="event === 'round_end'">
-				<transition name="pop-up" mode="out-in" appear>
-					<h1 class="mb-7">Round {{ gameState.round }} Results</h1>
-				</transition>
+				<!-- turn pre start -->
+				<div
+					class="game-overlay__countdown"
+					v-else-if="event === 'turn_pre_start'"
+				>
+					<h3>
+						You are drawing <b v-text="gameState.word"></b> in
+						<span v-text="turnCountDown"></span>...
+					</h3>
+				</div>
 			</div>
-
-			<!-- scoreboard -->
-			<game-scoreboard v-if="fixed" />
-		</div>
+		</transition>
 	</div>
 </template>
 
@@ -98,118 +134,6 @@ export default {
 	pointer-events: none;
 	border-radius: $border-radius;
 	overflow: hidden;
-	// z-index: 1;
-
-	&.fixed {
-		position: fixed;
-		background-color: white;
-		z-index: 999;
-	}
-
-	&__event {
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-direction: column;
-		position: relative;
-		width: 100%;
-		height: 100%;
-	}
-}
-
-.turn-end-banner {
-	display: flex;
-	align-items: center;
-	margin-top: 3rem;
-	height: 40px;
-
-	border-radius: $border-radius;
-	overflow: hidden;
-
-	&__score {
-		display: flex;
-		align-items: center;
-		height: 100%;
-		padding: 0 0.5rem;
-		font-size: 0.9rem;
-		background-color: darken($green, 10);
-		color: white;
-
-		&:before {
-			content: '+';
-		}
-	}
-	&__text {
-		display: flex;
-		align-items: center;
-		height: 100%;
-		padding: 0 0.75rem;
-		font-size: 0.8rem;
-		background-color: $green;
-		color: white;
-
-		b {
-			margin-left: 0.15rem;
-		}
-	}
-
-	&.negative {
-		.turn-end-banner {
-			&__score {
-				background-color: darken($red, 10);
-				&:before {
-					content: '-';
-				}
-			}
-			&__text {
-				background-color: darken($red, 1);
-			}
-		}
-	}
-}
-
-.selecting {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-
-	&__words {
-		display: flex;
-		align-items: center;
-		margin-top: 2rem;
-		pointer-events: auto;
-
-		&-word {
-			button {
-				font-size: 1.1rem;
-				padding: 0.75rem 1rem;
-				pointer-events: auto;
-			}
-			&:not(:last-child) {
-				margin-right: 1rem;
-			}
-		}
-	}
-}
-.waiting {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-	font-size: 1.1rem;
-
-	b {
-		padding: 0.5rem;
-		border-radius: $border-radius;
-		margin-right: 0.25rem;
-	}
-}
-.turn-end {
-	display: flex;
-	align-items: center;
-	flex-direction: column;
-}
-
-.pre_turn {
 	@include stripe(white, darken(white, 2));
 	position: absolute;
 	top: 0px;
@@ -232,5 +156,61 @@ export default {
 		);
 		pointer-events: none;
 	}
+
+	&__event {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+		position: relative;
+		width: 100%;
+		height: 100%;
+	}
+	&__countdown {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+
+		h1 {
+			font-size: 5rem;
+			font-weight: $bold;
+		}
+	}
+	&__selecting {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		flex-direction: column;
+
+		ul {
+			display: flex;
+			flex-direction: row;
+			margin-top: 2.5rem;
+		}
+		li:not(:last-child) {
+			margin-right: 1rem;
+		}
+		button {
+			height: 50px;
+			padding: 0 1.5rem;
+			font-size: 1.2rem;
+			pointer-events: auto;
+			// background-color: $black;
+
+			&:hover {
+				box-shadow: 0 0 0 3px $black;
+			}
+		}
+	}
+}
+
+.slider {
+	width: 24px;
+	height: 24px;
+	top: 1.5rem;
+	right: 1.5rem;
+	position: absolute;
+	z-index: 1;
 }
 </style>

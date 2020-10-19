@@ -1,83 +1,122 @@
 <script>
 import { roomState } from '@/services/Room'
-import { computed } from 'vue'
+import { computed, ref, watch } from 'vue'
+import { colorMap } from '@/assets/colors'
+import ProgressBar from 'progressbar.js'
 
 export default {
 	name: 'game-header',
 	setup() {
-		let word = computed(() => roomState.gameState.word)
-		let matchTime = computed(() => roomState.userState.matchTime)
-		let match = computed(() => roomState.userState.match && roundOver)
 		let roundOver = computed(() => roomState.gameState.event === 'turn_end')
-		let roundStart = computed(() => roomState.gameState.event === 'pre_turn')
+		let match = computed(() => roomState.userState.match && roundOver)
 		let drawing = computed(() => roomState.userState.drawing)
 		let selecting = computed(() => roomState.userState.selecting)
 		let playersGuessed = computed(() => roomState.gameState.playersGuessed)
 		let turnUser = computed(() => roomState.gameState.turnUser)
-
 		let active = computed(
 			() => match.value || (drawing.value && playersGuessed.value > 0)
+		)
+		let turnScore = computed(() => roomState.userState.turnScore)
+		let matchTime = computed(() => roomState.userState.matchTime)
+		let event = computed(() => roomState.gameState.event)
+		let activeColor = computed(() => {
+			if (
+				!drawing.value &&
+				['pre_turn', 'turn_pre_start'].includes(roomState.gameState.event)
+			) {
+				return roomState.gameState.turnUser.color
+			} else if (match.value || (drawing.value && playersGuessed.value !== 0)) {
+				return 'green'
+			} else return 'red'
+		})
+
+		let bar = null
+		let slider = ref(null)
+		let turnCountDown = ref(3)
+		watch(
+			() => event.value,
+			() => {
+				if (event.value === 'turn_pre_start') {
+					setTimeout(() => {
+						bar = new ProgressBar.Circle(slider.value, {
+							strokeWidth: 20,
+							color: '#fff',
+							trailWidth: 12,
+							trailColor:
+								colorMap[roomState.gameState.turnUser.color] || '#111111',
+							svgStyle: null,
+						})
+						bar.set(0)
+						bar.animate(1.0, {
+							duration: 3000,
+						})
+					}, 50)
+				}
+			}
 		)
 
 		return {
 			active,
-			word,
 			match,
 			matchTime,
-			roundOver,
-			roundStart,
+			turnScore,
 			drawing,
 			selecting,
 			playersGuessed,
 			turnUser,
+			activeColor,
+			event,
+			turnCountDown,
+			slider,
 		}
 	},
 }
 </script>
 
 <template>
-	<div
-		class="game-header card"
-		:class="{
-			match: active,
-			round: roundOver,
-			[`bg-${turnUser.color} pre`]: roundStart,
-		}"
-	>
-		<div class="game-header__text">
-			<div class="avatar pre" v-if="roundStart">
-				<i class="ri-pencil-fill"></i>
-			</div>
-			<div class="avatar" v-else>
-				<i :class="`ri-${active ? 'check' : 'forbid'}-line`"></i>
-			</div>
-			<div class="text">
-				<div class="round-start" v-if="roundStart">
-					<b v-text="turnUser.username"></b>
-					is selecting a word...
-				</div>
-				<div v-if="roundOver">
-					<div v-if="match || drawing">
-						<span v-text="playersGuessed"></span>
-						<span
-							>{{ playersGuessed === 0 ? 'players' : 'player' }} guessed the
-							word</span
-						>
-						<b v-text="word"></b>
-					</div>
-					<div v-else>
-						You ran out of time. The word was
-						<b v-text="word"></b>
-					</div>
-				</div>
-				<div v-else-if="match">
-					<span>You guessed the word</span>
-					<b v-text="word"></b>
-					<span>&nbsp;in</span>
-					<b v-text="matchTime"></b>
-					<span>&nbsp;seconds</span>
-				</div>
-			</div>
+	<div class="game-header card bg-striped" :class="`bg-${activeColor}`">
+		<div class="game-header__icon">
+			<span v-if="drawing || selecting">
+				<span v-if="playersGuessed !== 0"> +{{ turnScore }} </span>
+				<span v-else> -{{ turnScore }} </span>
+			</span>
+			<span v-else>
+				<span v-if="event === 'pre_turn'">
+					<i class="ri-route-line"></i>
+				</span>
+				<span v-else-if="event === 'turn_pre_start'">
+					<div class="slider" ref="slider"></div>
+				</span>
+				<span v-else-if="match">+{{ turnScore }}</span>
+				<span v-else>
+					-50
+				</span>
+			</span>
+		</div>
+		<div class="game-header__message">
+			<span v-if="drawing">
+				<span v-if="playersGuessed !== 0">
+					<b>{{ playersGuessed }}</b>
+					{{ playersGuessed === 1 ? 'player' : 'players' }} guessed the word
+				</span>
+				<span v-else>
+					0 players guessed the word
+				</span>
+			</span>
+			<span v-else>
+				<span v-if="event === 'pre_turn'">
+					<b v-text="turnUser.username"></b> is choosing a word to draw
+				</span>
+				<span v-else-if="event === 'turn_pre_start'">
+					<b v-text="turnUser.username"></b> is about to draw
+				</span>
+				<span v-else-if="match">
+					You guessed the word in <b v-text="matchTime"></b>s
+				</span>
+				<span v-else>
+					You didn't guess the word
+				</span>
+			</span>
 		</div>
 	</div>
 </template>
@@ -89,91 +128,31 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	height: 40px;
 
-	padding: 1.25rem 1.65rem 1.25rem 1.25rem;
-	z-index: 2;
-	margin-top: 0.5rem;
+	z-index: 3;
+	margin-top: 2rem;
 	position: relative;
+	border: none;
+	color: white;
+	overflow: hidden;
 
-	&:after {
-		content: '';
-		position: absolute;
-		top: -1px;
-		right: -1px;
-		bottom: -1px;
-		left: -1px;
-		border-radius: $border-radius;
-		transition: box-shadow 0.2s ease;
-	}
-	&.pre {
-		border: none;
-		padding: 0.75rem 1.65rem 0.75rem 1.25rem !important;
-		margin-top: 0.75rem;
-
-		.avatar {
-			background-color: fade-out(white, 0.8);
-			color: white;
-			font-size: 1rem;
-		}
-	}
-	&:not(.round):after {
-		box-shadow: inset 0 0 1px 3px $red;
-	}
-	&.match:not(.round):after {
-		box-shadow: inset 0 0 1px 3px $green;
-	}
-	&.round:not(.match) {
-		background-color: lighten($red, 38);
-		border: none;
-
-		&:after {
-			box-shadow: inset 0 0 0 3px $red;
-		}
-	}
-	&.match {
-		.avatar {
-			background-color: fade-out($green, 0.8);
-			color: $green;
-		}
-	}
-	&.pre {
-		&:after {
-			display: none;
-		}
-	}
-
-	&__text {
+	&__icon {
+		padding: 0.65rem;
+		background-color: fade-out(black, 0.75);
+		height: 100%;
+		font-weight: $bold;
 		display: flex;
 		align-items: center;
-		font-size: 1.25rem;
-
-		span {
-			margin-right: 0.35rem;
-			font-size: 1.1rem;
-		}
-		b {
-			font-size: 1.3rem;
-		}
-
-		.avatar {
-			width: 2rem;
-			height: 2rem;
-			margin-right: 0.75rem;
-			background-color: fade-out($red, 0.8);
-			color: $red;
-			font-size: 1.45rem;
-		}
+		justify-content: center;
+	}
+	&__message {
+		padding: 0 0.75rem;
+		font-size: 0.95rem;
 	}
 }
-.round-start {
-	font-size: 1rem;
-	color: white;
-
-	b {
-		font-size: 1rem;
-	}
-	span {
-		color: white;
-	}
+.slider {
+	width: 1rem;
+	height: 1rem;
 }
 </style>

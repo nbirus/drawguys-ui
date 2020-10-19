@@ -50,7 +50,7 @@ $box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
 		$end 4rem
 	);
 	background-size: 200% 200%;
-	animation: barberpole 15s linear infinite;
+	animation: barberpole 20s linear infinite;
 }
 
 @mixin stripe-sm($start, $end) {
@@ -62,6 +62,6 @@ $box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
 		$end 2rem
 	);
 	background-size: 200% 200%;
-	animation: barberpole 15s linear infinite;
+	animation: barberpole 25s linear infinite;
 }
 

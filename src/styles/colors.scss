@@ -3,13 +3,28 @@
 		background-color: $color;
 
 		&.bg-darken {
-			background-color: darken($color, 3);
+			background-color: darken($color, 10);
+		}
+		&.bg-lighten {
+			background-color: lighten($color, 10);
 		}
 		&.bg-fade {
-			background-color: fade-out($color, .95);
+			background-color: fade-out($color, .85);
 		}
 		&.bg-striped {
 			@include stripe($color, darken($color, 5));
+		}
+		&.bg-color {
+			color: darken($color, 10);
+		}
+		&.bg-striped.bg-orange {
+			@include stripe($color, lighten($color, 5));
+		}
+		&.bg-striped.bg-pink {
+			@include stripe($color, lighten($color, 5));
+		}
+		&.bg-striped.bg-green {
+			@include stripe($color, darken($color, 3));
 		}
 	}
 	.border-#{$name} {
@@ -18,8 +33,7 @@
 	.text-#{$name} {
 		color: $color;
 	}
-
-	.outline-#{$name} {
+	.outline {
 		&:after {
 			transition: box-shadow 0.2s ease;
 			content: '';
@@ -31,26 +45,8 @@
 			border-radius: $border-radius;
 			pointer-events: none;
 		}
-		&.ready:after {
-			box-shadow: inset 0 0 0 3px $color;
-		}
-		&.ready {
-			border-color: $color !important;
-		}
-		&.ready.sm:after {
-			box-shadow: inset 0 0 0 2px $color;
-		}
-		&.nudge:after {
-			top: -1px;
-			right: -1px;
-			bottom: -1px;
-			left: -1px;
-		}
-		&.nudge-2:after {
-			top: -1px;
-			right: 0px;
-			bottom: 0px;
-			left: 0px;
-		}
+	}
+	.outline-#{$name}:after {
+		box-shadow: inset 0 0 0 4px $color;
 	}
 }

@@ -176,18 +176,15 @@ socket.on('update_room', onUpdateRoom)
 socket.on('join_room_error', onJoinRoomError)
 socket.on('join_room', onJoinRoom)
 
+
 // watchers
 watch(() => roomState.gameState.event, event => {
 	if (roomState.userState.selecting && event === 'pre_turn') {
 		getWords()
 	}
 	if (roomState.userState.selecting && event === 'turn_pre_start' && roomState.gameState.word === '') {
-		console.log(roomState.gameState.words[0]);
 		setWordDefault(roomState.gameState.words[0])
 	}
-	// console.log(roomState.gameState.word);
-	// console.log(roomState.gameState.words);
-	// console.log(roomState.userState);
 })
 
 // helpers
@@ -229,9 +226,9 @@ const roomStateTest = {
   messages: [],
   gameState: {
     active: true,
-    event: 'turn_start',
-    word: 'Test',
-    timer: 30,
+    event: 'pre_turn',
+    word: 'Test Word',
+    timer: 15,
     gameTimer: null,
 		usedWords: [],
     turnUser: {
@@ -241,11 +238,11 @@ const roomStateTest = {
 			ready: false,
 			match: false,
 			typing: false,
-			drawing: true,
-			selecting: false,
+			drawing: false,
+			selecting: true,
 			color: 'orange',
 			matchTime: 0,
-			turnScore: -200,
+			turnScore: 50,
 			roundScore: 0,
 			score: 100,
 		},
@@ -265,7 +262,7 @@ const roomStateTest = {
 			selecting: false,
 			color: 'blue',
 			matchTime: 0,
-			turnScore: -50,
+			turnScore: 50,
 			roundScore: 0,
 			score:  0,
 		},
@@ -276,11 +273,11 @@ const roomStateTest = {
 			ready: false,
 			match: false,
 			typing: false,
-			drawing: true,
-			selecting: false,
+			drawing: false,
+			selecting: true,
 			color: 'orange',
 			matchTime: 0,
-			turnScore: -50,
+			turnScore: 50,
 			roundScore: 0,
 			score: 100,
 		},
@@ -295,38 +292,49 @@ const roomStateTest = {
 			selecting: false,
 			color: 'purple',
 			matchTime: 0,
-			turnScore: -50,
+			turnScore: 0,
 			roundScore: 0,
-			score: 100,
-		},
-		for: {
-			userid: 'for',
-			username: 'Username Three',
-			guess: '',
-			ready: false,
-			match: true,
-			typing: false,
-			drawing: false,
-			selecting: false,
-			color: 'maroon',
-			matchTime: 20,
-			turnScore: 50,
-			roundScore: 0,
-			score: 300,
+			score: 50,
 		},
 	},
 }
 
 export function testRoomState() {
-	
-	onUpdateRoom(roomStateTest, true)
 
-	// setInterval(() => {
-	// 	roomState.usersState.two.guess += '1'
-	// }, 3000)
-	setTimeout(() => {
-		roomState.gameState.event = 'turn_end'
-	}, 3000)
+	start()
+
+	getWords()
+
+
+	setInterval(() => {
+		start()
+	}, 350000);
+
+	function start() {
+
+		onUpdateRoom(JSON.parse(JSON.stringify(roomStateTest)), true)
+
+		// setInterval(() => {
+		// 	roomState.usersState.one.guess += '1'
+		// }, 5000)
+		// setTimeout(() => {
+		// 	roomState.gameState.event = 'turn_pre_start'
+		// }, 2000)
+		setTimeout(() => {
+			roomState.usersState.two.drawing = true
+			roomState.usersState.two.selecting = false
+			roomState.gameState.event = 'turn_start'
+		}, 1000)
+		// setTimeout(() => {
+		// 	roomState.usersState.one.match = true
+		// 	roomState.usersState.one.matchTime = 12
+		// 	roomState.gameState.playersGuessed = 1
+		// }, 15000)
+		// setTimeout(() => {
+		// 	roomState.gameState.event = 'turn_end'
+		// }, 31000)
+
+	}
 }
 
 export function setInactive() {
