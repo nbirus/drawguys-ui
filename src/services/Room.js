@@ -296,6 +296,21 @@ const roomStateTest = {
 			roundScore: 0,
 			score: 50,
 		},
+		four: {
+			userid: 'four',
+			username: 'Username four',
+			guess: '',
+			ready: false,
+			match: true,
+			typing: false,
+			drawing: false,
+			selecting: false,
+			color: 'maroon',
+			matchTime: 12,
+			turnScore: 0,
+			roundScore: 0,
+			score: 50,
+		},
 	},
 }
 
@@ -306,9 +321,9 @@ export function testRoomState() {
 	getWords()
 
 
-	setInterval(() => {
-		start()
-	}, 30000);
+	// setInterval(() => {
+	// 	start()
+	// }, 9000);
 
 	function start() {
 
@@ -326,13 +341,15 @@ export function testRoomState() {
 			roomState.gameState.event = 'turn_start'
 		}, 100)
 		setTimeout(() => {
-			roomState.usersState.one.match = true
-			roomState.usersState.one.matchTime = 12
-			roomState.gameState.playersGuessed = 1
-		}, 2000)
+			// roomState.usersState.one.match = true
+			// roomState.usersState.one.matchTime = 13
+			// roomState.gameState.playersGuessed = 1
+			roomState.gameState.event = 'turn_end'
+
+		}, 1000)
 		// setTimeout(() => {
 		// 	roomState.gameState.event = 'turn_end'
-		// }, 31000)
+		// }, 6000)
 
 	}
 }

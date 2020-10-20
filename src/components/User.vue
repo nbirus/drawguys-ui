@@ -156,7 +156,23 @@ export default {
 		<!-- placement -->
 		<div class="user__place" v-if="showPlace">
 			<i v-if="first" class="ri-vip-crown-line"></i>
-			<span v-text="[, '1st', '2nd', '3rd', '4th', '5th', '6th'][place]"></span>
+			<span
+				v-text="
+					[
+						,
+						'1st',
+						'2nd',
+						'3rd',
+						'4th',
+						'5th',
+						'6th',
+						'7th',
+						'8th',
+						'9th',
+						'10th',
+					][place]
+				"
+			></span>
 		</div>
 
 		<!-- events -->

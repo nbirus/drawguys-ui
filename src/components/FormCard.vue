@@ -135,19 +135,6 @@ export default {
 		}
 	}
 }
-.wave {
-	background: url(../assets/wave.svg) repeat-x;
-	position: absolute;
-	top: 0;
-	width: 6400px;
-	height: 100%;
-	animation: wave 30s cubic-bezier(0.36, 0.45, 0.63, 0.53) infinite;
-	transform: translate3d(0, 0, 0);
-	transform: scale(4);
-	opacity: 0.1;
-	pointer-events: none;
-}
-
 @keyframes popover {
 	0% {
 		transform: translateY(2rem);

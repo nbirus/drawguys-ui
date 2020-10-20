@@ -138,17 +138,18 @@ export default {
 	overflow: hidden;
 
 	&__icon {
-		padding: 0.65rem;
+		padding: 0.5rem;
 		background-color: fade-out(black, 0.75);
 		height: 100%;
 		font-weight: $bold;
 		display: flex;
 		align-items: center;
 		justify-content: center;
+		font-size: 1.1rem;
 	}
 	&__message {
 		padding: 0 0.75rem;
-		font-size: 0.95rem;
+		font-size: 1rem;
 	}
 }
 .slider {

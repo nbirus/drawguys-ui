@@ -209,7 +209,7 @@ export default [
   'Sundae',
   'Beach',
   'Sunglasses',
-  'Surfboard',~
+  'Surfboard',
   'Watermelon',
   'Baseball',
   'Bat',
