@@ -93,18 +93,16 @@ export default {
 				</div>
 				<div class="board__card-footer" v-show="showFooter">
 					<div class="absolute-container">
-						<!-- <transition name="game-widget" mode="out-in" appear> -->
 						<!-- game-timline -->
-						<game-timeline key="timeline" :show="showTimeline" />
+						<game-timeline />
 
 						<!-- draw form -->
 						<game-draw-form
-							key="draw"
 							v-if="!showTimeline && roomState.userState.drawing"
 						/>
 
 						<!-- game form -->
-						<game-form key="form" v-else-if="showGameForm" />
+						<game-form v-else-if="showGameForm" />
 					</div>
 				</div>
 			</div>

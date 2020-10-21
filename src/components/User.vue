@@ -303,9 +303,9 @@ export default {
 		}
 		&-icon {
 			height: 1.25rem;
-			width: 1.25rem;
+			width: 1.15rem;
 			border-radius: $border-radius 0 0 $border-radius;
-			margin-right: 0.35rem;
+			margin-right: 0.25rem;
 			padding: 0.25rem;
 			padding-right: 0.15rem;
 			background-color: fade-out(black, 0.9);
@@ -316,7 +316,7 @@ export default {
 			font-size: 1rem;
 		}
 		&-text {
-			margin-right: 0.75rem;
+			margin-right: 0.4rem;
 			color: white;
 		}
 	}
