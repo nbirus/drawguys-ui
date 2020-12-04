@@ -2,6 +2,7 @@
 	<div class="page game">
 		<!-- game over -->
 		<game-over v-if="roomState.gameState.event === 'game_end'" />
+		<game-scoreboard v-if="roomState.gameState.event === 'round_end'" />
 
 		<div v-else class="game__container">
 			<div class="game__rounds"></div>
@@ -31,6 +32,7 @@
 <script>
 import GameUsers from '@/views/game/GameUsers'
 import GameBoard from '@/views/game/GameBoard'
+import GameScoreboard from '@/views/game/GameScoreboard'
 import GameOver from '@/views/game/GameOver'
 import RoomShareModal from '@/views/room/RoomShareModal'
 import { testRoomState, roomState } from '@/services/Room'
@@ -42,6 +44,7 @@ export default {
 	components: {
 		GameUsers,
 		GameBoard,
+		GameScoreboard,
 		GameOver,
 		RoomShareModal,
 	},
@@ -89,7 +92,7 @@ export default {
 		padding: 0 2rem;
 	}
 	&__users {
-		flex: 0 0 240px;
+		flex: 0 0 230px;
 		padding-top: 2rem;
 		margin-right: 2rem;
 		z-index: 1;

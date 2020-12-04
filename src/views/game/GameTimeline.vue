@@ -1,14 +1,13 @@
 <script>
 import { roomState } from '@/services/Room'
-import { watch, ref, computed } from 'vue'
+import { watch, ref, computed, nextTick, onBeforeUpdate } from 'vue'
 
 export default {
 	name: 'game-timeline',
-	setup(props) {
+	setup() {
 		// helpers
 		let event = computed(() => roomState.gameState.event)
 		let drawing = computed(() => roomState.userState.drawing)
-		let selecting = computed(() => roomState.userState.selecting)
 		let match = computed(() => roomState.userState.match)
 		let matchTime = computed(() => roomState.userState.matchTime)
 		let turnScore = computed(() => roomState.userState.turnScore)
@@ -23,28 +22,39 @@ export default {
 			}
 		})
 		watch(() => show.value, onShow)
-		watch(() => event.value, onEvent)
 
 		function onShow() {
-			setTimeout(() => {
-				showOtherUsers.value = true
-			}, 3000)
-		}
-		function onEvent() {
-			// if (event.value === 'turn_start') {
-			// }
-		}
-		function onMatch() {
-			// matchTick
+			showOtherUsers.value = false
+			if (show.value) {
+				nextTick(() => {
+					let tickLeft = matchTick.value.offsetLeft
+					matchTag.value.style.left = `${tickLeft - 15}px`
+				})
+				setTimeout(() => {
+					showOtherUsers.value = true
+					nextTick(setUsers)
+				}, 3000)
+			}
 		}
 
+		// active segements
 		let activeSegments = computed(() => {
-			if (!showOtherUsers.value && match.value) {
+			if (!showOtherUsers.value) {
 				return [getSegment(matchTime.value)]
+			} else if (event.value === 'turn_end') {
+				let segments = []
+				Object.values(roomState.usersState).forEach(user => {
+					if (!user.drawing) {
+						if (!user.match) {
+							segments.push(1)
+						} else {
+							segments.push(getSegment(user.matchTime))
+						}
+					}
+				})
+				return segments
 			} else return []
 		})
-
-		let users = ref([])
 
 		function getSegment(time) {
 			if (time >= 35) {
@@ -62,40 +72,64 @@ export default {
 			}
 		}
 
+		// users
+		let matchedUsers = computed(() => {
+			if (event.value === 'turn_end') {
+				return Object.values(roomState.usersState).filter(user => !user.drawing)
+			} else
+				return Object.values(roomState.usersState).filter(
+					user => !user.drawing && user.match
+				)
+		})
+		let matchTick = ref(null)
+		let matchTag = ref(null)
+		let tickRefs = []
+		let tagRefs = []
+		const setTickRef = el => {
+			tickRefs.push(el)
+		}
+		const setTagRef = el => {
+			tagRefs.push(el)
+		}
+		onBeforeUpdate(() => {
+			tickRefs = []
+			tagRefs = []
+		})
+
 		watch(
-			() => roomState.usersState,
-			() => {
-				setUsers()
-			},
-			{
-				deep: true,
-			}
+			() => matchedUsers.value,
+			() => nextTick(setUsers)
 		)
 
-		let secondCounts = []
+		let columns = []
 		function setUsers() {
-			secondCounts = []
-			for (let i = 1; i <= 30; i++) {
-				secondCounts[i] = 0
+			columns = []
+			for (let i = 0; i <= 40; i++) {
+				columns.push(0)
 			}
-			Object.values(roomState.usersState).forEach(user => {
-				let newUser = JSON.parse(JSON.stringify(user))
 
-				if (newUser.match) {
-					// set match style
-					newUser.matchStyle = {
-						'grid-column': newUser.matchTime,
-						'grid-row': getRow(newUser.matchTime),
+			tagRefs.forEach(async (tagEl, i) => {
+				await nextTick(() => {
+					let matchTime = matchedUsers.value[i].matchTime
+					let left = matchTime === 0 ? -60 : tickRefs[i].offsetLeft - 10
+					let top = 0
+
+					if (matchTime % 2 !== 0) {
+						top = columns[matchTime] * 28 + 74
+					} else {
+						top = columns[matchTime] * 28 * -1
 					}
-					newUser.tickStyle = {
-						'grid-column': newUser.matchTime,
+
+					if (columns[matchTime] > 0) {
+						top += matchTime % 2 !== 0 ? 4 : -4
 					}
-					users.value.push(newUser)
-				}
+
+					tagEl.style.left = `${left}px`
+					tagEl.style.top = `${top}px`
+
+					columns[matchTime]++
+				})
 			})
-		}
-		function getRow(time) {
-			return 30 - ++secondCounts[time]
 		}
 
 		return {
@@ -104,10 +138,16 @@ export default {
 			turnScore,
 			showOtherUsers,
 			activeSegments,
+			matchedUsers,
+			event,
+			scores: ['-50', '+50', '+100', '+200', '+300', '+400'],
 
-			users,
-
-			scores: ['-50', '+50', '+100', '+200', '+400', '+450'],
+			tickRefs,
+			setTickRef,
+			tagRefs,
+			setTagRef,
+			matchTick,
+			matchTag,
 		}
 	},
 }
@@ -116,61 +156,80 @@ export default {
 <template>
 	<div class="timeline card" :class="{ show }">
 		<div class="timeline__bar"></div>
-		<div class="timeline__bar-overlay" :class="{ show: showOtherUsers }"></div>
+		<div
+			class="timeline__bar-overlay"
+			v-show="event === 'turn_start'"
+			:class="{ show: showOtherUsers }"
+		></div>
 
+		<!-- segments -->
 		<ul class="timeline__segments">
 			<li
 				v-for="i in 6"
 				:key="i"
 				class="timeline__segments-segment"
 				:class="{
-					active: activeSegments.includes(i) || (i === 1 && showOtherUsers),
+					active: activeSegments.includes(i),
 				}"
 			>
 				<span class="scores" v-text="scores[i - 1]"></span>
 			</li>
 
+			<!-- ticks -->
 			<ul class="timeline__user-ticks absolute-bar">
 				<li
 					v-if="!showOtherUsers"
+					ref="matchTick"
 					class="timeline__user-ticks-tick match-tick bg-green"
-					:style="`grid-column: ${matchTime}`"
+					:style="
+						`grid-column: ${matchTime + 1}; opacity: ${matchTime === 0 ? 0 : 1}`
+					"
 				></li>
 				<li
 					v-else
-					v-for="(user, i) in users"
+					v-for="(user, i) in matchedUsers"
+					:ref="setTickRef"
 					:key="i"
 					class="timeline__user-ticks-tick"
-					:style="user.tickStyle"
+					:style="{
+						'grid-column': user.matchTime + 1,
+						opacity: user.matchTime === 0 ? 0 : 1,
+					}"
 					:class="`bg-${user.color}`"
 				></li>
 			</ul>
 		</ul>
 
 		<ul class="timeline__users-tag absolute-bar">
+			<!-- tags -->
 			<li
 				v-if="!showOtherUsers"
 				class="timeline__users-tag-user match-tag"
-				:style="`grid-column: ${matchTime}`"
+				ref="matchTag"
 				:class="`bg-${matchTime === 0 ? 'red fail-tag' : 'green'}`"
 			>
 				<div class="score">
-					<i :class="`ri-${matchTime === 0 ? 'close' : 'check'}-line`"></i>
+					<i :class="`ri-${matchTime === 0 ? 'forbid' : 'check'}-line`"></i>
 				</div>
 				<div class="time"><b v-text="`${matchTime}`"></b>s</div>
 			</li>
 			<li
 				v-else
-				v-for="(user, i) in users"
+				v-for="(user, i) in matchedUsers"
 				:key="i"
+				:ref="setTagRef"
 				class="timeline__users-tag-user"
-				:style="user.matchStyle"
 				:class="`bg-${user.color}`"
 			>
-				<div class="score">
+				<!-- <div class="score">
 					<i :class="`ri-${user.matchTime === 0 ? 'close' : 'check'}-line`"></i>
+				</div> -->
+				<div class="time" v-if="user.matchTime > 0">
+					<b v-text="`${user.matchTime}`"></b>s
 				</div>
-				<div class="time"><b v-text="`${user.matchTime}`"></b>s</div>
+				<div class="time icon" v-else>
+					<i class="ri-forbid-line"></i>
+				</div>
 			</li>
 		</ul>
 	</div>
@@ -302,10 +361,13 @@ $fail-width: 90px;
 		overflow: visible;
 		display: grid;
 		grid-template-columns: repeat(40, 1fr);
-		width: calc(100% - 90px - 1.5rem);
-		left: calc(0.75rem + 90px);
+		width: calc(100% - 90px);
+		left: calc(90px);
 		border-radius: 0 $border-radius $border-radius 0;
 		z-index: 1;
+		align-items: end;
+		justify-content: space-evenly;
+		pointer-events: auto;
 
 		&-tick {
 			grid-row: 1;
@@ -324,16 +386,15 @@ $fail-width: 90px;
 	}
 	&__users-tag {
 		overflow: visible;
-		display: grid;
-		grid-template-columns: repeat(40, 1fr);
 		width: calc(100% - 0.75rem - 100px);
 		left: 100px;
-		bottom: 3.25rem;
-		align-content: end;
-		grid-gap: 0.15rem;
+		bottom: 3rem;
+		border-radius: 0;
 
 		&-user {
 			grid-row: 1;
+			position: absolute;
+			width: auto;
 			height: 28px;
 			z-index: 999;
 			border-radius: 0.45rem;
@@ -348,21 +409,19 @@ $fail-width: 90px;
 			.score {
 				background-color: fade-out(black, 0.75);
 				height: 28px;
-				padding: 0 0.35rem;
+				padding: 0 0.5rem;
 				display: flex;
 				align-items: center;
 				justify-content: center;
 				border-radius: 0.45rem 0 0 0.45rem;
 			}
-			i {
-				font-size: 0.8rem;
-			}
 			.time {
-				padding: 0 0.45rem 0 0.25rem;
+				padding: 0 0.35rem;
 				font-size: 0.8rem;
-			}
 
-			&.match-tag {
+				&.icon {
+					font-size: 1rem;
+				}
 			}
 			&.fail-tag {
 				transform: translateX(-4rem);

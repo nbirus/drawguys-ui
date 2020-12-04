@@ -17,6 +17,7 @@ export default {
 		drawing: Boolean,
 		small: Boolean,
 		large: Boolean,
+		elevated: Boolean,
 		changeColor: Boolean,
 		hideScore: Boolean,
 		first: Boolean,
@@ -120,6 +121,7 @@ export default {
 				clickable: props.changeColor,
 				first: props.first,
 				large: props.large,
+				elevated: props.elevated,
 			},
 		])
 
@@ -154,26 +156,28 @@ export default {
 		<div class="user__score bg-darken" v-if="!hideScore" v-text="score"></div>
 
 		<!-- placement -->
-		<div class="user__place" v-if="showPlace">
-			<i v-if="first" class="ri-vip-crown-line"></i>
-			<span
-				v-text="
-					[
-						,
-						'1st',
-						'2nd',
-						'3rd',
-						'4th',
-						'5th',
-						'6th',
-						'7th',
-						'8th',
-						'9th',
-						'10th',
-					][place]
-				"
-			></span>
-		</div>
+		<transition name="pop-in" mode="out-in">
+			<div class="user__place" v-if="showPlace">
+				<i v-if="first" class="ri-vip-crown-fill"></i>
+				<span
+					v-text="
+						[
+							,
+							'1st',
+							'2nd',
+							'3rd',
+							'4th',
+							'5th',
+							'6th',
+							'7th',
+							'8th',
+							'9th',
+							'10th',
+						][place]
+					"
+				></span>
+			</div>
+		</transition>
 
 		<!-- events -->
 		<transition-group name="user-popup" mode="out-in" appear>
@@ -323,7 +327,7 @@ export default {
 	&__place {
 		position: absolute;
 		top: -0.75rem;
-		left: -0.75rem;
+		right: -0.75rem;
 		padding: 0 0.25rem;
 		height: 1.5rem;
 		display: flex;
@@ -372,8 +376,12 @@ export default {
 		}
 	}
 
-	&.first {
+	&.elevated {
 		transform: scale(1.075);
+
+		&:after {
+			box-shadow: 0 0 0 4px $black;
+		}
 	}
 	&.large {
 		.user__username {

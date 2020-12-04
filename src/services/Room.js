@@ -24,6 +24,7 @@ export let roomState = reactive({
 		usedWords: [],
 		numberOfRounds: 5,
 		playersGuessed: 0,
+		history: []
 	},
 	usersState: {},
 	userState: {},
@@ -185,6 +186,15 @@ watch(() => roomState.gameState.event, event => {
 	if (roomState.userState.selecting && event === 'turn_pre_start' && roomState.gameState.word === '') {
 		setWordDefault(roomState.gameState.words[0])
 	}
+	if (event === 'turn_end') {
+		roomState.gameState.history.push({
+			word: roomState.gameState.word,
+			userState: roomState.userState,
+		})
+	}
+	if (event === 'round_start') {
+		roomState.gameState.history = []
+	}
 })
 
 // helpers
@@ -291,7 +301,7 @@ const roomStateTest = {
 			drawing: false,
 			selecting: false,
 			color: 'purple',
-			matchTime: 12,
+			matchTime: 0,
 			turnScore: 0,
 			roundScore: 0,
 			score: 0,
@@ -306,7 +316,7 @@ const roomStateTest = {
 			drawing: false,
 			selecting: false,
 			color: 'maroon',
-			matchTime: 12,
+			matchTime: 0,
 			turnScore: 0,
 			roundScore: 0,
 			score: 0,
@@ -329,8 +339,8 @@ export function testRoomState() {
 
 		onUpdateRoom(JSON.parse(JSON.stringify(roomStateTest)), true)
 
-		// userDrawing()
-		userGuessing(true)
+		userDrawing()
+		// userGuessing(true)
 
 
 		function userDrawing() {
@@ -350,8 +360,24 @@ export function testRoomState() {
 				roomState.gameState.playersGuessed = 2
 			}, 3000)
 			setTimeout(() => {
+				roomState.usersState.two.score = 500
+				roomState.usersState.three.score = 200
+				roomState.usersState.one.score = 50
+				roomState.usersState.four.score = -50
+				roomState.usersState.two.turnScore = 500
+				roomState.usersState.three.turnScore = 200
+				roomState.usersState.one.turnScore = 50
+				roomState.usersState.four.turnScore = -50
+				roomState.gameState.history = []
 				roomState.gameState.event = 'turn_end'
 			}, 6000)
+			setTimeout(() => {
+				roomState.usersState.one.drawing = false
+				roomState.usersState.one.match = false
+				roomState.usersState.two.match = false
+				roomState.usersState.three.match = false
+				roomState.gameState.event = 'round_end'
+			}, 7000)
 		}
 		function userGuessing(scores = true) {
 			roomState.usersState.one.selecting = false
@@ -367,22 +393,34 @@ export function testRoomState() {
 
 			if (scores) {
 				setTimeout(() => {
-					roomState.usersState.one.match = true
-					roomState.usersState.one.matchTime = 34
-					roomState.usersState.one.turnScore = 200
-					roomState.gameState.playersGuessed = 1
+					// roomState.usersState.one.match = true
+					// roomState.usersState.one.matchTime = 35
+					// roomState.usersState.one.turnScore = 200
+					// roomState.gameState.playersGuessed = 1
 				}, 2000)
 				setTimeout(() => {
-					roomState.usersState.three.match = true
-					roomState.usersState.three.matchTime = 26
-					roomState.usersState.three.turnScore = 200
-					roomState.gameState.playersGuessed = 2
-				}, 6000)
+					// roomState.usersState.three.match = true
+					// roomState.usersState.three.matchTime = 12
+					// roomState.usersState.three.turnScore = 200
+					// roomState.usersState.four.match = true
+					// roomState.usersState.four.matchTime = 39
+					// roomState.usersState.four.turnScore = 200
+					// roomState.gameState.playersGuessed = 3
+				}, 3000)
+				// setTimeout(() => {
+				// 	roomState.usersState.four.match = true
+				// 	roomState.usersState.four.matchTime = 21
+				// 	roomState.usersState.four.turnScore = 200
+				// 	roomState.gameState.playersGuessed = 3
+				// }, 7000)
 			}
 
-			// setTimeout(() => {
-			// 	roomState.gameState.event = 'turn_end'
-			// }, 6000)
+			setTimeout(() => {
+				roomState.gameState.event = 'turn_end'
+			}, 3000)
+			setTimeout(() => {
+				roomState.gameState.event = 'round_end'
+			}, 4000)
 		}
 
 	}

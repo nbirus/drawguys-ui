@@ -1,5 +1,6 @@
 import { socket } from '@/services/Socket'
-import { reactive, computed, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
+import { roomState } from '@/services/Room'
 
 let canvas
 let context
@@ -14,7 +15,7 @@ let clickColor = new Array()
 let clickSize = new Array()
 let undoIndex = new Array()
 
-let history = new Array()
+export const history = ref([])
 
 export const drawState = reactive({
 	color: '#111111',
@@ -115,6 +116,18 @@ export function updateDrawState() {
 	socket.emit('set_draw_state', drawState)
 }
 
+// watch
+watch(() => roomState.gameState.event, event => {
+	if (event === 'turn_end') {
+		let img = new Image()
+		img.src = canvas.toDataURL("image/png")
+		history.value.push(img)
+	}
+	if (event === 'round_start') {
+		history.value = []
+	}
+})
+
 // socket events
 socket.on('set_draw_state', setDrawState)
 socket.on('mousedown', mousedown)
@@ -125,16 +138,6 @@ socket.on('undo', undo)
 socket.on('reset', reset)
 
 // actions
-export function saveDrawing() {
-	history.push({
-		clickX,
-		clickY,
-		clickDrag,
-		clickColor,
-		clickSize,
-		undoIndex,
-	})
-}
 export function reset() {
 	context.clearRect(0, 0, context.canvas.width, context.canvas.height)
 	context.beginPath()
