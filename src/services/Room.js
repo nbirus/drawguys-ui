@@ -1,4 +1,5 @@
 import { socket } from '@/services/Socket'
+import { playSound } from '@/services/Sound'
 import { userState } from '@/services/User'
 import { reactive, ref, watch } from 'vue'
 import words from '@/assets/words'
@@ -99,6 +100,7 @@ export function nextColor() {
 			}
 		}
 
+		playSound('pop')
 		socket.emit('color', colors[newColorIndex])
 	}
 }
@@ -339,8 +341,8 @@ export function testRoomState() {
 
 		onUpdateRoom(JSON.parse(JSON.stringify(roomStateTest)), true)
 
-		userDrawing()
-		// userGuessing(true)
+		// userDrawing()
+		userGuessing(false)
 
 
 		function userDrawing() {
@@ -384,7 +386,6 @@ export function testRoomState() {
 			roomState.usersState.two.selecting = true
 			roomState.gameState.turnUser = roomState.usersState.two
 
-
 			setTimeout(() => {
 				roomState.usersState.two.drawing = true
 				roomState.usersState.two.selecting = false
@@ -417,7 +418,7 @@ export function testRoomState() {
 
 			setTimeout(() => {
 				roomState.gameState.event = 'turn_end'
-			}, 3000)
+			}, 2000)
 			setTimeout(() => {
 				roomState.gameState.event = 'round_end'
 			}, 4000)

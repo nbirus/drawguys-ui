@@ -15,6 +15,7 @@
 			required
 			@focus="focus = true"
 			@blur="focus = false"
+			@keypress="playSound('tick')"
 			autocomplete="off"
 		/>
 		<transition name="form-button" mode="out-in">
@@ -26,7 +27,9 @@
 </template>
 
 <script>
+import { playSound } from '@/services/Sound'
 import { ref, watch } from 'vue'
+
 export default {
 	name: 'form-card',
 	inheritAttrs: false,
@@ -39,6 +42,7 @@ export default {
 
 		function onSubmit() {
 			emit('submit', value.value)
+			playSound('submit')
 		}
 
 		watch(value, togglePopover)
@@ -80,6 +84,7 @@ export default {
 			focus,
 			onSubmit,
 			toggleFocus,
+			playSound,
 		}
 	},
 }

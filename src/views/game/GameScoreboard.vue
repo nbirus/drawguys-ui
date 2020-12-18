@@ -23,8 +23,21 @@
 			</transition-group>
 		</div>
 
-		<div class="scoreboard__history" :class="`size-${history.length}`" v-else>
-			<ul class="list" :class="`size-${history.length}`">
+		<div class="scoreboard__rounds-left" v-else-if="showRoundsLeft">
+			<transition name="list" appear>
+				<h2 v-if="roomState.gameState.round === 1">Last Round!</h2>
+				<h2 v-else>{{ 5 - roomState.gameState.round }} Rounds Left</h2>
+			</transition>
+		</div>
+
+		<div v-else class="scoreboard__history" :class="`size-${history.length}`">
+			<transition-group
+				class="list"
+				:class="`size-${history.length}`"
+				tag="ul"
+				name="list"
+				appear
+			>
 				<game-history-drawing
 					v-for="(historyItem, i) in history"
 					:key="i"
@@ -32,7 +45,7 @@
 					:img="historyItem"
 					v-bind="roomState.gameState.history[i]"
 				/>
-			</ul>
+			</transition-group>
 		</div>
 	</div>
 </template>
@@ -53,6 +66,7 @@ export default {
 	setup() {
 		let showPlaces = ref(false)
 		let showHistory = ref(false)
+		let showRoundsLeft = ref(false)
 		let users = computed(() =>
 			Object.values(roomState.usersState).sort((a, b) => b.score - a.score)
 		)
@@ -63,26 +77,19 @@ export default {
 			}, 350)
 			setTimeout(() => {
 				showHistory.value = true
-			}, 2250)
+			}, 1550)
+			setTimeout(() => {
+				showRoundsLeft.value = true
+			}, 4550)
 		})
 
 		return {
 			users,
 			roomState,
-			history: [
-				new Image(),
-				new Image(),
-				new Image(),
-				new Image(),
-				new Image(),
-				new Image(),
-				new Image(),
-				new Image(),
-				new Image(),
-				new Image(),
-			],
+			history,
 			showHistory,
 			showPlaces,
+			showRoundsLeft,
 		}
 	},
 }
@@ -175,6 +182,12 @@ export default {
 				}
 			}
 		}
+	}
+	&__rounds-left {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
 	}
 }
 </style>

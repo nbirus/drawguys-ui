@@ -50,8 +50,9 @@
 
 <script>
 import ChatMessage from './RoomChatMessage'
+import { playSound } from '@/services/Sound'
 import { setTyping, roomState, sendMessage } from '@/services/Room'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 export default {
 	name: 'room-chat',
@@ -77,6 +78,13 @@ export default {
 			sendMessage(message.value)
 			message.value = ''
 		}
+
+		// watch(
+		// 	() => messages.value,
+		// 	() => {
+		// 		playSound('message')
+		// 	}
+		// )
 
 		return {
 			focus,
