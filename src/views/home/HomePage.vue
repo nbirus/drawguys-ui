@@ -38,7 +38,8 @@ import HomePageRooms from './HomePageRooms'
 import FormCard from '@/components/FormCard'
 import { createRoom, getRooms, setInactive } from '@/services/Room'
 import { userState } from '@/services/User'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
+import { playSound } from '@/services/Sound'
 
 export default {
 	name: 'home-page',
@@ -54,6 +55,13 @@ export default {
 		function onClick() {
 			hidePage.value = true
 		}
+
+		onMounted(() => {
+			console.log('HERE')
+			// playSound('pop')
+			// setTimeout(() => {
+			// }, 100)
+		})
 
 		return {
 			createRoom,

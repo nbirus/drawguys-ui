@@ -1,9 +1,13 @@
 <template>
-	<transition name="page" mode="out-in" appear>
-		<router-view v-if="socketState.connected || $route.name === 'game-test'" />
-		<socket-loading v-else-if="socketState.loading" />
-		<socket-error v-else-if="socketState.error" />
-	</transition>
+	<div>
+		<transition name="page" mode="out-in" appear>
+			<router-view
+				v-if="socketState.connected || $route.name === 'game-test'"
+			/>
+			<socket-loading v-else-if="socketState.loading" />
+			<socket-error v-else-if="socketState.error" />
+		</transition>
+	</div>
 </template>
 
 <script>
@@ -26,7 +30,6 @@ export default {
 		onBeforeUnmount(() => {
 			disconnect()
 		})
-
 		return {
 			socketState,
 		}

@@ -342,8 +342,10 @@ export function testRoomState() {
 		onUpdateRoom(JSON.parse(JSON.stringify(roomStateTest)), true)
 
 		// userDrawing()
-		userGuessing(false)
-
+		// userGuessing(false)
+		roomState.usersState.two.drawing = true
+		roomState.usersState.two.selecting = false
+		roomState.gameState.event = 'turn_start'
 
 		function userDrawing() {
 			setTimeout(() => {

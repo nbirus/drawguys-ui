@@ -28,7 +28,7 @@ export default {
 			} else return ''
 		})
 
-		socket.on('guess_result', result => {
+		socket.on('guess_result', (result) => {
 			if (result) {
 				onCorrect()
 			} else {
@@ -107,11 +107,13 @@ export default {
 		let word = computed(() => roomState.gameState.word)
 		let placeholder = computed(() => {
 			let placeholderLines = ''
-			word.value.split('').forEach(letter => {
+			word.value.split('').forEach((letter) => {
 				placeholderLines += letter === ' ' ? ' ' : '_'
 			})
 			return placeholderLines
 		})
+
+		function next() {}
 
 		return {
 			input,
@@ -130,6 +132,8 @@ export default {
 			fail,
 			focusColor,
 			placeholder,
+			word,
+			next,
 		}
 	},
 }
@@ -163,11 +167,12 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/styles/component.scss';
+
 .form-card {
 	display: flex;
 	align-items: center;
 	padding: 0.75rem 0.75rem 0.75rem 0.75rem;
-	width: 360px;
+	// width: 370px;
 	transition: transform 0.2s ease;
 	border: solid thin $border-color;
 	position: relative;

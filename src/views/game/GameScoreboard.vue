@@ -25,8 +25,8 @@
 
 		<div class="scoreboard__rounds-left" v-else-if="showRoundsLeft">
 			<transition name="list" appear>
-				<h2 v-if="roomState.gameState.round === 1">Last Round!</h2>
-				<h2 v-else>{{ 5 - roomState.gameState.round }} Rounds Left</h2>
+				<h3 v-if="roomState.gameState.round === 4">Last Round!</h3>
+				<h3 v-else>{{ 4 - roomState.gameState.round }} rounds left...</h3>
 			</transition>
 		</div>
 
@@ -77,10 +77,7 @@ export default {
 			}, 350)
 			setTimeout(() => {
 				showHistory.value = true
-			}, 1550)
-			setTimeout(() => {
-				showRoundsLeft.value = true
-			}, 4550)
+			}, 2000)
 		})
 
 		return {
@@ -156,7 +153,7 @@ export default {
 			height: auto;
 			display: grid;
 			grid-template-columns: 1fr 1fr;
-			grid-gap: 2rem;
+			grid-gap: 4rem 2rem;
 			overflow: visible;
 
 			&.size-3 {
@@ -188,6 +185,13 @@ export default {
 		align-items: center;
 		justify-content: center;
 		width: 100%;
+
+		h3 {
+			background-color: fade-out(black, 0.95);
+			padding: 1rem 2rem;
+			display: block;
+			border-radius: 0.5rem;
+		}
 	}
 }
 </style>

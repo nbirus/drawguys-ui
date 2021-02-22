@@ -5,6 +5,7 @@ import GameDrawing from '@/views/game/GameDrawing'
 import GameDrawForm from '@/views/game/GameDrawForm'
 import GameOverlay from '@/views/game/GameOverlay'
 import GameTimeline from '@/views/game/GameTimeline'
+import GameHint from '@/views/game/GameHint'
 import GameHeader from '@/views/game/GameHeader'
 import { roomState } from '@/services/Room'
 import { computed } from 'vue'
@@ -19,6 +20,7 @@ export default {
 		GameOverlay,
 		GameTimeline,
 		GameHeader,
+		GameHint,
 	},
 	setup() {
 		let event = computed(() => roomState.gameState.event)
@@ -29,6 +31,7 @@ export default {
 		let showFooter = computed(() =>
 			['turn_start', 'turn_end'].includes(event.value)
 		)
+		let showHint = computed(() => ['turn_start'].includes(event.value))
 		let showTimeline = computed(() => event.value === 'turn_end' || match.value)
 		let showWord = computed(() => event.value === 'turn_end' || match.value)
 		let showTimer = computed(
@@ -56,6 +59,7 @@ export default {
 			showHeader,
 			showWord,
 			showGameForm,
+			showHint,
 		}
 	},
 }
@@ -85,6 +89,8 @@ export default {
 					</div>
 				</div>
 				<div class="board__card-body card">
+					<!-- hint -->
+
 					<!-- drawing -->
 					<game-drawing />
 
@@ -103,6 +109,9 @@ export default {
 
 						<!-- game form -->
 						<game-form v-else-if="showGameForm" />
+
+						<!-- game hint -->
+						<game-hint v-if="!roomState.userState.drawing && showHint" />
 					</div>
 				</div>
 			</div>

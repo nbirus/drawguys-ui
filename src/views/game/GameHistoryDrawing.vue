@@ -2,16 +2,18 @@
 	<div
 		class="card outline"
 		ref="canvasRef"
-		:class="`outline-${userState.color} size-${size}`"
+		:class="`size-${size} outline-${userState.turnScore > 0 ? 'green' : 'red'}`"
 	>
 		<div class="card__header-container" v-if="img">
 			<div class="card__header" :class="`bg-${userState.color}`">
-				<h5>{{ userState.username }} drew the word <b v-text="word"></b></h5>
+				<span
+					>{{ userState.username }} drew the word <b v-text="word"></b
+				></span>
 			</div>
 		</div>
 		<div class="card__footer-container" v-if="img">
 			<div
-				class="card__footer"
+				class="card__footer bg-striped"
 				:class="`bg-${userState.turnScore > 0 ? 'green' : 'red'}`"
 			>
 				<div class="card__footer-score score">{{ userState.turnScore }}</div>
@@ -24,9 +26,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="empty" v-else>
-			No drawing found
-		</div>
+		<div class="empty" v-else>No drawing found</div>
 	</div>
 </template>
 
@@ -113,6 +113,8 @@ export default {
 		padding: 0.75rem 1rem;
 		border-radius: $border-radius;
 		z-index: 2;
+		// background-color: #fff;
+		box-shadow: $box-shadow;
 
 		&-container {
 			position: absolute;
@@ -144,8 +146,9 @@ export default {
 			background-color: fade-out(black, 0.75);
 		}
 		&-text {
-			font-size: 0.9rem;
-			padding: 0.45rem 0.5rem;
+			font-size: 0.8rem;
+			padding: 0 0.65rem 0 0.5rem;
+			font-weight: $bold;
 		}
 
 		&-container {

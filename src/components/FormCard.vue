@@ -15,7 +15,6 @@
 			required
 			@focus="focus = true"
 			@blur="focus = false"
-			@keypress="playSound('tick')"
 			autocomplete="off"
 		/>
 		<transition name="form-button" mode="out-in">
@@ -49,6 +48,7 @@ export default {
 		watch(focus, togglePopover)
 
 		function togglePopover() {
+			playSound('pop', 0.25)
 			if (value.value && focus.value) {
 				showPopover()
 			} else {

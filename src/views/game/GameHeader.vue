@@ -78,7 +78,7 @@ export default {
 		<div class="game-header__icon">
 			<span v-if="drawing || selecting">
 				<span v-if="playersGuessed !== 0"> +{{ turnScore }} </span>
-				<span v-else> -{{ turnScore }} </span>
+				<span v-else> {{ turnScore }} </span>
 			</span>
 			<span v-else>
 				<span v-if="event === 'pre_turn'">
@@ -88,9 +88,7 @@ export default {
 					<div class="slider" ref="slider"></div>
 				</span>
 				<span v-else-if="match">+{{ turnScore }}</span>
-				<span v-else>
-					-50
-				</span>
+				<span v-else> -50 </span>
 			</span>
 		</div>
 		<div class="game-header__message">
@@ -99,9 +97,7 @@ export default {
 					<b>{{ playersGuessed }}</b>
 					{{ playersGuessed === 1 ? 'player' : 'players' }} guessed the word
 				</span>
-				<span v-else>
-					0 players guessed the word
-				</span>
+				<span v-else> 0 players guessed the word </span>
 			</span>
 			<span v-else>
 				<span v-if="event === 'pre_turn'">
@@ -113,9 +109,7 @@ export default {
 				<span v-else-if="match">
 					You guessed the word in <b v-text="matchTime"></b>s
 				</span>
-				<span v-else>
-					You didn't guess the word
-				</span>
+				<span v-else> You didn't guess the word </span>
 			</span>
 		</div>
 	</div>
